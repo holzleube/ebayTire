@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EbaySeller.View", "WpfApplication1\EbaySeller.View.csproj", "{09299F74-8FEE-4949-BB93-CE9723B05B59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EbaySeller.ViewModel", "EbaySeller.ViewModel\EbaySeller.ViewModel.csproj", "{BADC7C01-75DC-45FF-84E1-A46CBC34FE08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EbaySeller.Model", "EbaySeller.Model\EbaySeller.Model.csproj", "{DC5F9EFB-7707-4E29-A998-82E0B8172320}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{09299F74-8FEE-4949-BB93-CE9723B05B59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09299F74-8FEE-4949-BB93-CE9723B05B59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09299F74-8FEE-4949-BB93-CE9723B05B59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09299F74-8FEE-4949-BB93-CE9723B05B59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BADC7C01-75DC-45FF-84E1-A46CBC34FE08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BADC7C01-75DC-45FF-84E1-A46CBC34FE08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BADC7C01-75DC-45FF-84E1-A46CBC34FE08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BADC7C01-75DC-45FF-84E1-A46CBC34FE08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC5F9EFB-7707-4E29-A998-82E0B8172320}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC5F9EFB-7707-4E29-A998-82E0B8172320}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC5F9EFB-7707-4E29-A998-82E0B8172320}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC5F9EFB-7707-4E29-A998-82E0B8172320}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

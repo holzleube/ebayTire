@@ -1,0 +1,8 @@
+EbaySeller/EbaySeller.ViewModel/obj/
+EbaySeller/EbaySeller.ViewModel/bin/
+EbaySeller/WpfApplication1/bin/
+EbaySeller/*/bin
+EbaySeller/*/obj
+bin/
+obj/
+EbaySeller/EbaySeller.Model/bin/
