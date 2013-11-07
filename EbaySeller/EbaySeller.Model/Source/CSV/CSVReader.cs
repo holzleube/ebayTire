@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EbaySeller.Model.Source.Data.Interfaces;
+using EbaySeller.Model.Source.Exceptions;
 
 namespace EbaySeller.Model.Source.CSV
 {
@@ -12,8 +13,16 @@ namespace EbaySeller.Model.Source.CSV
     {
         public List<IArticle> ReadArticlesFromFile(string filePath)
         {
-            var textLines = File.ReadAllLines(filePath);
-            return textLines.Select(CSVTextHelper.GetArticleFromString).ToList();
+            try
+            {
+                var textLines = File.ReadAllLines(filePath);
+                return textLines.Skip(1).Select(CSVTextHelper.GetArticleFromString).ToList();
+            }
+            catch (IOException exception)
+            {
+                throw new FileNotReadyException();
+            }
+            
         }
     }
 }
