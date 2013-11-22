@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.2\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.1.1309.1617\lib\net40\Moq.dll</HintPath>
     </Reference>
@@ -51,6 +54,8 @@
     <Compile Include="Source\CSV\ICSVReader.cs" />
     <Compile Include="Source\Data\Article.cs" />
     <Compile Include="Source\Data\Interfaces\IArticle.cs" />
+    <Compile Include="Source\Data\Interfaces\IWheel.cs" />
+    <Compile Include="Source\Data\Wheel.cs" />
     <Compile Include="Source\Exceptions\FileNotReadyException.cs" />
     <Compile Include="Tests\CSV\CSVTextHelperTests.cs" />
   </ItemGroup>

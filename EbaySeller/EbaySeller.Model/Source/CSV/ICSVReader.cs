@@ -9,6 +9,6 @@ namespace EbaySeller.Model.Source.CSV
 {
     public interface ICSVReader
     {
-        List<IArticle> ReadArticlesFromFile(string filePath);
+        Dictionary<string, IArticle> ReadArticlesFromFile(string filePath);
     }
 }

@@ -12,11 +12,22 @@ namespace EbaySeller.Model.Source.CSV
 {
     public class CSVTextHelper
     {
-        public static IArticle GetArticleFromString(string textLine)
+        private static List<string> tyreManufactorer = new List<string>()
+            {
+                "MICHELIN"
+            }; 
+        public static IArticle GetArticleFromString(string textLine, int articleId)
         {
             var values = textLine.Split('|');
             var article = new Article();
-            article.Id = Convert.ToInt32(values[0]);
+            var description = GetString(values[2]);
+            var manufactorer = GetString(values[14]);
+            var tyreLabel = GetString(values[16]);
+            if (IsWheel(description, manufactorer, tyreLabel))
+            {
+                article = GetWheel(description);
+            }
+            article.Id = articleId;
             article.ArticleId = GetString(values[1]);
             article.Description = GetString(values[2]);
             article.Description2 = GetString(values[3]);
@@ -34,6 +45,27 @@ namespace EbaySeller.Model.Source.CSV
             article.DirectLink = values[15];
             article.TyreLabelLink = values[16];
             return article;
+        }
+
+        private static Article GetWheel(string descriptionLine)
+        {
+            return new Wheel();
+        }
+
+        private static bool IsWheel(string textLine, string manufactorer, string tyrelabel)
+        {
+            if (tyrelabel.Contains(@"0/0/0/0/0-h300-w300.jpg"))
+            {
+                return false;
+            }
+            return true;
+            //if (tyreManufactorer.Contains(manufactorer))
+            //{
+            //    return true;
+            //}
+            ////var match = Regex.Match(textLine, @"[A-Za-z]+\s*[A-Za-z]+ \s*\d{3}/\d{3}");
+            //var match = Regex.Match(textLine, @"\d{3}/\d{3}");
+            //return match.Success;
         }
 
         private static string GetString(string value)

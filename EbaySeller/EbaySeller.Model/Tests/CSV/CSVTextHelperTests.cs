@@ -25,8 +25,8 @@ namespace EbaySeller.Model.Tests.CSV
         [Test]
         public void TestReadArticlePositiveCase()
         {
-            var articleToTest = CSVTextHelper.GetArticleFromString(TEST_LINE);
-            Assert.AreEqual(184098, articleToTest.Id);
+            var articleToTest = CSVTextHelper.GetArticleFromString(TEST_LINE, 1);
+            Assert.AreEqual(1, articleToTest.Id);
             Assert.AreEqual("B20050XKIKT207", articleToTest.ArticleId);
             Assert.AreEqual("KINGSTIR KT207  200    -50 2 PR    ", articleToTest.Description);
             Assert.AreEqual("", articleToTest.Description2);

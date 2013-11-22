@@ -12,6 +12,7 @@
   See http://www.galasoft.ch/mvvm
 */
 
+using EbaySeller.ViewModel.Source.Import;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
@@ -31,18 +32,8 @@ namespace EbaySeller.ViewModel.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            ////if (ViewModelBase.IsInDesignModeStatic)
-            ////{
-            ////    // Create design time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DesignDataService>();
-            ////}
-            ////else
-            ////{
-            ////    // Create run time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DataService>();
-            ////}
-
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<ImportViewModel>();
         }
 
         public MainViewModel Main
@@ -50,6 +41,14 @@ namespace EbaySeller.ViewModel.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
+            }
+        }
+        
+        public ImportViewModel Import
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<ImportViewModel>();
             }
         }
         

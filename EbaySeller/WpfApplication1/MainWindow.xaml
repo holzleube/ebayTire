@@ -4,21 +4,32 @@
         xmlns:import="clr-namespace:EbaySeller.ViewModel.Source.Import;assembly=EbaySeller.ViewModel"
         Title="EbaySeller" Height="800" Width="1024">
     <Grid>
-        <Grid.DataContext>
-            <import:MainViewModel/>
-        </Grid.DataContext>
+       
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Ribbon x:Name="RibbonWindow">
-            <RibbonTab Header="Import">
+            <RibbonTab Header="Import" DataContext="{Binding Source={StaticResource Locator}, Path=Import}">
                 <RibbonGroup Header="Laden">
-                    <RibbonButton Label="Öffne CSV" LargeImageSource="Images/open.png" Command="{Binding ImportRelayCommand}"></RibbonButton>
+                    <RibbonButton Label="Öffne Basis" LargeImageSource="Images/open.png" Command="{Binding ImportRelayCommand}"></RibbonButton>
+                    <RibbonButton Label="Öffne Neu" LargeImageSource="Images/open.png" Command="{Binding ImportRelayCommand}"></RibbonButton>
+                </RibbonGroup>
+                <RibbonGroup Header="Filter">
+                    <RibbonToggleButton Label="Reifen" IsChecked="{Binding WheelFilterChecked}" LargeImageSource="Images/wheel.png" Command="{Binding WheelFilterToggleCommand}"></RibbonToggleButton>
+                </RibbonGroup>
+                <RibbonGroup Header="Berechnung">
+                    <RibbonButton Label="Kalkuliere Unterschiede" LargeImageSource="Images/reload.png" Command="{Binding ImportRelayCommand}"></RibbonButton>
+                    <RibbonButton Label="Ebay hochladen" LargeImageSource="Images/ebay.png" Command="{Binding ImportRelayCommand}"></RibbonButton>
+                </RibbonGroup>
+            </RibbonTab>
+            <RibbonTab Header="Ebay">
+                <RibbonGroup Header="Verwaltung">
+                    <RibbonButton Label="Lade Status" LargeImageSource="Images/open.png" Command="{Binding ImportRelayCommand}"></RibbonButton>
+                    <RibbonButton Label="Verkauft" LargeImageSource="Images/open.png" Command="{Binding ImportRelayCommand}"></RibbonButton>
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>
-        
-            <DataGrid Grid.Row="1" ItemsSource="{Binding Articles}"></DataGrid>
+        <Frame x:Name="MainFrame" Grid.Row="1"/>
     </Grid>
 </Window>

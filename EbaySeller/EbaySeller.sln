@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EbaySeller.ViewModel", "Eba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EbaySeller.Model", "EbaySeller.Model\EbaySeller.Model.csproj", "{DC5F9EFB-7707-4E29-A998-82E0B8172320}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "framewindowsample", "..\..\sample\csharp\framewindowsample.csproj", "{3E03646C-9548-4DED-A35B-FA35DD9974EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{DC5F9EFB-7707-4E29-A998-82E0B8172320}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC5F9EFB-7707-4E29-A998-82E0B8172320}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC5F9EFB-7707-4E29-A998-82E0B8172320}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E03646C-9548-4DED-A35B-FA35DD9974EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E03646C-9548-4DED-A35B-FA35DD9974EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E03646C-9548-4DED-A35B-FA35DD9974EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E03646C-9548-4DED-A35B-FA35DD9974EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

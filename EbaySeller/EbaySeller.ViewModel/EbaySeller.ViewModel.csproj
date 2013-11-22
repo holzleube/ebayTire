@@ -56,11 +56,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\Import\IMainViewModel.cs" />
+    <Compile Include="Source\Import\ImportViewModel.cs" />
     <Compile Include="Source\Import\MainViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +69,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Source\Main\" />
     <Folder Include="Tests\" />
   </ItemGroup>
   <ItemGroup>
