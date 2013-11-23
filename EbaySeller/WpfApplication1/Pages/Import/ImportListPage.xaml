@@ -1,30 +1,57 @@
-﻿<Page x:Class="WpfApplication1.Pages.Import.ImportListPage"
+﻿<Page x:Class="EbaySeller.Pages.Import.ImportListPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:converter="clr-namespace:WpfApplication1.Converter"
+      xmlns:converter="clr-namespace:EbaySeller.Converter"
+      xmlns:themes="clr-namespace:DataGridThemes;assembly=DataGridThemes"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
      
 	Title="ImportListPage">
     
     <Grid DataContext="{Binding Source={StaticResource Locator}, Path=Import}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <TextBlock Text="{Binding CountOfData}" Height="20px"/>
-        <DataGrid ItemsSource="{Binding Articles}" AutoGenerateColumns="False" Grid.Row="1">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Nr" IsReadOnly="True" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="ArtikelNr." IsReadOnly="False"  Binding="{Binding ArticleId}"/>
-                <DataGridTextColumn Header="Beschreibung" IsReadOnly="True"  Binding="{Binding Description}"/>
-                <DataGridTextColumn Header="Zusatz" IsReadOnly="True"  Binding="{Binding Description2}"/>
-                <DataGridTextColumn Header="Preis" IsReadOnly="True"  Binding="{Binding Price}"/>
-                <DataGridTextColumn Header="Anzahl" IsReadOnly="True"  Binding="{Binding Availability}"/>
-                <DataGridTextColumn Header="Hersteller" IsReadOnly="True"  Binding="{Binding Manufactorer}"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="{Binding CountOfData}" Height="20px"/>
+            <DataGrid ItemsSource="{Binding Articles}" AutoGenerateColumns="False" Grid.Row="1" themes:DataGridHelper.HorizontalMouseWheelScrollingEnabled="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Nr" IsReadOnly="True" Binding="{Binding Id}"/>
+                    <DataGridTextColumn Header="ArtikelNr." IsReadOnly="False"  Binding="{Binding ArticleId}"/>
+                    <DataGridTextColumn Header="Beschreibung" IsReadOnly="True"  Binding="{Binding Description}"/>
+                    <DataGridTextColumn Header="Zusatz" IsReadOnly="True"  Binding="{Binding Description2}"/>
+                    <DataGridTextColumn Header="Preis" IsReadOnly="True"  Binding="{Binding Price}"/>
+                    <DataGridTextColumn Header="Anzahl" IsReadOnly="True"  Binding="{Binding Availability}"/>
+                    <DataGridTextColumn Header="Hersteller" IsReadOnly="True"  Binding="{Binding Manufactorer}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="{Binding CountOfNewData}" Height="20px"/>
+            <DataGrid ItemsSource="{Binding NewArticles}" AutoGenerateColumns="False" Grid.Row="1" themes:DataGridHelper.HorizontalMouseWheelScrollingEnabled="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Nr" IsReadOnly="True" Binding="{Binding Id}"/>
+                    <DataGridTextColumn Header="ArtikelNr." IsReadOnly="False"  Binding="{Binding ArticleId}"/>
+                    <DataGridTextColumn Header="Beschreibung" IsReadOnly="True"  Binding="{Binding Description}"/>
+                    <DataGridTextColumn Header="Zusatz" IsReadOnly="True"  Binding="{Binding Description2}"/>
+                    <DataGridTextColumn Header="Preis" IsReadOnly="True"  Binding="{Binding Price}"/>
+                    <DataGridTextColumn Header="Anzahl" IsReadOnly="True"  Binding="{Binding Availability}"/>
+                    <DataGridTextColumn Header="Hersteller" IsReadOnly="True"  Binding="{Binding Manufactorer}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        
     </Grid>
 </Page>

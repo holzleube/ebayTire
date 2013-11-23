@@ -23,7 +23,7 @@ namespace EbaySeller.Model.Source.CSV
             var description = GetString(values[2]);
             var manufactorer = GetString(values[14]);
             var tyreLabel = GetString(values[16]);
-            if (IsWheel(description, manufactorer, tyreLabel))
+            if (IsCarWheel(description, manufactorer, tyreLabel))
             {
                 article = GetWheel(description);
             }
@@ -52,7 +52,7 @@ namespace EbaySeller.Model.Source.CSV
             return new Wheel();
         }
 
-        private static bool IsWheel(string textLine, string manufactorer, string tyrelabel)
+        private static bool IsCarWheel(string textLine, string manufactorer, string tyrelabel)
         {
             if (tyrelabel.Contains(@"0/0/0/0/0-h300-w300.jpg"))
             {

@@ -1,7 +1,9 @@
 ﻿using System.Windows;
-using WpfApplication1.Pages.Import;
+using System.Windows.Navigation;
+using EbaySeller.Pages.Import;
+using GalaSoft.MvvmLight.Ioc;
 
-namespace WpfApplication1
+namespace EbaySeller
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -12,6 +14,7 @@ namespace WpfApplication1
         {
             InitializeComponent();
             MainFrame.NavigationService.Navigate(new ImportListPage());
+            SimpleIoc.Default.Register(() => MainFrame.NavigationService);
         }
     }
 }

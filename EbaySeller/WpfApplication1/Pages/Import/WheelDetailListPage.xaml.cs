@@ -13,17 +13,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using EbaySeller.ViewModel.Source.ViewInterfaces;
+using EbaySeller.ViewModel.ViewModel;
 
 namespace EbaySeller.Pages.Import
 {
     /// <summary>
-    /// Interaction logic for ImportListPage.xaml
+    /// Interaction logic for WheelDetailListPage.xaml
     /// </summary>
-    public partial class ImportListPage : IImportListPage
+    public partial class WheelDetailListPage : IWheelDetailListPage
     {
-        public ImportListPage()
+        public WheelDetailListPage()
         {
             InitializeComponent();
         }
+
     }
 }

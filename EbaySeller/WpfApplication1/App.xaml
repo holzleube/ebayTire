@@ -1,16 +1,24 @@
-<Application x:Class="WpfApplication1.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" StartupUri="MainWindow.xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewModel="clr-namespace:EbaySeller.ViewModel.ViewModel;assembly=EbaySeller.ViewModel">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application x:Class="WpfApplication1.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" StartupUri="MainWindow.xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewModel="clr-namespace:EbaySeller.ViewModel.ViewModel;assembly=EbaySeller.ViewModel">
   <Application.Resources>
     <viewModel:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
-        <Style TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="Height" Value="35" />
-            <Setter Property="SeparatorBrush" Value="DarkRed" />
-            <Setter Property="FontWeight" Value="Black" />
-        </Style>
-        <Style TargetType="{x:Type DataGridRow}">
-            <Setter Property="Background" Value="LightYellow" />
-            <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
-        </Style>
-    </Application.Resources>
+    <ResourceDictionary x:Key="dataGridStyle" Source="/DataGridThemes;component/ExpressionLight.xaml" />
+        <!--<Style TargetType="{x:Type DataGridColumnHeader}">
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="Height" Value="35" />
+      <Setter Property="SeparatorBrush" Value="DarkRed" />
+      <Setter Property="FontWeight" Value="Black" />
+    </Style>
+    <Style TargetType="{x:Type DataGridRow}">
+      <Setter Property="Background" Value="LightYellow" />
+      <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
+    </Style>-->
+    <!--<ResourceDictionary x:Key="ThemeResources">
+      <ResourceDictionary.MergedDictionaries>
+       <ResourceDictionary x:Key="dark" Source="/DataGridThemes;component/ExpressionDark.xaml" />
+        <ResourceDictionary Source="/DataGridThemes;component/ExpressionLight.xaml" />
+        <ResourceDictionary Source="/DataGridThemes;component/WhistlerBlue.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>!-->
+  </Application.Resources>
 </Application>

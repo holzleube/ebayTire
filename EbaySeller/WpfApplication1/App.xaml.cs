@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using EbaySeller.Pages.Import;
+using EbaySeller.ViewModel.Source.ViewInterfaces;
+using GalaSoft.MvvmLight.Ioc;
 
 namespace WpfApplication1
 {
@@ -13,5 +10,10 @@ namespace WpfApplication1
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            SimpleIoc.Default.Register<IImportListPage>(()=> new ImportListPage());
+            SimpleIoc.Default.Register<IWheelDetailListPage>(()=> new WheelDetailListPage());
+        }
     }
 }

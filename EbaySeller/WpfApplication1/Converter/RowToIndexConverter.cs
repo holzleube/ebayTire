@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace WpfApplication1.Converter
+namespace EbaySeller.Converter
 {
     public class RowToIndexConverter : MarkupExtension, IValueConverter
     {
