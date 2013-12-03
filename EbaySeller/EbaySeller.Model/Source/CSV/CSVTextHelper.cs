@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using EbaySeller.Model.Source.CSV.WheelOperations;
 using EbaySeller.Model.Source.Data;
 using EbaySeller.Model.Source.Data.Interfaces;
 
@@ -12,20 +13,24 @@ namespace EbaySeller.Model.Source.CSV
 {
     public class CSVTextHelper
     {
-        private static List<string> tyreManufactorer = new List<string>()
-            {
-                "MICHELIN"
-            }; 
+
         public static IArticle GetArticleFromString(string textLine, int articleId)
         {
             var values = textLine.Split('|');
-            var article = new Article();
+            IArticle article = new Article();
             var description = GetString(values[2]);
             var manufactorer = GetString(values[14]);
             var tyreLabel = GetString(values[16]);
             if (IsCarWheel(description, manufactorer, tyreLabel))
             {
-                article = GetWheel(description);
+                try
+                {
+                    article = GetWheel(description);
+                }
+                catch (Exception exception)
+                {
+                    article = new Article();
+                }
             }
             article.Id = articleId;
             article.ArticleId = GetString(values[1]);
@@ -47,9 +52,9 @@ namespace EbaySeller.Model.Source.CSV
             return article;
         }
 
-        private static Article GetWheel(string descriptionLine)
+        private static IArticle GetWheel(string descriptionLine)
         {
-            return new Wheel();
+            return WheelOperationHandler.GetWheelForDescription(descriptionLine);
         }
 
         private static bool IsCarWheel(string textLine, string manufactorer, string tyrelabel)
@@ -58,14 +63,12 @@ namespace EbaySeller.Model.Source.CSV
             {
                 return false;
             }
+            if (manufactorer.Contains("STAHLRAD"))
+            {
+                return false;
+            }
             return true;
-            //if (tyreManufactorer.Contains(manufactorer))
-            //{
-            //    return true;
-            //}
-            ////var match = Regex.Match(textLine, @"[A-Za-z]+\s*[A-Za-z]+ \s*\d{3}/\d{3}");
-            //var match = Regex.Match(textLine, @"\d{3}/\d{3}");
-            //return match.Success;
+
         }
 
         private static string GetString(string value)

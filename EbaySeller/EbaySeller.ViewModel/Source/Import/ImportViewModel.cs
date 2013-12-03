@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Navigation;
 using EbaySeller.Model.Source.CSV;
 using EbaySeller.Model.Source.Data.Interfaces;
 using EbaySeller.Model.Source.Exceptions;
 using EbaySeller.ViewModel.Source.Comperator;
 using EbaySeller.ViewModel.Source.ViewInterfaces;
-using EbaySeller.ViewModel.ViewModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
@@ -27,6 +25,29 @@ namespace EbaySeller.ViewModel.Source.Import
         private Dictionary<string, IArticle> originalArticles = new Dictionary<string, IArticle>();
         private Dictionary<string, IArticle> newOriginalArticles = new Dictionary<string, IArticle>();
         private bool isWheelFilterChecked;
+        private bool isLoadingBaseData = false;
+        private bool isLoadingNewData = false;
+
+        #region binding Data
+        public bool IsLoadingBaseData
+        {
+            get { return isLoadingBaseData; }
+            set 
+            {
+                isLoadingBaseData = value;
+                RaisePropertyChanged("IsLoadingBaseData");
+            }
+        } 
+        
+        public bool IsLoadingNewData
+        {
+            get { return isLoadingNewData; }
+            set 
+            {
+                isLoadingNewData = value;
+                RaisePropertyChanged("IsLoadingNewData");
+            }
+        }
 
         public List<IArticle> Articles
         {
@@ -48,9 +69,32 @@ namespace EbaySeller.ViewModel.Source.Import
                 RaisePropertyChanged("CountOfNewData");
             }
         }
+
+        public bool WheelFilterChecked
+        {
+            get { return isWheelFilterChecked; }
+            set
+            {
+                isWheelFilterChecked = value;
+                RaisePropertyChanged("WheelFilterChecked");
+            }
+        }
+
+        public string CountOfData
+        {
+            get { return "Anzahl: " + Articles.Count; }
+        }
+
+        public string CountOfNewData
+        {
+            get { return "Anzahl: " + NewArticles.Count; }
+        }
+
+        #endregion
+        
         #region commands
 
-        public RelayCommand ImportRelayCommand
+        public ICommand ImportRelayCommand
         {
             get
             {
@@ -82,25 +126,7 @@ namespace EbaySeller.ViewModel.Source.Import
 
         #endregion
 
-        public bool WheelFilterChecked
-        {
-            get { return isWheelFilterChecked; }
-            set
-            {
-                isWheelFilterChecked = value;
-                RaisePropertyChanged("WheelFilterChecked");
-            }
-        }
 
-        public string CountOfData
-        {
-            get { return "Anzahl: " + Articles.Count; }
-        }
-        
-        public string CountOfNewData
-        {
-            get { return "Anzahl: " + NewArticles.Count; }
-        }
 
         private void WheelFilterWasPressed()
         {
@@ -127,7 +153,11 @@ namespace EbaySeller.ViewModel.Source.Import
             {
                 if (article is IWheel)
                 {
-                    resultList.Add(article);
+                    IWheel wheel = (IWheel) article;
+                    if (wheel.WheelHeight != 0)
+                    {
+                        resultList.Add(article);
+                    }
                 }
             }
             return resultList;
@@ -135,13 +165,51 @@ namespace EbaySeller.ViewModel.Source.Import
 
         private void ImportBaseDataWasClickedCommand()
         {
-            originalArticles = GetArticlesFromUserChosenFile();
-            Articles = new List<IArticle>(originalArticles.Values);
+            SetArticlesFromFileAsync(result =>
+            {
+                originalArticles = result;
+                Articles = new List<IArticle>(result.Values);
+                IsLoadingBaseData = false;
+            }, () => IsLoadingBaseData = true);
         }
         private void ImportNewBaseDataWasClickedCommand()
         {
-            newOriginalArticles = GetArticlesFromUserChosenFile();
-            NewArticles = new List<IArticle>(newOriginalArticles.Values);
+            SetArticlesFromFileAsync(result =>
+                {
+                    newOriginalArticles = result;
+                    NewArticles = new List<IArticle>(result.Values);
+                    IsLoadingNewData = false;
+                }, () => IsLoadingNewData = true);
+        }
+
+        private void SetArticlesFromFileAsync(Action<Dictionary<string, IArticle>> afterLoad, Action beforeLoad  )
+        {
+            var fileDialog = new OpenFileDialog();
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                BackgroundWorker bw = new BackgroundWorker();
+                
+                try
+                {
+                    bw.DoWork += delegate
+                        {
+                            beforeLoad.Invoke();
+                            var reader = new CSVReader();
+                            var resultArticles = reader.ReadArticlesFromFile(fileDialog.FileName);
+                            afterLoad.Invoke(resultArticles);
+                        };
+                    bw.RunWorkerAsync();
+                    
+                }
+                catch (FileNotReadyException ex)
+                {
+                    MessageBox.Show("Datei kann nicht geöffnet werden, da sie bereits verwendet wird.");
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Es ist folgender Fehler aufgetreten: " + e.Message);
+                }
+            }
         }
 
         private void CompareBaseAndNewFile()

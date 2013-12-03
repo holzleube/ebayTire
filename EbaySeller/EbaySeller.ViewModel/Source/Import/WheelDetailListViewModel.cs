@@ -48,10 +48,10 @@ namespace EbaySeller.ViewModel.Source.Import
         public void InitGroupedWheelList(List<IArticle> wheels )
         {
             countOfWheels = wheels.Count;
-            //WheelListFlat = wheels;
-            WheelList = new ListCollectionView(wheels);
-            WheelList.GroupDescriptions.Add(new PropertyGroupDescription("Manufactorer"));
-            WheelList.SortDescriptions.Add(new SortDescription("Manufactorer", ListSortDirection.Ascending));
+            WheelListFlat = wheels;
+            //WheelList = new ListCollectionView(wheels);
+            //WheelList.GroupDescriptions.Add(new PropertyGroupDescription("Manufactorer"));
+            //WheelList.SortDescriptions.Add(new SortDescription("Manufactorer", ListSortDirection.Ascending));
         }
     }
 }

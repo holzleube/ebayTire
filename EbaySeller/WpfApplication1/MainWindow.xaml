@@ -17,7 +17,10 @@
                     <RibbonButton Label="Öffne Neu" LargeImageSource="Images/open.png" Command="{Binding ImportNewRelayCommand}"/>
                 </RibbonGroup>
                 <RibbonGroup Header="Filter">
-                    <RibbonToggleButton Label="Reifen" IsChecked="{Binding WheelFilterChecked}" LargeImageSource="Images/wheel.png" Command="{Binding WheelFilterToggleCommand}"></RibbonToggleButton>
+                    <RibbonToggleButton Label="Autoreifen" IsChecked="{Binding WheelFilterChecked}" LargeImageSource="Images/auto.png" Command="{Binding WheelFilterToggleCommand}"></RibbonToggleButton>
+                    <RibbonToggleButton Label="DOT2011" IsChecked="{Binding WheelFilterChecked}" LargeImageSource="Images/wheel.png" Command="{Binding WheelFilterToggleCommand}"></RibbonToggleButton>
+                    <RibbonToggleButton Label="Winter" IsChecked="{Binding WheelFilterChecked}" LargeImageSource="Images/winter.png" Command="{Binding WheelFilterToggleCommand}"></RibbonToggleButton>
+                    <RibbonToggleButton Label="Sommer" IsChecked="{Binding WheelFilterChecked}" LargeImageSource="Images/summer.png" Command="{Binding WheelFilterToggleCommand}"></RibbonToggleButton>
                 </RibbonGroup>
                 <RibbonGroup Header="Berechnung">
                     <RibbonButton Label="Kalkuliere Unterschiede" LargeImageSource="Images/reload.png" Command="{Binding CompareBaseAndNewFileCommand}"></RibbonButton>

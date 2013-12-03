@@ -13,18 +13,22 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding CountOfData}" Height="20px"/>
-        <DataGrid ItemsSource="{Binding WheelList}" AutoGenerateColumns="False" Grid.Row="1">
+        <DataGrid ItemsSource="{Binding WheelListFlat}" AutoGenerateColumns="False" Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Nr" IsReadOnly="True" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Name" IsReadOnly="True"  Binding="{Binding WheelId}"/>
+                <DataGridTextColumn Header="ShortName" IsReadOnly="True"  Binding="{Binding ManufactorerShortName}"/>
                 
                 <DataGridTextColumn Header="Breite" IsReadOnly="True"  Binding="{Binding WheelWidth}"/>
+                <DataGridTextColumn Header="Querschnitt" IsReadOnly="True"  Binding="{Binding WheelHeight}"/>
                 <DataGridTextColumn Header="Durchmesser" IsReadOnly="True"  Binding="{Binding CrossSection}"/>
-                <DataGridTextColumn Header="Last" IsReadOnly="True"  Binding="{Binding WeightIndex}"/>
-                <DataGridTextColumn Header="Speed" IsReadOnly="True"  Binding="{Binding SpeedIndex}"/>
-                <DataGridTextColumn Header="Sprit" IsReadOnly="True"  Binding="{Binding FuelNeed}"/>
+                <DataGridTextColumn Header="Lastindex" IsReadOnly="True"  Binding="{Binding WeightIndex}"/>
+                <DataGridTextColumn Header="Speedindex" IsReadOnly="True"  Binding="{Binding SpeedIndex}"/>
+                <DataGridTextColumn Header="Beschreibung" IsReadOnly="True"  Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Beschreibung2" IsReadOnly="True"  Binding="{Binding Description2}"/>
+                <!--<DataGridTextColumn Header="Sprit" IsReadOnly="True"  Binding="{Binding FuelNeed}"/>
                 <DataGridTextColumn Header="Bremsen" IsReadOnly="True"  Binding="{Binding BreakingDistance}"/>
-                <DataGridTextColumn Header="Lautstärke" IsReadOnly="True"  Binding="{Binding AcousticLevel}"/>
+                <DataGridTextColumn Header="Lautstärke" IsReadOnly="True"  Binding="{Binding AcousticLevel}"/>-->
                 
                 <DataGridTextColumn Header="Preis" IsReadOnly="True"  Binding="{Binding Price}"/>
                 <DataGridTextColumn Header="Anzahl" IsReadOnly="True"  Binding="{Binding Availability}"/>

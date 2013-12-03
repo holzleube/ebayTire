@@ -14,6 +14,8 @@ namespace EbaySeller.Model.Source.Data.Interfaces
 
         int WheelWidth { get; set; }
 
+        int WheelHeight { get; set; }
+
         string CrossSection { get; set; }
 
         int WeightIndex { get; set; }

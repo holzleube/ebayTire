@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:converter="clr-namespace:EbaySeller.Converter"
       xmlns:themes="clr-namespace:DataGridThemes;assembly=DataGridThemes"
+      xmlns:control="clr-namespace:WpfApplication1.Control"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
      
@@ -19,10 +20,12 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <TextBlock Text="{Binding CountOfData}" Height="20px"/>
-            <DataGrid ItemsSource="{Binding Articles}" AutoGenerateColumns="False" Grid.Row="1" themes:DataGridHelper.HorizontalMouseWheelScrollingEnabled="True">
+            <control:LoadingPanel IsLoading="{Binding IsLoadingBaseData}" Message="Daten werden geladen" Grid.Row="1"/>
+            <DataGrid ItemsSource="{Binding Articles}" AutoGenerateColumns="False" Grid.Row="2" themes:DataGridHelper.HorizontalMouseWheelScrollingEnabled="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Nr" IsReadOnly="True" Binding="{Binding Id}"/>
                     <DataGridTextColumn Header="ArtikelNr." IsReadOnly="False"  Binding="{Binding ArticleId}"/>
@@ -34,13 +37,16 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
+        
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <TextBlock Text="{Binding CountOfNewData}" Height="20px"/>
-            <DataGrid ItemsSource="{Binding NewArticles}" AutoGenerateColumns="False" Grid.Row="1" themes:DataGridHelper.HorizontalMouseWheelScrollingEnabled="True">
+            <control:LoadingPanel IsLoading="{Binding IsLoadingNewData}" Message="Daten werden geladen" Grid.Row="1"/>
+            <DataGrid ItemsSource="{Binding NewArticles}" AutoGenerateColumns="False" Grid.Row="2" themes:DataGridHelper.HorizontalMouseWheelScrollingEnabled="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Nr" IsReadOnly="True" Binding="{Binding Id}"/>
                     <DataGridTextColumn Header="ArtikelNr." IsReadOnly="False"  Binding="{Binding ArticleId}"/>

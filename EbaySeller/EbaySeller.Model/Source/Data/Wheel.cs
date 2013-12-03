@@ -37,6 +37,7 @@ namespace EbaySeller.Model.Source.Data
         public string ManufactorerShortName { get; set; }
         public string WheelId { get; set; }
         public int WheelWidth { get; set; }
+        public int WheelHeight { get; set; }
         public string CrossSection { get; set; }
         public int WeightIndex { get; set; }
         public char SpeedIndex { get; set; }
