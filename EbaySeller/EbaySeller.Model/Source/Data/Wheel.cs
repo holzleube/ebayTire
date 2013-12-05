@@ -44,5 +44,8 @@ namespace EbaySeller.Model.Source.Data
         public string FuelNeed { get; set; }
         public string BreakingDistance { get; set; }
         public string AcousticLevel { get; set; }
+        public bool IsWinter { get; set; }
+        public bool IsMudSnow { get; set; }
+        public int DotNumber { get; set; }
     }
 }

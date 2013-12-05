@@ -18,14 +18,14 @@ namespace EbaySeller.Model.Source.CSV.WheelOperations
             {
                 return 0;
             }
-
         }
 
         public static string GetPattern(string descriptionLine, string regexToFind)
         {
             Regex reg = new Regex(regexToFind);
             var match = reg.Matches(descriptionLine);
-            for (int index = 0; index < match.Count; index++)
+            int index;
+            for (index = 0; index < match.Count;)
             {
                 return match[0].ToString();
             }

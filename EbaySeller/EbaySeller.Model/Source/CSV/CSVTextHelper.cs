@@ -19,13 +19,14 @@ namespace EbaySeller.Model.Source.CSV
             var values = textLine.Split('|');
             IArticle article = new Article();
             var description = GetString(values[2]);
+            var description2 = GetString(values[3]);
             var manufactorer = GetString(values[14]);
             var tyreLabel = GetString(values[16]);
             if (IsCarWheel(description, manufactorer, tyreLabel))
             {
                 try
                 {
-                    article = GetWheel(description);
+                    article = GetWheel(description, description2);
                 }
                 catch (Exception exception)
                 {
@@ -34,8 +35,8 @@ namespace EbaySeller.Model.Source.CSV
             }
             article.Id = articleId;
             article.ArticleId = GetString(values[1]);
-            article.Description = GetString(values[2]);
-            article.Description2 = GetString(values[3]);
+            article.Description = description;
+            article.Description2 = description2;
             article.Price = GetDouble(values[4]);
             article.Price4 = GetDouble(values[5]);
             article.AvgPrice = GetDouble(values[6]);
@@ -46,15 +47,15 @@ namespace EbaySeller.Model.Source.CSV
             article.ImageLink = values[11];
             article.ImageTnLink = values[12];
             article.InfoLink = values[13];
-            article.Manufactorer = values[14];
+            article.Manufactorer = manufactorer;
             article.DirectLink = values[15];
             article.TyreLabelLink = values[16];
             return article;
         }
 
-        private static IArticle GetWheel(string descriptionLine)
+        private static IArticle GetWheel(string descriptionLine, string description2)
         {
-            return WheelOperationHandler.GetWheelForDescription(descriptionLine);
+            return WheelOperationHandler.GetWheelForDescription(descriptionLine, description2);
         }
 
         private static bool IsCarWheel(string textLine, string manufactorer, string tyrelabel)

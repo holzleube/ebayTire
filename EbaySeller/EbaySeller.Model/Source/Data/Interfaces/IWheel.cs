@@ -27,5 +27,11 @@ namespace EbaySeller.Model.Source.Data.Interfaces
         string BreakingDistance { get; set; }
 
         string AcousticLevel { get; set; }
+
+        bool IsWinter { get; set; }
+
+        bool IsMudSnow { get; set; }
+
+        int DotNumber { get; set; }
     }
 }

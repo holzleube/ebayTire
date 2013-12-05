@@ -17,7 +17,7 @@ namespace EbaySeller.Model.Source.CSV.WheelOperations
 
         public string GetRegexPattern()
         {
-            return @" *[^ ]*";
+            return @" *[^ ]* [\d]*";
         }
     }
 }

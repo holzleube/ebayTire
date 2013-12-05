@@ -18,9 +18,9 @@ namespace EbaySeller.Model.Source.CSV.WheelOperations
                 new WheelWeightIndexOperation(),
                 new WheelSpeedIndexOperation()
             };
-        private static IWheelOperation heightWidthOperation = new WheelHeightWidthOperation();
+        private static readonly IWheelOperation heightWidthOperation = new WheelHeightWidthOperation();
 
-        public static IArticle GetWheelForDescription(string descriptionString)
+        public static IArticle GetWheelForDescription(string descriptionString, string description2String)
         {
             IWheel wheel = new Wheel();
             var heightWidthPattern = AWheelOperations.GetPattern(descriptionString,
@@ -42,12 +42,6 @@ namespace EbaySeller.Model.Source.CSV.WheelOperations
                 descriptionString = AWheelOperations.CutFromString(descriptionString, pattern);
             }
             return wheel;
-        }
-
-        private static bool IsNoCarWheel(string descriptionString)
-        {
-            var testPattern = AWheelOperations.GetPattern(descriptionString, @"\d{3}/\d{2}");
-            return testPattern.Equals(string.Empty);
         }
     }
 }

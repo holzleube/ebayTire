@@ -14,7 +14,7 @@ namespace EbaySeller.ViewModel.Source.Import
     {
         private ICollectionView wheelList = new ListCollectionView(new List<IWheel>());
 
-        private int countOfWheels = 0;
+        private int countOfWheels;
         private List<IArticle> wheelListFlat;
 
 
