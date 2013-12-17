@@ -16,15 +16,16 @@
                     <RibbonButton Label="Öffne Basis" LargeImageSource="Images/open.png" Command="{Binding ImportRelayCommand}"/>
                     <RibbonButton Label="Öffne Neu" LargeImageSource="Images/open.png" Command="{Binding ImportNewRelayCommand}"/>
                 </RibbonGroup>
-                <RibbonGroup Header="Filter">
-                    <RibbonToggleButton Label="Autoreifen" IsChecked="{Binding WheelFilterChecked}" LargeImageSource="Images/auto.png" Command="{Binding WheelFilterToggleCommand}"></RibbonToggleButton>
-                    <RibbonToggleButton Label="DOT2011" IsChecked="{Binding WheelFilterChecked}" LargeImageSource="Images/wheel.png" Command="{Binding WheelFilterToggleCommand}"></RibbonToggleButton>
-                    <RibbonToggleButton Label="Winter" IsChecked="{Binding WheelFilterChecked}" LargeImageSource="Images/winter.png" Command="{Binding WheelFilterToggleCommand}"></RibbonToggleButton>
-                    <RibbonToggleButton Label="Sommer" IsChecked="{Binding WheelFilterChecked}" LargeImageSource="Images/summer.png" Command="{Binding WheelFilterToggleCommand}"></RibbonToggleButton>
+                <RibbonGroup Header="Filter" DataContext="{Binding Source={StaticResource Locator}, Path=Filter}">
+                    <RibbonToggleButton Label="Autoreifen" IsChecked="{Binding CarWheelFilterChecked}" LargeImageSource="Images/auto.png" Command="{Binding FilterToggleCommand}" />
+                    <RibbonToggleButton Label="DOT2011" IsChecked="{Binding DotFilterChecked}" LargeImageSource="Images/wheel.png" Command="{Binding FilterToggleCommand}" />
+                    <RibbonToggleButton Label="Winter" IsChecked="{Binding WinterFilterChecked}" LargeImageSource="Images/winter.png" Command="{Binding FilterToggleCommand}" />
+                    <RibbonToggleButton Label="205/55 195/65 205/60 195/60" IsChecked="{Binding WidthHeightFilterChecked}" LargeImageSource="Images/yardstick.png" Command="{Binding FilterToggleCommand}" />
+                    <RibbonToggleButton Label="Alle" IsChecked="{Binding AllFilterChecked}" LargeImageSource="Images/yardstick.png" Command="{Binding FilterToggleCommand}" />
                 </RibbonGroup>
                 <RibbonGroup Header="Berechnung">
                     <RibbonButton Label="Kalkuliere Unterschiede" LargeImageSource="Images/reload.png" Command="{Binding CompareBaseAndNewFileCommand}"></RibbonButton>
-                    <RibbonButton Label="Ebay hochladen" LargeImageSource="Images/ebay.png" Command="{Binding ImportRelayCommand}"></RibbonButton>
+                    <RibbonButton Label="Ebay hochladen" DataContext="{Binding Source={StaticResource Locator}, Path=Wheel}" LargeImageSource="Images/ebay.png" Command="{Binding UploadToEbayCommand}"></RibbonButton>
                 </RibbonGroup>
             </RibbonTab>
             <RibbonTab Header="Ebay">

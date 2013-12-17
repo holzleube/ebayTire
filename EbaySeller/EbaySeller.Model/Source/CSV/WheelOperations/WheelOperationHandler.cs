@@ -10,7 +10,7 @@ namespace EbaySeller.Model.Source.CSV.WheelOperations
 {
     public static class WheelOperationHandler
     {
-        private static IEnumerable<IWheelOperation> wheelsOperations = new List<IWheelOperation>()
+        private static readonly IEnumerable<IWheelOperation> wheelsOperations = new List<IWheelOperation>()
             {
                 new WheelManufactorerShortNameOperation(),
                 new WheelArticleNameOperation(),
@@ -18,6 +18,14 @@ namespace EbaySeller.Model.Source.CSV.WheelOperations
                 new WheelWeightIndexOperation(),
                 new WheelSpeedIndexOperation()
             };
+        
+        private static readonly IEnumerable<IWheelOperation> extraWheelsOperations = new List<IWheelOperation>()
+            {
+                new WheelDotOperation(),
+                new WheelIsWinterOperation(),
+                new WheelMudAndSnowOperation()
+            };
+
         private static readonly IWheelOperation heightWidthOperation = new WheelHeightWidthOperation();
 
         public static IArticle GetWheelForDescription(string descriptionString, string description2String)
@@ -31,7 +39,14 @@ namespace EbaySeller.Model.Source.CSV.WheelOperations
             }
             wheel = heightWidthOperation.SetValueOnWheel(wheel, heightWidthPattern);
             descriptionString = AWheelOperations.CutFromString(descriptionString, heightWidthPattern);
-            foreach(IWheelOperation operation in wheelsOperations)
+            wheel = GetWheelWithGivenWheelOperations(descriptionString, wheel, wheelsOperations);
+            wheel = GetWheelWithGivenWheelOperations(description2String, wheel, extraWheelsOperations);
+            return wheel;
+        }
+
+        private static IWheel GetWheelWithGivenWheelOperations(string descriptionString, IWheel wheel, IEnumerable<IWheelOperation> wheelOperations)
+        {
+            foreach (IWheelOperation operation in wheelOperations)
             {
                 var pattern = AWheelOperations.GetPattern(descriptionString, operation.GetRegexPattern());
                 if (pattern.Equals(string.Empty))

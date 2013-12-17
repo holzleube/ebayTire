@@ -24,6 +24,9 @@
                 <DataGridTextColumn Header="Durchmesser" IsReadOnly="True"  Binding="{Binding CrossSection}"/>
                 <DataGridTextColumn Header="Lastindex" IsReadOnly="True"  Binding="{Binding WeightIndex}"/>
                 <DataGridTextColumn Header="Speedindex" IsReadOnly="True"  Binding="{Binding SpeedIndex}"/>
+                <DataGridTextColumn Header="Dot" IsReadOnly="True"  Binding="{Binding DotNumber}"/>
+                <DataGridTextColumn Header="Winter" IsReadOnly="True"  Binding="{Binding IsWinter}"/>
+                <DataGridTextColumn Header="M+S" IsReadOnly="True"  Binding="{Binding IsMudSnow}"/>
                 <DataGridTextColumn Header="Beschreibung" IsReadOnly="True"  Binding="{Binding Description}"/>
                 <DataGridTextColumn Header="Beschreibung2" IsReadOnly="True"  Binding="{Binding Description2}"/>
                 <!--<DataGridTextColumn Header="Sprit" IsReadOnly="True"  Binding="{Binding FuelNeed}"/>

@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using EbaySeller.Model.Source.CSV;
+using EbaySeller.Model.Source.CSV.Reader;
 using EbaySeller.Model.Source.Data.Interfaces;
 using EbaySeller.Model.Source.Exceptions;
 using EbaySeller.ViewModel.Source.Comperator;
@@ -18,15 +19,17 @@ using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace EbaySeller.ViewModel.Source.Import
 {
-    public class ImportViewModel: ViewModelBase
+    public class ImportViewModel: ViewModelBase, IFilterableViewModel
     {
         private List<IArticle> articles = new List<IArticle>();
         private List<IArticle> newArticles = new List<IArticle>();
         private Dictionary<string, IArticle> originalArticles = new Dictionary<string, IArticle>();
         private Dictionary<string, IArticle> newOriginalArticles = new Dictionary<string, IArticle>();
-        private bool isWheelFilterChecked;
+
         private bool isLoadingBaseData = false;
         private bool isLoadingNewData = false;
+        private const string BaseArticleKey = "BaseArticleKey";
+        private const string NewArticleKey = "NewArticleKey";
 
         #region binding Data
         public bool IsLoadingBaseData
@@ -70,16 +73,7 @@ namespace EbaySeller.ViewModel.Source.Import
             }
         }
 
-        public bool WheelFilterChecked
-        {
-            get { return isWheelFilterChecked; }
-            set
-            {
-                isWheelFilterChecked = value;
-                RaisePropertyChanged("WheelFilterChecked");
-            }
-        }
-
+        
         public string CountOfData
         {
             get { return "Anzahl: " + Articles.Count; }
@@ -109,13 +103,7 @@ namespace EbaySeller.ViewModel.Source.Import
                 return new RelayCommand(ImportNewBaseDataWasClickedCommand);
             }
         }
-        public RelayCommand WheelFilterToggleCommand
-        {
-            get
-            {
-                return new RelayCommand(WheelFilterWasPressed);
-            }
-        }
+        
         public RelayCommand CompareBaseAndNewFileCommand
         {
             get
@@ -125,43 +113,6 @@ namespace EbaySeller.ViewModel.Source.Import
         }
 
         #endregion
-
-
-
-        private void WheelFilterWasPressed()
-        {
-            if (WheelFilterChecked)
-            {
-                var resultList = GetWheelFilteredList(originalArticles.Values);
-                var newResultList = GetWheelFilteredList(newOriginalArticles.Values);
-                Articles = resultList;
-                NewArticles = newResultList;
-                return;
-            }
-            Articles = new List<IArticle>(originalArticles.Values);
-            NewArticles = new List<IArticle>(newOriginalArticles.Values);
-        }
-
-        private List<IArticle> GetWheelFilteredList(Dictionary<string, IArticle>.ValueCollection articlesToFilter)
-        {
-            var resultList = new List<IArticle>();
-            if (articlesToFilter.Count == 0)
-            {
-                return resultList;
-            }
-            foreach (var article in articlesToFilter)
-            {
-                if (article is IWheel)
-                {
-                    IWheel wheel = (IWheel) article;
-                    if (wheel.WheelHeight != 0)
-                    {
-                        resultList.Add(article);
-                    }
-                }
-            }
-            return resultList;
-        }
 
         private void ImportBaseDataWasClickedCommand()
         {
@@ -266,27 +217,18 @@ namespace EbaySeller.ViewModel.Source.Import
             SimpleIoc.Default.GetInstance<NavigationService>().Navigate(targetPage);
         }
 
-
-        private Dictionary<string, IArticle> GetArticlesFromUserChosenFile()
+        public Dictionary<string, List<IArticle>> GetListsToFilter()
         {
-            var fileDialog = new OpenFileDialog();
-            if (fileDialog.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    var reader = new CSVReader();
-                    return reader.ReadArticlesFromFile(fileDialog.FileName);
-                }
-                catch (FileNotReadyException ex)
-                {
-                    MessageBox.Show("Datei kann nicht geöffnet werden, da sie bereits verwendet wird.");
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Es ist folgender Fehler aufgetreten: " + e.Message);
-                }
-            }
-            return new Dictionary<string, IArticle>();
+            var articleListsToFilter = new Dictionary<string, List<IArticle>>();
+            articleListsToFilter.Add(BaseArticleKey, new List<IArticle>(originalArticles.Values));
+            articleListsToFilter.Add(NewArticleKey, new List<IArticle>(newOriginalArticles.Values));
+            return articleListsToFilter;
+        }
+
+        public void SetFilteredLists(Dictionary<string, List<IArticle>> filteredArticleLists)
+        {
+            Articles = filteredArticleLists[BaseArticleKey];
+            NewArticles = filteredArticleLists[NewArticleKey];
         }
     }
 }

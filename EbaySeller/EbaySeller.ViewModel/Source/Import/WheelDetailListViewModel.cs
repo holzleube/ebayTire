@@ -5,8 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Forms;
+using System.Windows.Input;
 using EbaySeller.Model.Source.Data.Interfaces;
+using EbaySeller.Model.Source.Ebay;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 
 namespace EbaySeller.ViewModel.Source.Import
 {
@@ -17,6 +21,17 @@ namespace EbaySeller.ViewModel.Source.Import
         private int countOfWheels;
         private List<IArticle> wheelListFlat;
 
+        private ICommand uploadToEbayCommand;
+
+        public ICommand UploadToEbayCommand
+        {
+            get
+            {
+                return new RelayCommand(UploadCurrentListToEbay);
+            }
+        }
+
+        
 
         public ICollectionView WheelList
         {
@@ -52,6 +67,16 @@ namespace EbaySeller.ViewModel.Source.Import
             //WheelList = new ListCollectionView(wheels);
             //WheelList.GroupDescriptions.Add(new PropertyGroupDescription("Manufactorer"));
             //WheelList.SortDescriptions.Add(new SortDescription("Manufactorer", ListSortDirection.Ascending));
+        }
+
+        private void UploadCurrentListToEbay()
+        {
+            var ebayUploader = new EbayUploader();
+            var saveFileDialog = new SaveFileDialog();
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                ebayUploader.RefreshOrCreateEbayArticle(WheelListFlat, saveFileDialog.FileName);
+            }
         }
     }
 }

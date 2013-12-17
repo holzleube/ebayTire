@@ -35,6 +35,7 @@ namespace EbaySeller.ViewModel.ViewModel
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<ImportViewModel>();
             SimpleIoc.Default.Register<WheelDetailListViewModel>();
+            SimpleIoc.Default.Register<FilterViewModel>();
         }
 
         public MainViewModel Main
@@ -59,12 +60,20 @@ namespace EbaySeller.ViewModel.ViewModel
                 return ServiceLocator.Current.GetInstance<WheelDetailListViewModel>();
             }
         }
+        public FilterViewModel Filter
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<FilterViewModel>();
+            }
+        }
         
         public static void Cleanup()
         {
             SimpleIoc.Default.Unregister<MainViewModel>();
             SimpleIoc.Default.Unregister<ImportViewModel>();
             SimpleIoc.Default.Unregister<WheelDetailListViewModel>();
+            SimpleIoc.Default.Unregister<FilterViewModel>();
         }
     }
 }

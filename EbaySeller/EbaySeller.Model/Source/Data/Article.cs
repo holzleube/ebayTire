@@ -26,5 +26,6 @@ namespace EbaySeller.Model.Source.Data
         public string ManufactorerNumber { get; set; }
         public string DirectLink { get; set; }
         public string TyreLabelLink { get; set; }
+        public string EbayId { get; set; }
     }
 }

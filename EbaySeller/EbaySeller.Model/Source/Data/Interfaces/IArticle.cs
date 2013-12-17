@@ -42,5 +42,7 @@ namespace EbaySeller.Model.Source.Data.Interfaces
 
         string TyreLabelLink { get; set; }
 
+        string EbayId { get; set; }
+
     }
 }

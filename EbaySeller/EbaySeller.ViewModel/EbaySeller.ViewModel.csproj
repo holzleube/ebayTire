@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4">
@@ -37,8 +39,15 @@
     <Reference Include="GalaSoft.MvvmLight.WPF4">
       <HintPath>..\packages\MvvmLightLibs.4.2.30.0\lib\net40\GalaSoft.MvvmLight.WPF4.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -62,6 +71,13 @@
     <Compile Include="Source\Comperator\ICompareCriteria.cs" />
     <Compile Include="Source\Comperator\IdCriteria.cs" />
     <Compile Include="Source\Comperator\PriceCriteria.cs" />
+    <Compile Include="Source\Filter\CarFilterCriteria.cs" />
+    <Compile Include="Source\Filter\DotFilter.cs" />
+    <Compile Include="Source\Filter\IFilterCriteria.cs" />
+    <Compile Include="Source\Filter\WidthHeightFilter.cs" />
+    <Compile Include="Source\Filter\WinterFilterCriteria.cs" />
+    <Compile Include="Source\Import\FilterViewModel.cs" />
+    <Compile Include="Source\Import\IFilterableViewModel.cs" />
     <Compile Include="Source\Import\IMainViewModel.cs" />
     <Compile Include="Source\Import\ImportViewModel.cs" />
     <Compile Include="Source\Import\MainViewModel.cs" />
