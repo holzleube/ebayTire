@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\CSV\Constants\CSVConstants.cs" />
     <Compile Include="Source\CSV\CSVTextHelper.cs" />
     <Compile Include="Source\CSV\Reader\CSVReader.cs" />
     <Compile Include="Source\CSV\Reader\ICSVReader.cs" />
@@ -102,7 +103,6 @@
     <Content Include="Lib\eBay.Service.SDK.Attribute.dll" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="Data\CSV-Datei.csv" />
     <None Include="packages.config" />
   </ItemGroup>

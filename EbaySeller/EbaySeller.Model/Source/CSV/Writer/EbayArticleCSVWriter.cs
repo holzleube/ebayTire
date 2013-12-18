@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using EbaySeller.Model.Source.CSV.Constants;
 using EbaySeller.Model.Source.Data.Interfaces;
 
 namespace EbaySeller.Model.Source.CSV.Writer
@@ -14,11 +15,17 @@ namespace EbaySeller.Model.Source.CSV.Writer
         public EbayArticleCSVWriter(string filename)
         {
             this.fileName = filename;
+            WriteTextToFile(CSVConstants.FirstLineOfCsvFile);
         }
         public void WriteToCSVFile(IArticle articleToWrite)
         {
             string csvTextLine = GetTextLineFromArticle(articleToWrite);
-            using (var file = new StreamWriter(@fileName))
+            WriteTextToFile(csvTextLine);
+        }
+
+        private void WriteTextToFile(string csvTextLine)
+        {
+            using (var file = new StreamWriter(@fileName, true))
             {
                 file.WriteLine(csvTextLine);
             }
@@ -26,7 +33,26 @@ namespace EbaySeller.Model.Source.CSV.Writer
 
         private string GetTextLineFromArticle(IArticle articleToWrite)
         {
-            return "line"+articleToWrite.Description;
+            return string.Format(CSVConstants.DataFormatLine, 
+                articleToWrite.Id,
+                articleToWrite.ArticleId,
+                articleToWrite.Description,
+                articleToWrite.Description2,
+                articleToWrite.Price,
+                articleToWrite.Price4,
+                articleToWrite.AvgPrice,
+                articleToWrite.AnonymPrice,
+                articleToWrite.RvoPrice,
+                articleToWrite.Availability,
+                articleToWrite.ManufactorerNumber,
+                articleToWrite.ImageLink,
+                articleToWrite.ImageTnLink,
+                articleToWrite.InfoLink,
+                articleToWrite.Manufactorer,
+                articleToWrite.DirectLink,
+                articleToWrite.TyreLabelLink,
+                articleToWrite.EbayId,
+                DateTime.Now);
         }
     }
 }
