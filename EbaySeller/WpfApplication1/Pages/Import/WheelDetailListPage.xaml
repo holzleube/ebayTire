@@ -12,17 +12,23 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding CountOfData}" Height="20px"/>
-        <control:LoadingPanel IsLoading="{Binding IsLoadingBaseData}" Message="Daten werden geladen" Grid.Row="1"/>
+        <control:LoadingPanel IsLoading="{Binding IsUploadingToEbay}" Message="Artikel werden auf Ebay veröffentlicht" Grid.Row="1"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock Text="Prozentsatz: "/>
+            <TextBox Height="20px" Width="50" Text="{Binding EbayArticlePercentage, Mode=TwoWay}"/>
+            <TextBlock Text="Betrag: "/>
+            <TextBox Height="20px" Width="50" Text="{Binding EbayArticleAmount, Mode=TwoWay}"/>
+        </StackPanel>
         
-        <DataGrid ItemsSource="{Binding WheelListFlat}" AutoGenerateColumns="False" Grid.Row="2">
+        <DataGrid ItemsSource="{Binding WheelListFlat}" AutoGenerateColumns="False" Grid.Row="3">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Nr" IsReadOnly="True" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Name" IsReadOnly="True"  Binding="{Binding WheelId}"/>
                 <DataGridTextColumn Header="ShortName" IsReadOnly="True"  Binding="{Binding ManufactorerShortName}"/>
-                
                 <DataGridTextColumn Header="Breite" IsReadOnly="True"  Binding="{Binding WheelWidth}"/>
                 <DataGridTextColumn Header="Querschnitt" IsReadOnly="True"  Binding="{Binding WheelHeight}"/>
                 <DataGridTextColumn Header="Durchmesser" IsReadOnly="True"  Binding="{Binding CrossSection}"/>
@@ -31,6 +37,7 @@
                 <DataGridTextColumn Header="Dot" IsReadOnly="True"  Binding="{Binding DotNumber}"/>
                 <DataGridTextColumn Header="Winter" IsReadOnly="True"  Binding="{Binding IsWinter}"/>
                 <DataGridTextColumn Header="M+S" IsReadOnly="True"  Binding="{Binding IsMudSnow}"/>
+                <DataGridTextColumn Header="EbayId" IsReadOnly="True"  Binding="{Binding EbayId}"/>
                 <DataGridTextColumn Header="Beschreibung" IsReadOnly="True"  Binding="{Binding Description}"/>
                 <DataGridTextColumn Header="Beschreibung2" IsReadOnly="True"  Binding="{Binding Description2}"/>
                 <!--<DataGridTextColumn Header="Sprit" IsReadOnly="True"  Binding="{Binding FuelNeed}"/>

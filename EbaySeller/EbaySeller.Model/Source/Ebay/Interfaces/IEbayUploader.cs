@@ -8,6 +8,6 @@ namespace EbaySeller.Model.Source.Ebay.Interfaces
 {
     public interface IEbayUploader
     {
-        void RefreshOrCreateEbayArticle(List<IArticle> articlesToRefresh, string filename);
+        List<IArticle> RefreshOrCreateEbayArticle(List<IArticle> articlesToRefresh, string filename, double percentage, double amount);
     }
 }

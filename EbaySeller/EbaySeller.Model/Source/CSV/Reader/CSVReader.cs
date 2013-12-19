@@ -23,7 +23,6 @@ namespace EbaySeller.Model.Source.CSV.Reader
                 {
                     try
                     {
-                        
                         var article = CSVTextHelper.GetArticleFromString(textLine, index);
                         if (result.ContainsKey(article.ArticleId))
                         {

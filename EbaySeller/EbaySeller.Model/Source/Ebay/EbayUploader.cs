@@ -24,30 +24,65 @@ namespace EbaySeller.Model.Source.Ebay
             };
 
         private ApiContext Context;
+        private AddFixedPriceItemCall api2call;
+        private ReviseItemCall reviseItemCall;
+        private double currentPercentage;
+        private double currentAmount;
 
-        public void RefreshOrCreateEbayArticle(List<IArticle> articlesToRefresh, string fileName)
+        public EbayUploader()
         {
-
-            var ebayArticleCsvWriter = new EbayArticleCSVWriter(fileName);
             InitializeContext();
-            var apiCall = new AddItemCall(Context);
-            var api2call = new AddFixedPriceItemCall(Context);
-            //var categoryCall = new GetCategoryFeaturesCall(Context);
-            //categoryCall.DetailLevelList.Add(DetailLevelCodeType.ReturnAll);
-            //categoryCall.ViewAllNodes = true;
-            //categoryCall.CategoryID = "9891";
-            //var test = categoryCall.GetCategoryFeatures();
-            string template = TemplateLoader.LoadTemplateFromUri(ConfigurationManager.AppSettings["Ebay.Template"]);
-            LodUpSingleArticle(articlesToRefresh[119], template, api2call, ebayArticleCsvWriter);
-            //foreach (var article in articlesToRefresh)
-            //{
-            //    LodUpSingleArticle(article, template, api2call, ebayArticleCsvWriter);
-            //    break;
-            //}
+            api2call = new AddFixedPriceItemCall(Context);
+            reviseItemCall = new ReviseItemCall(Context);
         }
 
-        private void LodUpSingleArticle(IArticle article, string template, AddFixedPriceItemCall api2call,
-                                        EbayArticleCSVWriter ebayArticleCsvWriter)
+        public List<IArticle> RefreshOrCreateEbayArticle(List<IArticle> articlesToRefresh, string fileName, double percentage, double amount)
+        {
+            var ebayArticleCsvWriter = new EbayArticleCSVWriter(fileName+".diffs");
+            currentPercentage = percentage;
+            currentAmount = amount;
+            string template = TemplateLoader.LoadTemplateFromUri(ConfigurationManager.AppSettings["Ebay.Template"]);
+            var resultList = new List<IArticle>();
+            foreach (var article in articlesToRefresh)
+            {
+                IArticle newArticle = article;
+                try
+                {
+                    if (article.EbayId == null)
+                    {
+                        if (article.Availability < EbayArticleConstants.MinimumCountOfArticles)
+                        {
+                            continue;
+                        }
+                        newArticle = LoadUpNewSingleArticle(article, template);
+                    }
+                    else
+                    {
+                        newArticle = ReviseEbayArticle(article);
+                    }
+                }
+                catch (ApiException e)
+                {
+                    logger.Warn("Fehler bei Ebay Kommunikation von Datensatz ID:"+article.ArticleId, e);
+                }
+                ebayArticleCsvWriter.WriteToCSVFile(newArticle);
+                resultList.Add(newArticle);
+            }
+            return resultList;
+        }
+
+        private IArticle ReviseEbayArticle(IArticle article)
+        {
+            var ebayType = new ItemType();
+            ebayType.ItemID = article.EbayId;
+            ebayType.QuantityAvailable = article.Availability;
+            ebayType.StartPrice = GetCalculatedPrice(article);
+            reviseItemCall.DeletedFieldList = new StringCollection();
+            reviseItemCall.ReviseItem(ebayType, new StringCollection(), false);
+            return article;
+        }
+
+        private IArticle LoadUpNewSingleArticle(IArticle article, string template)
         {
             var ebayType = new ItemType();
 
@@ -63,7 +98,7 @@ namespace EbaySeller.Model.Source.Ebay
             ebayType.ListingDuration = "Days_7";
 
             ebayType.Currency = CurrencyCodeType.EUR;
-            ebayType.StartPrice = new AmountType {currencyID = CurrencyCodeType.EUR, Value = article.Price};
+            ebayType.StartPrice = GetCalculatedPrice(article);
 
             ebayType.Location = "Baden-Baden";
             ebayType.Country = CountryCodeType.DE;
@@ -85,28 +120,43 @@ namespace EbaySeller.Model.Source.Ebay
             
             ebayType.MotorsGermanySearchable = true;
 
-            //var prodId = new ExternalProductIDType {Value = article.ArticleId, Type = ExternalProductCodeType.ProductID};
-            //ebayType.ExternalProductID = prodId;
-
             ebayType.ReturnPolicy = GetPolicy();
             api2call.PictureFileList = new StringCollection();
-            ebayType.PictureDetails = new PictureDetailsType();
-            ebayType.PictureDetails.PictureURL = new StringCollection();
-            ebayType.PictureDetails.PictureURL.Add(article.ImageLink);
-            ebayType.PictureDetails.PhotoDisplay = PhotoDisplayCodeType.None;
+            ebayType.PictureDetails = GetPictureDetails(article);
 
             api2call.AddFixedPriceItem(ebayType);
             
             article.EbayId = ebayType.ItemID;
-            ebayArticleCsvWriter.WriteToCSVFile(article);
+            return article;
+        }
+
+        private PictureDetailsType GetPictureDetails(IArticle article)
+        {
+            var pictureDetails = new PictureDetailsType();
+            pictureDetails.PictureURL = new StringCollection();
+            pictureDetails.PictureURL.Add(article.ImageLink);
+            pictureDetails.PhotoDisplay = PhotoDisplayCodeType.None;
+            return pictureDetails;
+        }
+
+        private AmountType GetCalculatedPrice(IArticle article)
+        {
+            double price = article.Price;
+            if (currentAmount.Equals(0.0))
+            {
+                price = price*currentPercentage;
+            }
+            else
+            {
+                price = price + currentAmount;
+            }
+            return new AmountType {currencyID = CurrencyCodeType.EUR, Value = price};
         }
 
         private NameValueListTypeCollection AddItemSpecific(IWheel article)
         {
             var valueSpecifics = new NameValueListTypeCollection();
-
             return valueSpecifics;
-
         }
 
         private void InitializeContext()

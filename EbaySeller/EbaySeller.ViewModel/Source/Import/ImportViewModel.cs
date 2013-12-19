@@ -52,6 +52,11 @@ namespace EbaySeller.ViewModel.Source.Import
             }
         }
 
+        public Dictionary<string, IArticle> OriginalArticles
+        {
+            get { return originalArticles; }
+        } 
+
         public List<IArticle> Articles
         {
             get { return articles; }
@@ -173,7 +178,7 @@ namespace EbaySeller.ViewModel.Source.Import
             
             if (NewArticles.Count == 0)
             {
-                string messageBoxText = "Es sind keine neuen Datensätze vorhanden. Wollen Sie alle Datensätze der Basis übernehmen?";
+                string messageBoxText = "Es sind keine Datensätze zum Vergleichen vorhanden. Wollen Sie alle Datensätze der Basis übernehmen?";
                 string caption = "Leere Vergleichsdaten";
                 var buttons = MessageBoxButtons.YesNo;
                 var icon = MessageBoxImage.Question;

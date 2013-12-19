@@ -50,6 +50,10 @@ namespace EbaySeller.Model.Source.CSV
             article.Manufactorer = manufactorer;
             article.DirectLink = values[15];
             article.TyreLabelLink = values[16];
+            if (values.Length == 19)
+            {
+                article.EbayId = values[17];
+            }
             return article;
         }
 

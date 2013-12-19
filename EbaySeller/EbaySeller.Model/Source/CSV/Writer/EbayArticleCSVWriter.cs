@@ -6,12 +6,14 @@ using System.Linq;
 using System.Text;
 using EbaySeller.Model.Source.CSV.Constants;
 using EbaySeller.Model.Source.Data.Interfaces;
+using log4net;
 
 namespace EbaySeller.Model.Source.CSV.Writer
 {
     public class EbayArticleCSVWriter:ICSVWriter
     {
         private string fileName;
+        private ILog logger = LogManager.GetLogger(typeof(EbayArticleCSVWriter));
 
         public EbayArticleCSVWriter(string filename)
         {
@@ -20,6 +22,11 @@ namespace EbaySeller.Model.Source.CSV.Writer
         }
         public void WriteToCSVFile(IArticle articleToWrite)
         {
+            if (articleToWrite == null)
+            {
+                logger.Warn("Article in Write To CSV was null");
+                return;
+            }
             string csvTextLine = GetTextLineFromArticle(articleToWrite);
             WriteTextToFile(csvTextLine, true);
         }
