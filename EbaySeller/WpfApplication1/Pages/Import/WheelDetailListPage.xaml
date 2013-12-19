@@ -2,7 +2,8 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:control="clr-namespace:WpfApplication1.Control"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
 	Title="WheelDetailListPage">
@@ -10,10 +11,13 @@
     <Grid DataContext="{Binding Source={StaticResource Locator}, Path=Wheel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding CountOfData}" Height="20px"/>
-        <DataGrid ItemsSource="{Binding WheelListFlat}" AutoGenerateColumns="False" Grid.Row="1">
+        <control:LoadingPanel IsLoading="{Binding IsLoadingBaseData}" Message="Daten werden geladen" Grid.Row="1"/>
+        
+        <DataGrid ItemsSource="{Binding WheelListFlat}" AutoGenerateColumns="False" Grid.Row="2">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Nr" IsReadOnly="True" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Name" IsReadOnly="True"  Binding="{Binding WheelId}"/>

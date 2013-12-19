@@ -93,8 +93,10 @@
     <Compile Include="Source\Data\Interfaces\IArticle.cs" />
     <Compile Include="Source\Data\Interfaces\IWheel.cs" />
     <Compile Include="Source\Data\Wheel.cs" />
+    <Compile Include="Source\Ebay\Constants\EbayArticleConstants.cs" />
     <Compile Include="Source\Ebay\EbayUploader.cs" />
     <Compile Include="Source\Ebay\Interfaces\IEbayUploader.cs" />
+    <Compile Include="Source\Ebay\Template\TemplateLoader.cs" />
     <Compile Include="Source\Exceptions\FileNotReadyException.cs" />
     <Compile Include="Tests\CSV\CSVTextHelperTests.cs" />
   </ItemGroup>

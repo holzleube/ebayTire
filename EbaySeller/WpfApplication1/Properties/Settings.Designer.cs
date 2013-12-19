@@ -22,5 +22,17 @@ namespace EbaySeller.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\Dane\\Desktop\\ebay-template-redame.html")]
+        public string TemplateUrl {
+            get {
+                return ((string)(this["TemplateUrl"]));
+            }
+            set {
+                this["TemplateUrl"] = value;
+            }
+        }
     }
 }

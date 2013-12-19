@@ -11,6 +11,7 @@ using EbaySeller.Model.Source.Data.Interfaces;
 using EbaySeller.Model.Source.Ebay;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using eBay.Service.Core.Sdk;
 
 namespace EbaySeller.ViewModel.Source.Import
 {
@@ -75,7 +76,14 @@ namespace EbaySeller.ViewModel.Source.Import
             var saveFileDialog = new SaveFileDialog();
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                ebayUploader.RefreshOrCreateEbayArticle(WheelListFlat, saveFileDialog.FileName);
+                try
+                {
+                    ebayUploader.RefreshOrCreateEbayArticle(WheelListFlat, saveFileDialog.FileName);
+                }
+                catch (ApiException e)
+                {
+                    MessageBox.Show(e.Message);
+                }
             }
         }
     }

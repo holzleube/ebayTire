@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,17 +16,17 @@ namespace EbaySeller.Model.Source.CSV.Writer
         public EbayArticleCSVWriter(string filename)
         {
             this.fileName = filename;
-            WriteTextToFile(CSVConstants.FirstLineOfCsvFile);
+            WriteTextToFile(CSVConstants.FirstLineOfCsvFile, false);
         }
         public void WriteToCSVFile(IArticle articleToWrite)
         {
             string csvTextLine = GetTextLineFromArticle(articleToWrite);
-            WriteTextToFile(csvTextLine);
+            WriteTextToFile(csvTextLine, true);
         }
 
-        private void WriteTextToFile(string csvTextLine)
+        private void WriteTextToFile(string csvTextLine, bool append)
         {
-            using (var file = new StreamWriter(@fileName, true))
+            using (var file = new StreamWriter(@fileName, append))
             {
                 file.WriteLine(csvTextLine);
             }
@@ -38,11 +39,11 @@ namespace EbaySeller.Model.Source.CSV.Writer
                 articleToWrite.ArticleId,
                 articleToWrite.Description,
                 articleToWrite.Description2,
-                articleToWrite.Price,
-                articleToWrite.Price4,
-                articleToWrite.AvgPrice,
-                articleToWrite.AnonymPrice,
-                articleToWrite.RvoPrice,
+                articleToWrite.Price.ToString("0.00", CultureInfo.InvariantCulture),
+                articleToWrite.Price4.ToString("0.00", CultureInfo.InvariantCulture),
+                articleToWrite.AvgPrice.ToString("0.00", CultureInfo.InvariantCulture),
+                articleToWrite.AnonymPrice.ToString("0.00", CultureInfo.InvariantCulture),
+                articleToWrite.RvoPrice.ToString("0.00", CultureInfo.InvariantCulture),
                 articleToWrite.Availability,
                 articleToWrite.ManufactorerNumber,
                 articleToWrite.ImageLink,
