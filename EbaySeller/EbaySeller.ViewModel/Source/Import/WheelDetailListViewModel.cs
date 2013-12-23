@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,24 +12,27 @@ using EbaySeller.Model.Source.CSV.Reader;
 using EbaySeller.Model.Source.CSV.Writer;
 using EbaySeller.Model.Source.Data.Interfaces;
 using EbaySeller.Model.Source.Ebay;
+using EbaySeller.Model.Source.Ebay.Template;
 using EbaySeller.Model.Source.Exceptions;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using eBay.Service.Core.Sdk;
+using log4net;
 
 namespace EbaySeller.ViewModel.Source.Import
 {
     public class WheelDetailListViewModel: ViewModelBase
     {
         private ICollectionView wheelList = new ListCollectionView(new List<IWheel>());
-
+        private ILog logger = LogManager.GetLogger(typeof(EbayUploader));
         private int countOfWheels;
         private List<IArticle> wheelListFlat;
 
         private bool isUploadingToEbay;
         private string ebayArticlePercentage = string.Empty;
         private string ebayArticleAmount = string.Empty;
+        private int countOfCurrentUploadedItems;
 
         public ICommand UploadToEbayCommand
         {
@@ -85,6 +89,21 @@ namespace EbaySeller.ViewModel.Source.Import
             get { return "Daten: " + countOfWheels; }
         }
 
+        public string LoadingState
+        {
+            get { return string.Format(ViewConstants.UploadingItemsConstant, CountOfCurrentUploadedItems, countOfWheels); }
+        }
+
+        public int CountOfCurrentUploadedItems
+        {
+            get { return countOfCurrentUploadedItems; }
+            set 
+            { 
+                countOfCurrentUploadedItems = value;
+                RaisePropertyChanged("LoadingState");
+            }
+        }
+
         public bool IsUploadingToEbay
         {
             get { return isUploadingToEbay; }
@@ -106,16 +125,13 @@ namespace EbaySeller.ViewModel.Source.Import
 
         private void UploadCurrentListToEbay()
         {
-            var ebayUploader = new EbayUploader();
-            double percentage = 0.0;
             double amount = 0.0;
-            if (!IsValidDouble(EbayArticlePercentage, out percentage) && !IsValidDouble(EbayArticleAmount, out amount))
+            if (!IsValidDouble(EbayArticleAmount, out amount))
             {
-                MessageBox.Show("Bitte entweder einen Betrag oder einen Prozentsatz für die Preiskalkulation des Artikels angeben.");
+                MessageBox.Show("Bitte geben Sie einen gültigen Gewinn ein.");
                 return;
             }
              
-            percentage = percentage/100 + 1;
             var saveFileDialog = new SaveFileDialog();
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -126,22 +142,12 @@ namespace EbaySeller.ViewModel.Source.Import
                 {
                     bw.DoWork += delegate
                     {
-                        var ebayResults = ebayUploader.RefreshOrCreateEbayArticle(WheelListFlat, saveFileDialog.FileName, percentage, amount);
-                        var ebayArticleCsvWriter = new EbayArticleCSVWriter(saveFileDialog.FileName);
+                        string template = TemplateLoader.LoadTemplateFromUri(ConfigurationManager.AppSettings["Ebay.Template"]);
+                        var ebaySingleArticleCsvWriter = new EbayArticleCSVWriter(saveFileDialog.FileName + ".diffs");
                         ImportViewModel importViewModel = SimpleIoc.Default.GetInstance<ImportViewModel>();
-                        var dictionary = importViewModel.OriginalArticles;
-                        foreach (var ebayResult in ebayResults)
-                        {
-                            if (dictionary.ContainsKey(ebayResult.ArticleId))
-                            {
-                                dictionary.Remove(ebayResult.ArticleId);
-                            }
-                            dictionary[ebayResult.ArticleId] = ebayResult;
-                        }
-                        foreach (var article in dictionary.Values)
-                        {
-                            ebayArticleCsvWriter.WriteToCSVFile(article);
-                        }
+                        CountOfCurrentUploadedItems = 0;
+                        var allArticles = IterateThroughAllItemsAndUploadThem(importViewModel.OriginalArticles, ebaySingleArticleCsvWriter, amount, template);
+                        WriteAllArticlesBackToCSV(saveFileDialog.FileName, allArticles);
                         IsUploadingToEbay = false;
                     };
                     bw.RunWorkerAsync();
@@ -151,6 +157,49 @@ namespace EbaySeller.ViewModel.Source.Import
                 {
                     MessageBox.Show("Es ist folgender Fehler aufgetreten: " + e.Message);
                 }
+            }
+        }
+
+        private Dictionary<string, IArticle>.ValueCollection IterateThroughAllItemsAndUploadThem(Dictionary<string, IArticle> dictionary,
+                                                               EbayArticleCSVWriter ebaySingleArticleCsvWriter, double amount,
+                                                               string template)
+        {
+            var ebayUploader = new EbayUploader();
+            foreach (var articleToUpload in WheelListFlat)
+            {
+                IArticle result = null;
+                try
+                {
+                    result = ebayUploader.RefreshOrCreateEbayArticle(articleToUpload,
+                                                                     ebaySingleArticleCsvWriter, amount,
+                                                                     template);
+                    if (dictionary.ContainsKey(result.ArticleId))
+                    {
+                        dictionary.Remove(result.ArticleId);
+                    }
+                    dictionary[result.ArticleId] = result;
+                }
+                catch (ApiException e)
+                {
+                    logger.Warn(
+                        "Fehler bei Ebay Kommunikation von Datensatz ID:" + articleToUpload.ArticleId, e);
+                }
+                catch (Exception e)
+                {
+                    logger.Error("Unknown Exception On Uploading articles", e);
+                    break;
+                }
+                CountOfCurrentUploadedItems++;
+            }
+            return dictionary.Values;
+        }
+
+        private static void WriteAllArticlesBackToCSV(string filename, IEnumerable<IArticle> articles)
+        {
+            var ebayArticleCsvWriter = new EbayArticleCSVWriter(filename);
+            foreach (var article in articles)
+            {
+                ebayArticleCsvWriter.WriteToCSVFile(article);
             }
         }
 

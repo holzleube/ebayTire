@@ -36,50 +36,48 @@ namespace EbaySeller.Model.Source.Ebay
             reviseItemCall = new ReviseItemCall(Context);
         }
 
-        public List<IArticle> RefreshOrCreateEbayArticle(List<IArticle> articlesToRefresh, string fileName, double percentage, double amount)
+        public IArticle RefreshOrCreateEbayArticle(IArticle article, EbayArticleCSVWriter cswWriter, double amount, string template)
         {
-            var ebayArticleCsvWriter = new EbayArticleCSVWriter(fileName+".diffs");
-            currentPercentage = percentage;
+            IArticle newArticle = null;
             currentAmount = amount;
-            string template = TemplateLoader.LoadTemplateFromUri(ConfigurationManager.AppSettings["Ebay.Template"]);
-            var resultList = new List<IArticle>();
-            foreach (var article in articlesToRefresh)
+            
+            if (article.EbayId == null)
             {
-                IArticle newArticle = article;
-                try
+                if (article.Availability < EbayArticleConstants.MinimumCountOfArticles)
                 {
-                    if (article.EbayId == null)
-                    {
-                        if (article.Availability < EbayArticleConstants.MinimumCountOfArticles)
-                        {
-                            continue;
-                        }
-                        newArticle = LoadUpNewSingleArticle(article, template);
-                    }
-                    else
-                    {
-                        newArticle = ReviseEbayArticle(article);
-                    }
+                    return article;
                 }
-                catch (ApiException e)
-                {
-                    logger.Warn("Fehler bei Ebay Kommunikation von Datensatz ID:"+article.ArticleId, e);
-                }
-                ebayArticleCsvWriter.WriteToCSVFile(newArticle);
-                resultList.Add(newArticle);
+                newArticle = LoadUpNewSingleArticle(article, template);
             }
-            return resultList;
+            else
+            {
+                newArticle = ReviseEbayArticle(article);
+            }
+
+            cswWriter.WriteToCSVFile(newArticle);
+            return newArticle;
         }
 
         private IArticle ReviseEbayArticle(IArticle article)
         {
             var ebayType = new ItemType();
+            
             ebayType.ItemID = article.EbayId;
-            ebayType.QuantityAvailable = article.Availability;
+            ebayType.QuantityAvailable = GetQuantityOfArticle(article);
             ebayType.StartPrice = GetCalculatedPrice(article);
             reviseItemCall.DeletedFieldList = new StringCollection();
             reviseItemCall.ReviseItem(ebayType, new StringCollection(), false);
+            
             return article;
+        }
+
+        private static int GetQuantityOfArticle(IArticle article)
+        {
+            if (article.Availability > 20)
+            {
+                return 20;
+            }
+            return article.Availability;
         }
 
         private IArticle LoadUpNewSingleArticle(IArticle article, string template)
@@ -94,11 +92,14 @@ namespace EbaySeller.Model.Source.Ebay
             }
             ebayType.Description = GetDescriptionFromArticle(wheel, template);
 
+            //ebayType.ListingType = ListingTypeCodeType.StoresFixedPrice;
+            //ebayType.ListingDuration = "GTC";
             ebayType.ListingType = ListingTypeCodeType.FixedPriceItem;
             ebayType.ListingDuration = "Days_7";
 
             ebayType.Currency = CurrencyCodeType.EUR;
             ebayType.StartPrice = GetCalculatedPrice(article);
+            ebayType.UseTaxTable = true;
 
             ebayType.Location = "Baden-Baden";
             ebayType.Country = CountryCodeType.DE;
@@ -108,12 +109,12 @@ namespace EbaySeller.Model.Source.Ebay
             category.CategoryID = "9891";
             ebayType.PrimaryCategory = category;
 
-            ebayType.Quantity = article.Availability;
+            ebayType.Quantity = GetQuantityOfArticle(article);
 
             ebayType.ConditionID = 1000;
 
             ebayType.PaymentMethods = new BuyerPaymentMethodCodeTypeCollection(PaymentMethods);
-            ebayType.PayPalEmailAddress = "dane160290@yahoo.de";
+            ebayType.PayPalEmailAddress = "nb@redame.de";
             ebayType.DispatchTimeMax = 1;
 
             ebayType.ShippingDetails = GetShippingDetails();
@@ -123,7 +124,7 @@ namespace EbaySeller.Model.Source.Ebay
             ebayType.ReturnPolicy = GetPolicy();
             api2call.PictureFileList = new StringCollection();
             ebayType.PictureDetails = GetPictureDetails(article);
-
+            
             api2call.AddFixedPriceItem(ebayType);
             
             article.EbayId = ebayType.ItemID;
@@ -142,14 +143,9 @@ namespace EbaySeller.Model.Source.Ebay
         private AmountType GetCalculatedPrice(IArticle article)
         {
             double price = article.Price;
-            if (currentAmount.Equals(0.0))
-            {
-                price = price*currentPercentage;
-            }
-            else
-            {
-                price = price + currentAmount;
-            }
+            price += currentAmount + 0.35;
+            price /= EbayArticleConstants.CalculatedConstant;
+            
             return new AmountType {currencyID = CurrencyCodeType.EUR, Value = price};
         }
 
@@ -181,6 +177,9 @@ namespace EbaySeller.Model.Source.Ebay
             
             sd.InsuranceFee = new AmountType(){Value = 2.8, currencyID = CurrencyCodeType.EUR};
             sd.ShippingType = ShippingTypeCodeType.Flat;
+            sd.SalesTax = new SalesTaxType();
+            sd.SalesTax.ShippingIncludedInTax = false;
+            sd.SalesTax.SalesTaxPercent = 0.19f;
 
             ShippingServiceOptionsType st1 = new ShippingServiceOptionsType();
             st1.ShippingService = ShippingServiceCodeType.DE_Paket.ToString();
