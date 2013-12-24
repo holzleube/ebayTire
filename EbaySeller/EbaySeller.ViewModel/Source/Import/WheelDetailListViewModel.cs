@@ -128,7 +128,7 @@ namespace EbaySeller.ViewModel.Source.Import
             double amount = 0.0;
             if (!IsValidDouble(EbayArticleAmount, out amount))
             {
-                MessageBox.Show("Bitte geben Sie einen gültigen Gewinn ein.");
+                MessageBox.Show("Bitte geben Sie einen gültigen Gewinn ein. In der Form 4,5");
                 return;
             }
              
@@ -206,6 +206,10 @@ namespace EbaySeller.ViewModel.Source.Import
         private bool IsValidDouble(string stringToCheck, out double variable)
         {
             variable = 0.0;
+            if (stringToCheck.Contains("."))
+            {
+                return false;
+            }
             if (stringToCheck.Equals(string.Empty))
             {
                 return false;

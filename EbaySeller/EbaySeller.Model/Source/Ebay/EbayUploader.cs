@@ -19,7 +19,7 @@ namespace EbaySeller.Model.Source.Ebay
         private ILog logger = LogManager.GetLogger(typeof(EbayUploader));
         private static readonly BuyerPaymentMethodCodeType[] PaymentMethods = new[]
             {
-                //BuyerPaymentMethodCodeType.MoneyXferAccepted, 
+                BuyerPaymentMethodCodeType.MoneyXferAccepted, 
                 BuyerPaymentMethodCodeType.PayPal
             };
 
@@ -28,12 +28,14 @@ namespace EbaySeller.Model.Source.Ebay
         private ReviseItemCall reviseItemCall;
         private double currentPercentage;
         private double currentAmount;
+        private string currentMail;
 
         public EbayUploader()
         {
             InitializeContext();
             api2call = new AddFixedPriceItemCall(Context);
             reviseItemCall = new ReviseItemCall(Context);
+            currentMail = ConfigurationManager.AppSettings["Paypal.Mail"];
         }
 
         public IArticle RefreshOrCreateEbayArticle(IArticle article, EbayArticleCSVWriter cswWriter, double amount, string template)
@@ -41,7 +43,7 @@ namespace EbaySeller.Model.Source.Ebay
             IArticle newArticle = null;
             currentAmount = amount;
             
-            if (article.EbayId == null)
+            if (string.IsNullOrEmpty(article.EbayId))
             {
                 if (article.Availability < EbayArticleConstants.MinimumCountOfArticles)
                 {
@@ -65,6 +67,7 @@ namespace EbaySeller.Model.Source.Ebay
             ebayType.ItemID = article.EbayId;
             ebayType.QuantityAvailable = GetQuantityOfArticle(article);
             ebayType.StartPrice = GetCalculatedPrice(article);
+            ebayType.VATDetails = GetVatDetails();
             reviseItemCall.DeletedFieldList = new StringCollection();
             reviseItemCall.ReviseItem(ebayType, new StringCollection(), false);
             
@@ -92,14 +95,12 @@ namespace EbaySeller.Model.Source.Ebay
             }
             ebayType.Description = GetDescriptionFromArticle(wheel, template);
 
-            //ebayType.ListingType = ListingTypeCodeType.StoresFixedPrice;
-            //ebayType.ListingDuration = "GTC";
-            ebayType.ListingType = ListingTypeCodeType.FixedPriceItem;
-            ebayType.ListingDuration = "Days_7";
+            ebayType.ListingType = ListingTypeCodeType.StoresFixedPrice;
+            ebayType.ListingDuration = "GTC";
 
             ebayType.Currency = CurrencyCodeType.EUR;
             ebayType.StartPrice = GetCalculatedPrice(article);
-            ebayType.UseTaxTable = true;
+            //ebayType.UseTaxTable = true;
 
             ebayType.Location = "Baden-Baden";
             ebayType.Country = CountryCodeType.DE;
@@ -114,21 +115,35 @@ namespace EbaySeller.Model.Source.Ebay
             ebayType.ConditionID = 1000;
 
             ebayType.PaymentMethods = new BuyerPaymentMethodCodeTypeCollection(PaymentMethods);
-            ebayType.PayPalEmailAddress = "nb@redame.de";
+            ebayType.PayPalEmailAddress = currentMail;
             ebayType.DispatchTimeMax = 1;
 
             ebayType.ShippingDetails = GetShippingDetails();
             
             ebayType.MotorsGermanySearchable = true;
+            ebayType.VATDetails = GetVatDetails();
 
             ebayType.ReturnPolicy = GetPolicy();
             api2call.PictureFileList = new StringCollection();
             ebayType.PictureDetails = GetPictureDetails(article);
             
-            api2call.AddFixedPriceItem(ebayType);
+            var fees = api2call.AddFixedPriceItem(ebayType);
+            //foreach (FeeType fee in fees)
+            //{
+            //    if (fee.Name == "ListingFee")
+            //    {
+            //        var masterFee = fee.Fee.Value;
+            //        break;
+            //    }
+            //}
             
             article.EbayId = ebayType.ItemID;
             return article;
+        }
+
+        private VATDetailsType GetVatDetails()
+        {
+            return new VATDetailsType {VATPercent = 0.19f};
         }
 
         private PictureDetailsType GetPictureDetails(IArticle article)
@@ -144,7 +159,7 @@ namespace EbaySeller.Model.Source.Ebay
         {
             double price = article.Price;
             price += currentAmount + 0.35;
-            price /= EbayArticleConstants.CalculatedConstant;
+            price /= (EbayArticleConstants.CalculatedConstant);
             
             return new AmountType {currencyID = CurrencyCodeType.EUR, Value = price};
         }
@@ -175,11 +190,11 @@ namespace EbaySeller.Model.Source.Ebay
         {
             ShippingDetailsType sd = new ShippingDetailsType();
             
-            sd.InsuranceFee = new AmountType(){Value = 2.8, currencyID = CurrencyCodeType.EUR};
+            //sd.InsuranceFee = new AmountType(){Value = 2.8, currencyID = CurrencyCodeType.EUR};
             sd.ShippingType = ShippingTypeCodeType.Flat;
-            sd.SalesTax = new SalesTaxType();
-            sd.SalesTax.ShippingIncludedInTax = false;
-            sd.SalesTax.SalesTaxPercent = 0.19f;
+            //sd.SalesTax = new SalesTaxType();
+            //sd.SalesTax.ShippingIncludedInTax = false;
+            //sd.SalesTax.SalesTaxPercent = 0.19f;
 
             ShippingServiceOptionsType st1 = new ShippingServiceOptionsType();
             st1.ShippingService = ShippingServiceCodeType.DE_Paket.ToString();
