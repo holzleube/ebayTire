@@ -20,6 +20,7 @@ namespace EbaySeller.ViewModel.Source.Import
         private bool isWinterFilterChecked;
         private bool isWidthHeightFilterChecked;
         private bool allFilterChecked;
+        private bool isEbayArticleFilterChecked;
 
         public FilterViewModel()
         {
@@ -29,6 +30,7 @@ namespace EbaySeller.ViewModel.Source.Import
             availableFilterDictionary.Add(DotFilterKey, new DotFilter());
             availableFilterDictionary.Add(WinterFilterKey, new WinterFilterCriteria());
             availableFilterDictionary.Add(WidthHeightFilterKey, new WidthHeightFilter());
+            availableFilterDictionary.Add(EbayArticleFilterKey, new EbayArticleFilter());
         }
 
         #region keys
@@ -36,6 +38,7 @@ namespace EbaySeller.ViewModel.Source.Import
         private const string DotFilterKey = "DotFilterKey";
         private const string WinterFilterKey = "WinterFilterKey";
         private const string WidthHeightFilterKey = "WidthHeightFilterKey";
+        private const string EbayArticleFilterKey = "EbayArticleFilterKey";
         #endregion
 
         #region boolProperties
@@ -48,6 +51,17 @@ namespace EbaySeller.ViewModel.Source.Import
                 UpdateFilter(CarWheelFilterKey);
                 isWheelFilterChecked = value;
                 RaisePropertyChanged("CarWheelFilterChecked");
+            }
+        }
+
+        public bool EbayArticleFilterChecked
+        {
+            get { return isEbayArticleFilterChecked; }
+            set
+            {
+                UpdateFilter(EbayArticleFilterKey);
+                isEbayArticleFilterChecked = value;
+                RaisePropertyChanged("EbayArticleFilterChecked");
             }
         }
 

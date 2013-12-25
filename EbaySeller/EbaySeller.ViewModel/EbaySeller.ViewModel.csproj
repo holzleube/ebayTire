@@ -78,6 +78,7 @@
     <Compile Include="Source\Comperator\PriceCriteria.cs" />
     <Compile Include="Source\Filter\CarFilterCriteria.cs" />
     <Compile Include="Source\Filter\DotFilter.cs" />
+    <Compile Include="Source\Filter\EbayArticleFilter.cs" />
     <Compile Include="Source\Filter\IFilterCriteria.cs" />
     <Compile Include="Source\Filter\WidthHeightFilter.cs" />
     <Compile Include="Source\Filter\WinterFilterCriteria.cs" />

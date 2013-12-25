@@ -26,7 +26,6 @@ namespace EbaySeller.Model.Source.Ebay
         private ApiContext Context;
         private AddFixedPriceItemCall api2call;
         private ReviseItemCall reviseItemCall;
-        private double currentPercentage;
         private double currentAmount;
         private string currentMail;
 
@@ -68,6 +67,12 @@ namespace EbaySeller.Model.Source.Ebay
             ebayType.QuantityAvailable = GetQuantityOfArticle(article);
             ebayType.StartPrice = GetCalculatedPrice(article);
             ebayType.VATDetails = GetVatDetails();
+            var wheel = article as IWheel;
+            if (wheel != null)
+            {
+                ebayType.ItemSpecifics = GetItemSpecifics(wheel);
+            }
+
             reviseItemCall.DeletedFieldList = new StringCollection();
             reviseItemCall.ReviseItem(ebayType, new StringCollection(), false);
             
@@ -100,13 +105,11 @@ namespace EbaySeller.Model.Source.Ebay
 
             ebayType.Currency = CurrencyCodeType.EUR;
             ebayType.StartPrice = GetCalculatedPrice(article);
-            //ebayType.UseTaxTable = true;
 
             ebayType.Location = "Baden-Baden";
             ebayType.Country = CountryCodeType.DE;
 
             var category = new CategoryType();
-            //category.CategoryID = "34639";
             category.CategoryID = "9891";
             ebayType.PrimaryCategory = category;
 
@@ -146,7 +149,6 @@ namespace EbaySeller.Model.Source.Ebay
             result.Add(GetSingleItemSpecific("Tragfähigkeitsindex", wheel.WeightIndex.ToString()));
             result.Add(GetSingleItemSpecific("Geschwindigkeitsindex", wheel.SpeedIndex.ToString()));
             result.Add(GetSingleItemSpecific("Winterreifen (Ja/Nein)", wheel.IsWinter ? "Ja":"Nein"));
- 
             return result;
         }
 
@@ -168,8 +170,7 @@ namespace EbaySeller.Model.Source.Ebay
             NameValueListType nv1 = new NameValueListType();
             nv1.Name = key;
             StringCollection nv1Col = new StringCollection();
-            String[] strArr1 = new string[] {value};
-            nv1Col.AddRange(strArr1);
+            nv1Col.Add(value);
             nv1.Value = nv1Col;
             return nv1;
         }

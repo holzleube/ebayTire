@@ -169,7 +169,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="App_prod.config">
+    <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="EbaySeller.View_TemporaryKey.pfx" />
@@ -181,7 +181,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
+    <None Include="App_debug.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -234,6 +234,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\yardstick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\listing.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
