@@ -90,7 +90,6 @@ namespace EbaySeller.Model.Source.Ebay
             var wheel = article as IWheel;
             if (wheel != null)
             {
-                ebayType.ItemSpecifics = AddItemSpecific(wheel);
                 ebayType.Title = GetTitleFromArticle(wheel);
                 ebayType.ItemSpecifics = GetItemSpecifics(wheel);
             }
@@ -129,15 +128,7 @@ namespace EbaySeller.Model.Source.Ebay
             api2call.PictureFileList = new StringCollection();
             ebayType.PictureDetails = GetPictureDetails(article);
             
-            var fees = api2call.AddFixedPriceItem(ebayType);
-            //foreach (FeeType fee in fees)
-            //{
-            //    if (fee.Name == "ListingFee")
-            //    {
-            //        var masterFee = fee.Fee.Value;
-            //        break;
-            //    }
-            //}
+            api2call.AddFixedPriceItem(ebayType);
             
             article.EbayId = ebayType.ItemID;
             return article;
@@ -146,14 +137,41 @@ namespace EbaySeller.Model.Source.Ebay
         private NameValueListTypeCollection GetItemSpecifics(IWheel wheel)
         {
             var result = new NameValueListTypeCollection();
+            result.Add(GetSingleItemSpecific("Reifenhersteller", wheel.Manufactorer));
+            result.Add(GetSingleItemSpecific("Hersteller-Artikelnummer", wheel.ArticleId));
+            result.Add(GetSingleItemSpecific("Reifenspezifikation", GetWheelSpecification(wheel)));
+            result.Add(GetSingleItemSpecific("Reifenbreite", wheel.WheelWidth.ToString()));
+            result.Add(GetSingleItemSpecific("Reifenquerschnitt", wheel.WheelHeight.ToString()));
+            result.Add(GetSingleItemSpecific("Zollgröße", wheel.CrossSection.Replace('R', ' ')));
+            result.Add(GetSingleItemSpecific("Tragfähigkeitsindex", wheel.WeightIndex.ToString()));
+            result.Add(GetSingleItemSpecific("Geschwindigkeitsindex", wheel.SpeedIndex.ToString()));
+            result.Add(GetSingleItemSpecific("Winterreifen (Ja/Nein)", wheel.IsWinter ? "Ja":"Nein"));
+ 
+            return result;
+        }
+
+        private string GetWheelSpecification(IWheel wheel)
+        {
+            if (wheel.IsWinter)
+            {
+                return "Winterreifen";
+            }
+            if (wheel.IsMudSnow)
+            {
+                return "Ganzjahresreifen";
+            }
+            return "Sommerreifen";
+        }
+
+        private NameValueListType GetSingleItemSpecific(string key, string value)
+        {
             NameValueListType nv1 = new NameValueListType();
-            nv1.Name = "Reifenhersteller";
+            nv1.Name = key;
             StringCollection nv1Col = new StringCollection();
-            String[] strArr1 = new string[] { wheel.Manufactorer };
+            String[] strArr1 = new string[] {value};
             nv1Col.AddRange(strArr1);
             nv1.Value = nv1Col;
-            result.Add(nv1);
-            return result;
+            return nv1;
         }
 
         private VATDetailsType GetVatDetails()
@@ -179,11 +197,6 @@ namespace EbaySeller.Model.Source.Ebay
             return new AmountType {currencyID = CurrencyCodeType.EUR, Value = price};
         }
 
-        private NameValueListTypeCollection AddItemSpecific(IWheel article)
-        {
-            var valueSpecifics = new NameValueListTypeCollection();
-            return valueSpecifics;
-        }
 
         private void InitializeContext()
         {
@@ -204,12 +217,7 @@ namespace EbaySeller.Model.Source.Ebay
         private ShippingDetailsType GetShippingDetails()
         {
             ShippingDetailsType sd = new ShippingDetailsType();
-            
-            //sd.InsuranceFee = new AmountType(){Value = 2.8, currencyID = CurrencyCodeType.EUR};
             sd.ShippingType = ShippingTypeCodeType.Flat;
-            //sd.SalesTax = new SalesTaxType();
-            //sd.SalesTax.ShippingIncludedInTax = false;
-            //sd.SalesTax.SalesTaxPercent = 0.19f;
 
             ShippingServiceOptionsType st1 = new ShippingServiceOptionsType();
             st1.ShippingService = ShippingServiceCodeType.DE_Paket.ToString();
