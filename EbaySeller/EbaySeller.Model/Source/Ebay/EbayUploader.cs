@@ -92,6 +92,7 @@ namespace EbaySeller.Model.Source.Ebay
             {
                 ebayType.ItemSpecifics = AddItemSpecific(wheel);
                 ebayType.Title = GetTitleFromArticle(wheel);
+                ebayType.ItemSpecifics = GetItemSpecifics(wheel);
             }
             ebayType.Description = GetDescriptionFromArticle(wheel, template);
 
@@ -122,6 +123,7 @@ namespace EbaySeller.Model.Source.Ebay
             
             ebayType.MotorsGermanySearchable = true;
             ebayType.VATDetails = GetVatDetails();
+            
 
             ebayType.ReturnPolicy = GetPolicy();
             api2call.PictureFileList = new StringCollection();
@@ -139,6 +141,19 @@ namespace EbaySeller.Model.Source.Ebay
             
             article.EbayId = ebayType.ItemID;
             return article;
+        }
+
+        private NameValueListTypeCollection GetItemSpecifics(IWheel wheel)
+        {
+            var result = new NameValueListTypeCollection();
+            NameValueListType nv1 = new NameValueListType();
+            nv1.Name = "Reifenhersteller";
+            StringCollection nv1Col = new StringCollection();
+            String[] strArr1 = new string[] { wheel.Manufactorer };
+            nv1Col.AddRange(strArr1);
+            nv1.Value = nv1Col;
+            result.Add(nv1);
+            return result;
         }
 
         private VATDetailsType GetVatDetails()
