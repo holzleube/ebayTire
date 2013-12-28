@@ -22,6 +22,7 @@
                     <ribbon:RibbonToggleButton Label="Winter" IsChecked="{Binding WinterFilterChecked}" LargeImageSource="Images/winter.png" Command="{Binding FilterToggleCommand}" />
                     <ribbon:RibbonToggleButton Label="205/55 195/65 205/60 195/60" IsChecked="{Binding WidthHeightFilterChecked}" LargeImageSource="Images/yardstick.png" Command="{Binding FilterToggleCommand}" />
                     <ribbon:RibbonToggleButton Label="Ebay Artikel" IsChecked="{Binding EbayArticleFilterChecked}" LargeImageSource="Images/listing.png" Command="{Binding FilterToggleCommand}" />
+                    <ribbon:RibbonToggleButton Label="Neue Artikel" IsChecked="{Binding NewArticleFilterChecked}" LargeImageSource="Images/shopping.png" Command="{Binding FilterToggleCommand}" />
                     <ribbon:RibbonToggleButton Label="Alle" IsChecked="{Binding AllFilterChecked}" LargeImageSource="Images/yardstick.png" Command="{Binding FilterToggleCommand}" />
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Berechnung">

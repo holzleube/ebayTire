@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="TemplateUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Users\Dane\Desktop\ebay-template-redame.html</Value>
+      <Value Profile="(Default)">C:\Users\Dane\Desktop\ebay\Templates\ebay-template-redame.html</Value>
     </Setting>
   </Settings>
 </SettingsFile>
