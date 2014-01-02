@@ -25,15 +25,17 @@ namespace EbaySeller.Model.Source.Ebay
 
         private ApiContext Context;
         private AddFixedPriceItemCall api2call;
-        private ReviseItemCall reviseItemCall;
+        private ReviseFixedPriceItemCall reviseItemCall;
         private double currentAmount;
         private string currentMail;
+        private EndItemCall deleteItemCall;
 
         public EbayUploader()
         {
             InitializeContext();
             api2call = new AddFixedPriceItemCall(Context);
-            reviseItemCall = new ReviseItemCall(Context);
+            reviseItemCall = new ReviseFixedPriceItemCall(Context);
+            deleteItemCall = new EndItemCall(Context);
             currentMail = ConfigurationManager.AppSettings["Paypal.Mail"];
         }
 
@@ -74,16 +76,16 @@ namespace EbaySeller.Model.Source.Ebay
             }
 
             reviseItemCall.DeletedFieldList = new StringCollection();
-            reviseItemCall.ReviseItem(ebayType, new StringCollection(), false);
+            reviseItemCall.ReviseFixedPriceItem(ebayType, new StringCollection());
             
             return article;
         }
 
         private static int GetQuantityOfArticle(IArticle article)
         {
-            if (article.Availability > 20)
+            if (article.Availability > 10)
             {
-                return 20;
+                return 6;
             }
             return article.Availability;
         }
@@ -125,7 +127,6 @@ namespace EbaySeller.Model.Source.Ebay
             
             ebayType.MotorsGermanySearchable = true;
             ebayType.VATDetails = GetVatDetails();
-            
 
             ebayType.ReturnPolicy = GetPolicy();
             api2call.PictureFileList = new StringCollection();

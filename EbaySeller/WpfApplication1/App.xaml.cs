@@ -12,6 +12,7 @@ namespace WpfApplication1
     {
         public App()
         {
+            log4net.Config.XmlConfigurator.Configure();
             SimpleIoc.Default.Register<IImportListPage>(()=> new ImportListPage());
             SimpleIoc.Default.Register<IWheelDetailListPage>(()=> new WheelDetailListPage());
         }
