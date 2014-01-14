@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <PublishUrlHistory>C:\Users\Dane\Desktop\ebay\Versions\|C:\Users\Dane\Desktop\ebay\|D:\New_Projects\ebaydateien\EbaySeller\|C:\Users\Dane\SkyDrive\EbaySeller\|ftp://185.2.103.159/home/ftp-docs/</PublishUrlHistory>
+    <PublishUrlHistory>D:\New_Projects\ebaydateien\EbaySeller\|C:\Users\Dane\Desktop\ebay\Versions\|C:\Users\Dane\Desktop\ebay\|C:\Users\Dane\SkyDrive\EbaySeller\|ftp://185.2.103.159/home/ftp-docs/</PublishUrlHistory>
     <InstallUrlHistory>http://sdrv.ms/1aa8BCG/</InstallUrlHistory>
     <SupportUrlHistory />
     <UpdateUrlHistory>http://sdrv.ms/1aa8BCG/|\\185.2.103.159/home/ftp-docs/</UpdateUrlHistory>

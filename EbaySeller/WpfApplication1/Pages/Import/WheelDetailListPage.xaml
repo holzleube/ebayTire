@@ -35,7 +35,7 @@
                 <DataGridTextColumn Header="Dot" IsReadOnly="True"  Binding="{Binding DotNumber}"/>
                 <DataGridTextColumn Header="Winter" IsReadOnly="True"  Binding="{Binding IsWinter}"/>
                 <DataGridTextColumn Header="M+S" IsReadOnly="True"  Binding="{Binding IsMudSnow}"/>
-                <DataGridTextColumn Header="EbayId" IsReadOnly="True"  Binding="{Binding EbayId}"/>
+                <DataGridTextColumn Header="EbayId" IsReadOnly="False"  Binding="{Binding EbayId}"/>
                 <DataGridTextColumn Header="Beschreibung" IsReadOnly="True"  Binding="{Binding Description}"/>
                 <DataGridTextColumn Header="Beschreibung2" IsReadOnly="True"  Binding="{Binding Description2}"/>
                 <DataGridTextColumn Header="Preis" IsReadOnly="True"  Binding="{Binding Price}"/>

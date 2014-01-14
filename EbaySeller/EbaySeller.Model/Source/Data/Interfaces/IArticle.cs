@@ -44,5 +44,7 @@ namespace EbaySeller.Model.Source.Data.Interfaces
 
         string EbayId { get; set; }
 
+        bool IsToDelete { get; set; }
+
     }
 }

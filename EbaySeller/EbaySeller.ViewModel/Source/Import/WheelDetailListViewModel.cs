@@ -173,6 +173,12 @@ namespace EbaySeller.ViewModel.Source.Import
                     result = ebayUploader.RefreshOrCreateEbayArticle(articleToUpload,
                                                                      ebaySingleArticleCsvWriter, amount,
                                                                      template);
+                    if (result == null)
+                    {
+                        dictionary.Remove(articleToUpload.ArticleId);
+                        CountOfCurrentUploadedItems++;
+                        continue;
+                    }
                     if (dictionary.ContainsKey(result.ArticleId))
                     {
                         dictionary.Remove(result.ArticleId);

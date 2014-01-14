@@ -54,6 +54,11 @@ namespace EbaySeller.Model.Source.Ebay
             }
             else
             {
+                if (article.IsToDelete)
+                {
+                    deleteItemCall.EndItem(article.EbayId, EndReasonCodeType.NotAvailable, "");
+                    return null;
+                }
                 newArticle = ReviseEbayArticle(article);
             }
 
@@ -69,6 +74,7 @@ namespace EbaySeller.Model.Source.Ebay
             ebayType.QuantityAvailable = GetQuantityOfArticle(article);
             ebayType.StartPrice = GetCalculatedPrice(article);
             ebayType.VATDetails = GetVatDetails();
+            ebayType.Storefront = GetStorefrontType();
             var wheel = article as IWheel;
             if (wheel != null)
             {
@@ -128,6 +134,8 @@ namespace EbaySeller.Model.Source.Ebay
             ebayType.MotorsGermanySearchable = true;
             ebayType.VATDetails = GetVatDetails();
 
+            ebayType.Storefront = GetStorefrontType();
+
             ebayType.ReturnPolicy = GetPolicy();
             api2call.PictureFileList = new StringCollection();
             ebayType.PictureDetails = GetPictureDetails(article);
@@ -136,6 +144,11 @@ namespace EbaySeller.Model.Source.Ebay
             
             article.EbayId = ebayType.ItemID;
             return article;
+        }
+
+        private StorefrontType GetStorefrontType()
+        {
+            return new StorefrontType {StoreCategoryID = 3492568016};
         }
 
         private NameValueListTypeCollection GetItemSpecifics(IWheel wheel)
@@ -195,7 +208,9 @@ namespace EbaySeller.Model.Source.Ebay
             double price = article.Price;
             price += currentAmount + 0.35;
             price /= (EbayArticleConstants.CalculatedConstant);
-            
+
+            //double newPrice = article.Price + currentAmount + 0.35;
+            //double calculated = (newPrice + (newPrice / 0.95) * 0.05) * 1.19;
             return new AmountType {currencyID = CurrencyCodeType.EUR, Value = price};
         }
 

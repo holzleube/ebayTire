@@ -14,7 +14,7 @@ namespace EbaySeller.Model.Source.Ebay.Constants
 
         public const int MinimumCountOfArticles = 10;
 
-        public const double CalculatedConstant = 0.761;
+        public const double CalculatedConstant = 0.771336;
 
     }
 }

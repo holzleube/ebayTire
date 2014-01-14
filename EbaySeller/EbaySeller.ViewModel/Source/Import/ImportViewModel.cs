@@ -181,7 +181,6 @@ namespace EbaySeller.ViewModel.Source.Import
                 string messageBoxText = "Es sind keine Datensätze zum Vergleichen vorhanden. Wollen Sie alle Datensätze der Basis übernehmen?";
                 string caption = "Leere Vergleichsdaten";
                 var buttons = MessageBoxButtons.YesNo;
-                var icon = MessageBoxImage.Question;
                 var result = MessageBox.Show(messageBoxText,caption, buttons);
                 switch (result)
                 {
@@ -202,15 +201,19 @@ namespace EbaySeller.ViewModel.Source.Import
                     var newArticle = newOriginalArticles[originalArticle.ArticleId];
                     if (!comperator.AreBothArticleEqual(originalArticle, newArticle))
                     {
-                        resultList.Add(newArticle);  
+                        var newArticleWithId = newArticle;
+                        newArticleWithId.EbayId = originalArticle.EbayId;
+                        resultList.Add(newArticleWithId);  
                     }
                     copyOfNewArticles.Remove(newArticle);
                 }
                 catch (KeyNotFoundException e)
                 {
+                    originalArticle.IsToDelete = true;
                     resultList.Add(originalArticle);  
                 }
             }
+            resultList.AddRange(copyOfNewArticles);
             NavigateToWheelDetailListPage(resultList);
         }
 
