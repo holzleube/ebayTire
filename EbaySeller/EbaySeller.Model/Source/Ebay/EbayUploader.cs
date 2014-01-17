@@ -56,7 +56,8 @@ namespace EbaySeller.Model.Source.Ebay
             {
                 if (article.IsToDelete)
                 {
-                    deleteItemCall.EndItem(article.EbayId, EndReasonCodeType.NotAvailable, "");
+                    RemoveItem(article);
+                    
                     return null;
                 }
                 newArticle = ReviseEbayArticle(article);
@@ -283,6 +284,11 @@ namespace EbaySeller.Model.Source.Ebay
             }
             
             return article.Description;
+        }
+
+        public void RemoveItem(IArticle articleToDelete)
+        {
+            deleteItemCall.EndItem(articleToDelete.EbayId, EndReasonCodeType.NotAvailable, "");
         }
     }
 }

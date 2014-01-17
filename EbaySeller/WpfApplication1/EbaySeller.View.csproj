@@ -27,7 +27,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <AutorunEnabled>true</AutorunEnabled>
     <ApplicationRevision>30</ApplicationRevision>
-    <ApplicationVersion>1.5.1.%2a</ApplicationVersion>
+    <ApplicationVersion>1.6.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -239,6 +239,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\shopping.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\delete_cart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\crosssection.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

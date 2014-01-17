@@ -18,18 +18,23 @@
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Filter" DataContext="{Binding Source={StaticResource Locator}, Path=Filter}">
                     <ribbon:RibbonToggleButton Label="Autoreifen" IsChecked="{Binding CarWheelFilterChecked}" LargeImageSource="Images/auto.png" Command="{Binding FilterToggleCommand}" />
-                    <ribbon:RibbonToggleButton Label="DOT2011" IsChecked="{Binding DotFilterChecked}" LargeImageSource="Images/wheel.png" Command="{Binding FilterToggleCommand}" />
+                    <ribbon:RibbonToggleButton Label="Dotfrei" IsChecked="{Binding DotFilterChecked}" LargeImageSource="Images/wheel.png" Command="{Binding FilterToggleCommand}" />
                     <ribbon:RibbonToggleButton Label="Winter" IsChecked="{Binding WinterFilterChecked}" LargeImageSource="Images/winter.png" Command="{Binding FilterToggleCommand}" />
+                    <ribbon:RibbonToggleButton Label="Kleiner R19" IsChecked="{Binding CrossSectionFilterChecked}" LargeImageSource="Images/crosssection.png" Command="{Binding FilterToggleCommand}" />
                     <ribbon:RibbonToggleButton Label="205/55 195/65 205/60 195/60" IsChecked="{Binding WidthHeightFilterChecked}" LargeImageSource="Images/yardstick.png" Command="{Binding FilterToggleCommand}" />
+                    <ribbon:RibbonToggleButton Label="Auto, Winter, Dotfrei, Maße" IsChecked="{Binding AllFilterChecked}" LargeImageSource="Images/yardstick.png" Command="{Binding FilterToggleCommand}" />
                     <ribbon:RibbonToggleButton Label="Ebay Artikel" IsChecked="{Binding EbayArticleFilterChecked}" LargeImageSource="Images/listing.png" Command="{Binding FilterToggleCommand}" />
                     <ribbon:RibbonToggleButton Label="Neue Artikel" IsChecked="{Binding NewArticleFilterChecked}" LargeImageSource="Images/shopping.png" Command="{Binding FilterToggleCommand}" />
-                    <ribbon:RibbonToggleButton Label="Alle" IsChecked="{Binding AllFilterChecked}" LargeImageSource="Images/yardstick.png" Command="{Binding FilterToggleCommand}" />
+                    <ribbon:RibbonToggleButton Label="Dot 2011" IsChecked="{Binding AllDotsChecked}" LargeImageSource="Images/wheel.png" Command="{Binding FilterToggleCommand}" />
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Berechnung">
                     <ribbon:RibbonButton Label="Kalkuliere Unterschiede" LargeImageSource="Images/reload.png" Command="{Binding CompareBaseAndNewFileCommand}"></ribbon:RibbonButton>
-                    <ribbon:RibbonButton Label="Ebay hochladen" DataContext="{Binding Source={StaticResource Locator}, Path=Wheel}" LargeImageSource="Images/ebay.png" Command="{Binding UploadToEbayCommand}"></ribbon:RibbonButton>
+                </ribbon:RibbonGroup> 
+                <ribbon:RibbonGroup Header="Berechnung">
+                    <ribbon:RibbonButton Label="Ebay hochladen" DataContext="{Binding Source={StaticResource Locator}, Path=Wheel}" LargeImageSource="Images/ebay.png" Command="{Binding UploadToEbayCommand}"/>
+                    <ribbon:RibbonButton Label="Artikel Löschen" DataContext="{Binding Source={StaticResource Locator}, Path=Wheel}" LargeImageSource="Images/delete_cart.png" Command="{Binding DeleteArticleEbayCommand}"/>
                 </ribbon:RibbonGroup>
-            </ribbon:RibbonTab>
+                </ribbon:RibbonTab>
             <ribbon:RibbonTab Header="Ebay">
                 <ribbon:RibbonGroup Header="Verwaltung">
                     <ribbon:RibbonButton Label="Lade Status" LargeImageSource="Images/open.png" Command="{Binding ImportRelayCommand}"></ribbon:RibbonButton>

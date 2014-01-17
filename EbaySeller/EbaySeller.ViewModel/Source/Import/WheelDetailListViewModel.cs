@@ -42,6 +42,16 @@ namespace EbaySeller.ViewModel.Source.Import
             }
         }
 
+        public ICommand DeleteArticleEbayCommand
+        {
+            get
+            {
+                return new RelayCommand(DeleteEbayArticles);
+            }
+        }
+
+        
+
         public ICollectionView WheelList
         {
             get { return wheelList; }
@@ -144,9 +154,8 @@ namespace EbaySeller.ViewModel.Source.Import
                     {
                         string template = TemplateLoader.LoadTemplateFromUri(ConfigurationManager.AppSettings["Ebay.Template"]);
                         var ebaySingleArticleCsvWriter = new EbayArticleCSVWriter(saveFileDialog.FileName + ".diffs");
-                        ImportViewModel importViewModel = SimpleIoc.Default.GetInstance<ImportViewModel>();
                         CountOfCurrentUploadedItems = 0;
-                        var allArticles = IterateThroughAllItemsAndUploadThem(importViewModel.OriginalArticles, ebaySingleArticleCsvWriter, amount, template);
+                        var allArticles = IterateThroughAllItemsAndUploadThem(GetOriginalArticles(), ebaySingleArticleCsvWriter, amount, template);
                         WriteAllArticlesBackToCSV(saveFileDialog.FileName, allArticles);
                         IsUploadingToEbay = false;
                     };
@@ -159,6 +168,12 @@ namespace EbaySeller.ViewModel.Source.Import
                 }
             }
         }
+
+        private Dictionary<string, IArticle> GetOriginalArticles()
+        {
+            ImportViewModel importViewModel = SimpleIoc.Default.GetInstance<ImportViewModel>();
+            return importViewModel.OriginalArticles;
+        } 
 
         private Dictionary<string, IArticle>.ValueCollection IterateThroughAllItemsAndUploadThem(Dictionary<string, IArticle> dictionary,
                                                                EbayArticleCSVWriter ebaySingleArticleCsvWriter, double amount,
@@ -229,6 +244,31 @@ namespace EbaySeller.ViewModel.Source.Import
                 return false;
             }
             return true;
+        }
+
+        private void DeleteEbayArticles()
+        {
+            string messageBoxText =string.Format("Sollen alle:{0} Artikel gelösch werden?", WheelListFlat.Count);
+            string caption = "Lösche Artikel";
+            var buttons = MessageBoxButtons.YesNo;
+            var result = MessageBox.Show(messageBoxText, caption, buttons);
+            if (result.Equals(DialogResult.Yes))
+            {
+                var saveFileDialog = new SaveFileDialog();
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var allArticles = GetOriginalArticles();
+                    var ebayUploader = new EbayUploader();
+                    foreach (var articleToDelete in WheelListFlat)
+                    {
+                        ebayUploader.RemoveItem(articleToDelete);
+                        allArticles[articleToDelete.ArticleId].EbayId = "";
+                    }
+                    WriteAllArticlesBackToCSV(saveFileDialog.FileName, allArticles.Values);
+                }
+            }
+            
+            
         }
     }
 }

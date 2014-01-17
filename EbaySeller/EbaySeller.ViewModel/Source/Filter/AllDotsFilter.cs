@@ -6,11 +6,11 @@ using EbaySeller.Model.Source.Data.Interfaces;
 
 namespace EbaySeller.ViewModel.Source.Filter
 {
-    public class DotFilter: IFilterCriteria<IWheel>
+    public class AllDotsFilter:IFilterCriteria<IWheel>
     {
         public bool IsInFilter(IWheel article)
         {
-            return article.DotNumber > 2012 || article.DotNumber == 0;
+            return article.DotNumber != 0;
         }
     }
 }

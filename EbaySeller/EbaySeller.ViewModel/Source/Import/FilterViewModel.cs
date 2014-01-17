@@ -22,6 +22,8 @@ namespace EbaySeller.ViewModel.Source.Import
         private bool allFilterChecked;
         private bool isEbayArticleFilterChecked;
         private bool isNewArticleFilterChecked;
+        private bool isAllDotsFilterChecked;
+        private bool isCrossSectionFilterChecked;
 
         public FilterViewModel()
         {
@@ -33,6 +35,8 @@ namespace EbaySeller.ViewModel.Source.Import
             availableFilterDictionary.Add(WidthHeightFilterKey, new WidthHeightFilter());
             availableFilterDictionary.Add(EbayArticleFilterKey, new EbayArticleFilter());
             availableFilterDictionary.Add(NewArticleFilterKey, new NewArticleFilter());
+            availableFilterDictionary.Add(AllDotsFilterKey, new AllDotsFilter());
+            availableFilterDictionary.Add(CrossSectionFilterKey, new CrossSectionFilter());
         }
 
         #region keys
@@ -42,6 +46,8 @@ namespace EbaySeller.ViewModel.Source.Import
         private const string WidthHeightFilterKey = "WidthHeightFilterKey";
         private const string EbayArticleFilterKey = "EbayArticleFilterKey";
         private const string NewArticleFilterKey = "NewArticleFilterKey";
+        private const string AllDotsFilterKey = "AllDotsFilterKey";
+        private const string CrossSectionFilterKey = "CrossSectionFilterKey";
         #endregion
 
         #region boolProperties
@@ -57,6 +63,17 @@ namespace EbaySeller.ViewModel.Source.Import
             }
         }
 
+        public bool AllDotsChecked
+        {
+            get { return isAllDotsFilterChecked; }
+            set
+            {
+                UpdateFilter(AllDotsFilterKey);
+                isAllDotsFilterChecked = value;
+                RaisePropertyChanged("AllDotsChecked");
+            }
+        }
+
         public bool EbayArticleFilterChecked
         {
             get { return isEbayArticleFilterChecked; }
@@ -65,6 +82,17 @@ namespace EbaySeller.ViewModel.Source.Import
                 UpdateFilter(EbayArticleFilterKey);
                 isEbayArticleFilterChecked = value;
                 RaisePropertyChanged("EbayArticleFilterChecked");
+            }
+        }
+
+        public bool CrossSectionFilterChecked
+        {
+            get { return isCrossSectionFilterChecked; }
+            set
+            {
+                UpdateFilter(CrossSectionFilterKey);
+                isCrossSectionFilterChecked = value;
+                RaisePropertyChanged("CrossSectionFilterChecked");
             }
         }
 
@@ -87,7 +115,10 @@ namespace EbaySeller.ViewModel.Source.Import
                 activeFilters = new List<IFilterCriteria<IWheel>>();
                 if (value)
                 {
-                    activeFilters.AddRange(availableFilterDictionary.Values);
+                    activeFilters.Add(availableFilterDictionary[CarWheelFilterKey]);
+                    activeFilters.Add(availableFilterDictionary[WinterFilterKey]);
+                    activeFilters.Add(availableFilterDictionary[DotFilterKey]);
+                    activeFilters.Add(availableFilterDictionary[WidthHeightFilterKey]);
                 }
                 allFilterChecked = value;
                 RaisePropertyChanged("AllFilterChecked");

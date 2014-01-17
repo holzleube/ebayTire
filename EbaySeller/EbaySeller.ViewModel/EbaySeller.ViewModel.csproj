@@ -76,7 +76,9 @@
     <Compile Include="Source\Comperator\ICompareCriteria.cs" />
     <Compile Include="Source\Comperator\IdCriteria.cs" />
     <Compile Include="Source\Comperator\PriceCriteria.cs" />
+    <Compile Include="Source\Filter\AllDotsFilter.cs" />
     <Compile Include="Source\Filter\CarFilterCriteria.cs" />
+    <Compile Include="Source\Filter\CrossSectionFilter.cs" />
     <Compile Include="Source\Filter\DotFilter.cs" />
     <Compile Include="Source\Filter\EbayArticleFilter.cs" />
     <Compile Include="Source\Filter\IFilterCriteria.cs" />
