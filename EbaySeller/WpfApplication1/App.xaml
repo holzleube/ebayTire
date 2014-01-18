@@ -5,7 +5,8 @@
     <ResourceDictionary x:Key="dataGridStyle" Source="/DataGridThemes;component/ExpressionLight.xaml">
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/DataGridThemes;component/ExpressionDark.xaml" />
-        <!--<ResourceDictionary Source="/DataGridThemes;component/ExpressionLight.xaml" />-->
+        <ResourceDictionary Source="Styles/DataGridStyles.xaml" />
+                <!--<ResourceDictionary Source="/DataGridThemes;component/ExpressionLight.xaml" />-->
         <!--<ResourceDictionary Source="/DataGridThemes;component/WhistlerBlue.xaml" />-->
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
+using EbaySeller.Common.DataInterface;
 using EbaySeller.Model.Source.CSV.Reader;
 using EbaySeller.Model.Source.CSV.Writer;
-using EbaySeller.Model.Source.Data.Interfaces;
 using EbaySeller.Model.Source.Ebay;
 using EbaySeller.Model.Source.Ebay.Template;
 using EbaySeller.Model.Source.Exceptions;
@@ -141,10 +141,10 @@ namespace EbaySeller.ViewModel.Source.Import
                 MessageBox.Show("Bitte geben Sie einen gültigen Gewinn ein. In der Form 4,5");
                 return;
             }
-             
-            var saveFileDialog = new SaveFileDialog();
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
+            string baseFileName = ConfigurationManager.AppSettings["Ebay.BaseFile"];
+            //var saveFileDialog = new SaveFileDialog();
+            //if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            //{
                 IsUploadingToEbay = true;
                 BackgroundWorker bw = new BackgroundWorker();
 
@@ -153,10 +153,10 @@ namespace EbaySeller.ViewModel.Source.Import
                     bw.DoWork += delegate
                     {
                         string template = TemplateLoader.LoadTemplateFromUri(ConfigurationManager.AppSettings["Ebay.Template"]);
-                        var ebaySingleArticleCsvWriter = new EbayArticleCSVWriter(saveFileDialog.FileName + ".diffs");
+                        var ebaySingleArticleCsvWriter = new EbayArticleCSVWriter(baseFileName + ".diffs");
                         CountOfCurrentUploadedItems = 0;
                         var allArticles = IterateThroughAllItemsAndUploadThem(GetOriginalArticles(), ebaySingleArticleCsvWriter, amount, template);
-                        WriteAllArticlesBackToCSV(saveFileDialog.FileName, allArticles);
+                        WriteAllArticlesBackToCSV(baseFileName, allArticles);
                         IsUploadingToEbay = false;
                     };
                     bw.RunWorkerAsync();
@@ -166,7 +166,7 @@ namespace EbaySeller.ViewModel.Source.Import
                 {
                     MessageBox.Show("Es ist folgender Fehler aufgetreten: " + e.Message);
                 }
-            }
+            //}
         }
 
         private Dictionary<string, IArticle> GetOriginalArticles()

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using EbaySeller.Common.DataInterface;
 using EbaySeller.Model.Source.CSV;
 using EbaySeller.Model.Source.CSV.Reader;
-using EbaySeller.Model.Source.Data.Interfaces;
 using EbaySeller.Model.Source.Exceptions;
 using EbaySeller.ViewModel.Source.Comperator;
 using EbaySeller.ViewModel.Source.ViewInterfaces;
@@ -100,6 +101,13 @@ namespace EbaySeller.ViewModel.Source.Import
                 return new RelayCommand(ImportBaseDataWasClickedCommand);
             }
         }
+        public ICommand ImportBaseFileRelayCommand
+        {
+            get
+            {
+                return new RelayCommand(ImportBaseFileWasClickedCommand);
+            }
+        }
         
         public RelayCommand ImportNewRelayCommand
         {
@@ -128,6 +136,18 @@ namespace EbaySeller.ViewModel.Source.Import
                 IsLoadingBaseData = false;
             }, () => IsLoadingBaseData = true);
         }
+        
+        private void ImportBaseFileWasClickedCommand()
+        {
+            string baseFileName = ConfigurationManager.AppSettings["Ebay.BaseFile"];
+            StartBackgroundWorker(result =>
+            {
+                originalArticles = result;
+                Articles = new List<IArticle>(result.Values);
+                IsLoadingBaseData = false;
+            }, () => IsLoadingBaseData = true, baseFileName);
+        }
+
         private void ImportNewBaseDataWasClickedCommand()
         {
             SetArticlesFromFileAsync(result =>
@@ -143,28 +163,32 @@ namespace EbaySeller.ViewModel.Source.Import
             var fileDialog = new OpenFileDialog();
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
-                BackgroundWorker bw = new BackgroundWorker();
-                
-                try
-                {
-                    bw.DoWork += delegate
-                        {
-                            beforeLoad.Invoke();
-                            var reader = new CSVReader();
-                            var resultArticles = reader.ReadArticlesFromFile(fileDialog.FileName);
-                            afterLoad.Invoke(resultArticles);
-                        };
-                    bw.RunWorkerAsync();
-                    
-                }
-                catch (FileNotReadyException ex)
-                {
-                    MessageBox.Show("Datei kann nicht geöffnet werden, da sie bereits verwendet wird.");
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Es ist folgender Fehler aufgetreten: " + e.Message);
-                }
+                StartBackgroundWorker(afterLoad, beforeLoad, fileDialog.FileName);
+            }
+        }
+
+        private static void StartBackgroundWorker(Action<Dictionary<string, IArticle>> afterLoad, Action beforeLoad, string fileName)
+        {
+            BackgroundWorker bw = new BackgroundWorker();
+
+            try
+            {
+                bw.DoWork += delegate
+                    {
+                        beforeLoad.Invoke();
+                        var reader = new CSVReader();
+                        var resultArticles = reader.ReadArticlesFromFile(fileName);
+                        afterLoad.Invoke(resultArticles);
+                    };
+                bw.RunWorkerAsync();
+            }
+            catch (FileNotReadyException ex)
+            {
+                MessageBox.Show("Datei kann nicht geöffnet werden, da sie bereits verwendet wird.");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Es ist folgender Fehler aufgetreten: " + e.Message);
             }
         }
 
@@ -198,7 +222,8 @@ namespace EbaySeller.ViewModel.Source.Import
             {
                 try
                 {
-                    var newArticle = newOriginalArticles[originalArticle.ArticleId];
+                    string key = originalArticle.Description + originalArticle.Description2;
+                    var newArticle = newOriginalArticles[key];
                     if (!comperator.AreBothArticleEqual(originalArticle, newArticle))
                     {
                         var newArticleWithId = newArticle;

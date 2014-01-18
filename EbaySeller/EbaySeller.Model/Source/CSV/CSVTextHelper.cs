@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using EbaySeller.Common.DataInterface;
 using EbaySeller.Model.Source.CSV.WheelOperations;
 using EbaySeller.Model.Source.Data;
-using EbaySeller.Model.Source.Data.Interfaces;
 
 namespace EbaySeller.Model.Source.CSV
 {
@@ -21,6 +21,10 @@ namespace EbaySeller.Model.Source.CSV
             var description = GetString(values[2]);
             var description2 = GetString(values[3]);
             var manufactorer = GetString(values[14]);
+            if (description.Contains("DOT") || description2.Contains("DOT") || manufactorer.Equals("Syron",StringComparison.InvariantCultureIgnoreCase))
+            {
+                return null;
+            }
             var tyreLabel = GetString(values[16]);
             if (IsCarWheel(description, manufactorer, tyreLabel))
             {
@@ -32,6 +36,10 @@ namespace EbaySeller.Model.Source.CSV
                 {
                     article = new Article();
                 }
+            }
+            else
+            {
+                return null;
             }
             article.Id = articleId;
             article.ArticleId = GetString(values[1]);

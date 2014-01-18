@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using EbaySeller.Model.Source.Data.Interfaces;
+using EbaySeller.Common.DataInterface;
 
 namespace EbaySeller.Model.Source.CSV.Reader
 {

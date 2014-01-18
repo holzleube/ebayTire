@@ -4,8 +4,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using EbaySeller.Common.DataInterface;
 using EbaySeller.Model.Source.CSV.Constants;
-using EbaySeller.Model.Source.Data.Interfaces;
 using log4net;
 
 namespace EbaySeller.Model.Source.CSV.Writer

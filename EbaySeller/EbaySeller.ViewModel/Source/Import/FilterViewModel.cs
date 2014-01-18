@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Navigation;
-using EbaySeller.Model.Source.Data.Interfaces;
+using EbaySeller.Common.DataInterface;
 using EbaySeller.ViewModel.Source.Filter;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using EbaySeller.Model.Source.Data.Interfaces;
+using EbaySeller.Common.DataInterface;
 using EbaySeller.Model.Source.Exceptions;
 using log4net;
 
@@ -18,17 +18,31 @@ namespace EbaySeller.Model.Source.CSV.Reader
             {
                 var textLines = File.ReadAllLines(filePath);
                 var result = new Dictionary<string, IArticle>();
+                var duplicateMap = new Dictionary<string, IArticle>();
                 int index = 1;
+                int counter = 1;
                 foreach (var textLine in textLines.Skip(1))
                 {
                     try
                     {
                         var article = CSVTextHelper.GetArticleFromString(textLine, index);
-                        if (result.ContainsKey(article.ArticleId))
+                        if (article == null)
                         {
                             continue;
                         }
-                        result.Add(article.ArticleId, article);
+                        var key = article.Description + article.Description2;
+                        if (result.ContainsKey(key))
+                        {
+                            IWheel wheel = article as IWheel;
+                            if (wheel == null)
+                            {
+                                continue;
+                            }
+                            
+                            result.Remove(key);
+                            result.Add(key, article);
+                        }
+                        result.Add(key, article);
                         index++;
                     }
                     catch (Exception e)

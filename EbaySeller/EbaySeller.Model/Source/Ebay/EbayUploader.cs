@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using EbaySeller.Common.DataInterface;
 using EbaySeller.Model.Source.CSV.Writer;
-using EbaySeller.Model.Source.Data.Interfaces;
 using EbaySeller.Model.Source.Ebay.Constants;
 using EbaySeller.Model.Source.Ebay.Interfaces;
 using EbaySeller.Model.Source.Ebay.Template;

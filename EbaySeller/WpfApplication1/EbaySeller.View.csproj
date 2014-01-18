@@ -26,11 +26,12 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>30</ApplicationRevision>
+    <ApplicationRevision>31</ApplicationRevision>
     <ApplicationVersion>1.6.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <ExpressionBlendVersion>5.0.40218.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -121,6 +122,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Control\WheelDataGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -131,6 +136,9 @@
     </Compile>
     <Compile Include="Control\LoadingPanel.xaml.cs">
       <DependentUpon>LoadingPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\WheelDataGrid.xaml.cs">
+      <DependentUpon>WheelDataGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converter\RowToIndexConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -144,6 +152,14 @@
     <Page Include="Pages\Import\WheelDetailListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\DataGridStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +206,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EbaySeller.Common\EbaySeller.Common.csproj">
+      <Project>{96fdffb5-551e-4528-9891-14f9ab936732}</Project>
+      <Name>EbaySeller.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EbaySeller.ViewModel\EbaySeller.ViewModel.csproj">
       <Project>{BADC7C01-75DC-45FF-84E1-A46CBC34FE08}</Project>
       <Name>EbaySeller.ViewModel</Name>
@@ -245,6 +265,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\crosssection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\base.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

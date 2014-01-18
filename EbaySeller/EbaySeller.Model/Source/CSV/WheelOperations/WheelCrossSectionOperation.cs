@@ -1,5 +1,5 @@
+using EbaySeller.Common.DataInterface;
 using EbaySeller.Model.Source.CSV.WheelOperations.Interfaces;
-using EbaySeller.Model.Source.Data.Interfaces;
 
 namespace EbaySeller.Model.Source.CSV.WheelOperations
 {

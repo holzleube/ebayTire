@@ -1,4 +1,4 @@
-﻿using EbaySeller.Model.Source.Data.Interfaces;
+﻿using EbaySeller.Common.DataInterface;
 
 namespace EbaySeller.ViewModel.Source.Comperator
 {

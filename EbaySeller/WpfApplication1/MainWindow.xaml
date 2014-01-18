@@ -3,6 +3,52 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ribbon="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
         Title="EbaySeller" Height="800" Width="1024">
+    <Window.Resources>
+        <DataTemplate x:Key="RowDetailTemplate">
+            <Grid x:Name="RowDetailGrid"
+			      Width="470"
+			      Height="Auto"
+			      Margin="5">
+
+                <Border HorizontalAlignment="Left"
+				        VerticalAlignment="Top"
+				        CornerRadius="5">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Offset="0" Color="WhiteSmoke" />
+                            <GradientStop Offset="0.75" Color="#AAFFFFAA" />
+                            <GradientStop Offset="1" Color="#AAFFD455" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0"
+						           Margin="10"
+						           HorizontalAlignment="Center"
+						           FontSize="18"
+						           FontWeight="Black"
+						           Text="Temperature Description" />
+                        <TextBlock Grid.Row="1"
+						           Margin="10"
+						           HorizontalAlignment="Left"
+						           Text="{Binding Description}"
+						           TextWrapping="WrapWithOverflow" />
+                    </Grid>
+                </Border>
+                <Border Margin="0 0 8 0" CornerRadius="5">
+                    <Border.Background>
+                        <RadialGradientBrush Center="0.5,1" GradientOrigin="0,1" Opacity="0.3" RadiusX="0.8" RadiusY="0.8">
+                            <GradientStop Offset="1" Color="#AAFFD455" />
+                            <GradientStop Offset="1" Color="WhiteSmoke" />
+                        </RadialGradientBrush>
+                    </Border.Background>
+                </Border>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
 
     <Grid>
        
@@ -13,6 +59,7 @@
         <ribbon:Ribbon x:Name="RibbonWindow">
             <ribbon:RibbonTab Header="Import" DataContext="{Binding Source={StaticResource Locator}, Path=Import}">
                 <ribbon:RibbonGroup Header="Laden">
+                    <ribbon:RibbonButton Label="Lade Basis" LargeImageSource="Images/base.png" Command="{Binding ImportBaseFileRelayCommand}"/>
                     <ribbon:RibbonButton Label="Öffne Basis" LargeImageSource="Images/open.png" Command="{Binding ImportRelayCommand}"/>
                     <ribbon:RibbonButton Label="Öffne Neu" LargeImageSource="Images/open.png" Command="{Binding ImportNewRelayCommand}"/>
                 </ribbon:RibbonGroup>

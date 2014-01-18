@@ -99,6 +99,10 @@
     <Compile Include="ViewModel\ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EbaySeller.Common\EbaySeller.Common.csproj">
+      <Project>{96fdffb5-551e-4528-9891-14f9ab936732}</Project>
+      <Name>EbaySeller.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EbaySeller.Model\EbaySeller.Model.csproj">
       <Project>{dc5f9efb-7707-4e29-a998-82e0b8172320}</Project>
       <Name>EbaySeller.Model</Name>

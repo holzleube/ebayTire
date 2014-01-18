@@ -90,8 +90,6 @@
     <Compile Include="Source\CSV\Writer\EbayArticleCSVWriter.cs" />
     <Compile Include="Source\CSV\Writer\ICSVWriter.cs" />
     <Compile Include="Source\Data\Article.cs" />
-    <Compile Include="Source\Data\Interfaces\IArticle.cs" />
-    <Compile Include="Source\Data\Interfaces\IWheel.cs" />
     <Compile Include="Source\Data\Wheel.cs" />
     <Compile Include="Source\Ebay\Constants\EbayArticleConstants.cs" />
     <Compile Include="Source\Ebay\EbayUploader.cs" />
@@ -107,6 +105,15 @@
   <ItemGroup>
     <None Include="Data\CSV-Datei.csv" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EbaySeller.Common\EbaySeller.Common.csproj">
+      <Project>{96fdffb5-551e-4528-9891-14f9ab936732}</Project>
+      <Name>EbaySeller.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Source\Data\Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
