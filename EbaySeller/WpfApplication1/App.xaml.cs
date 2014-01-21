@@ -2,6 +2,8 @@
 using EbaySeller.Pages.Import;
 using EbaySeller.ViewModel.Source.ViewInterfaces;
 using GalaSoft.MvvmLight.Ioc;
+using log4net;
+using log4net.Config;
 
 namespace WpfApplication1
 {
@@ -10,11 +12,21 @@ namespace WpfApplication1
     /// </summary>
     public partial class App : Application
     {
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public App()
         {
-            log4net.Config.XmlConfigurator.Configure();
+            
             SimpleIoc.Default.Register<IImportListPage>(()=> new ImportListPage());
             SimpleIoc.Default.Register<IWheelDetailListPage>(()=> new WheelDetailListPage());
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            XmlConfigurator.Configure();
+            base.OnStartup(e);
+            Log.Debug("test");
+            Log.Error("test");
         }
     }
 }

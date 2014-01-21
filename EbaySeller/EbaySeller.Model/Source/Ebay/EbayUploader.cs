@@ -9,6 +9,7 @@ using EbaySeller.Model.Source.Ebay.Template;
 using eBay.Service.Call;
 using eBay.Service.Core.Sdk;
 using eBay.Service.Core.Soap;
+using eBay.Service.Util;
 using log4net;
 using log4net.Repository.Hierarchy;
 
@@ -57,7 +58,7 @@ namespace EbaySeller.Model.Source.Ebay
                 if (article.IsToDelete)
                 {
                     RemoveItem(article);
-                    
+                    logger.Info("removed ebay article: " + article.EbayId);
                     return null;
                 }
                 newArticle = ReviseEbayArticle(article);
@@ -90,11 +91,11 @@ namespace EbaySeller.Model.Source.Ebay
 
         private static int GetQuantityOfArticle(IArticle article)
         {
-            if (article.Availability > 10)
+            if (article.Availability < 6)
             {
-                return 6;
+                return article.Availability;
             }
-            return article.Availability;
+            return 6;
         }
 
         private IArticle LoadUpNewSingleArticle(IArticle article, string template)
@@ -230,6 +231,12 @@ namespace EbaySeller.Model.Source.Ebay
             apiCredential.ApiAccount.Developer = ConfigurationManager.AppSettings["Environment.DevId"];
             Context.ApiCredential = apiCredential;
             Context.Site = SiteCodeType.Germany;
+
+            Context.ApiLogManager = new ApiLogManager();
+            Context.ApiLogManager.ApiLoggerList.Add(new FileLogger(
+                                                        ConfigurationManager.AppSettings["Ebay.Logfile"], false,
+                                                        false, true));
+            Context.ApiLogManager.EnableLogging = true;
         }
 
         private ShippingDetailsType GetShippingDetails()

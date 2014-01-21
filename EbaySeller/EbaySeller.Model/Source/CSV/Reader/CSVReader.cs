@@ -18,9 +18,7 @@ namespace EbaySeller.Model.Source.CSV.Reader
             {
                 var textLines = File.ReadAllLines(filePath);
                 var result = new Dictionary<string, IArticle>();
-                var duplicateMap = new Dictionary<string, IArticle>();
                 int index = 1;
-                int counter = 1;
                 foreach (var textLine in textLines.Skip(1))
                 {
                     try

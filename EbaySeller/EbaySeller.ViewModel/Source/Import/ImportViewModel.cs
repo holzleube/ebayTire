@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
+using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -15,6 +16,7 @@ using EbaySeller.ViewModel.Source.ViewInterfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
+using log4net;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 
@@ -26,6 +28,8 @@ namespace EbaySeller.ViewModel.Source.Import
         private List<IArticle> newArticles = new List<IArticle>();
         private Dictionary<string, IArticle> originalArticles = new Dictionary<string, IArticle>();
         private Dictionary<string, IArticle> newOriginalArticles = new Dictionary<string, IArticle>();
+
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private bool isLoadingBaseData = false;
         private bool isLoadingNewData = false;
@@ -122,6 +126,14 @@ namespace EbaySeller.ViewModel.Source.Import
             get
             {
                 return new RelayCommand(CompareBaseAndNewFile);
+            }
+        }
+
+        public RelayCommand CompareEbayArticlesCommand
+        {
+            get
+            {
+                return new RelayCommand(CompareEbayArticles);
             }
         }
 
@@ -241,6 +253,36 @@ namespace EbaySeller.ViewModel.Source.Import
             resultList.AddRange(copyOfNewArticles);
             NavigateToWheelDetailListPage(resultList);
         }
+
+        private void CompareEbayArticles()
+        {
+            if (Articles.Count == 0 || NewArticles.Count == 0)
+            {
+                MessageBox.Show("Es kann kein Update gemacht werden, da entweder die Basis oder die Vergleichsdatei fehlt.");
+            }
+            var ebayArticles = Articles.Where(x => !string.IsNullOrEmpty(x.EbayId));
+            var criteria = new PriceCriteria();
+            var resultList = new List<IArticle>();
+            foreach (var ebayArticle in ebayArticles)
+            {
+                var key = ebayArticle.Description + ebayArticle.Description2;
+                try
+                {
+                    var newArticle = newOriginalArticles[key];
+                    if (!criteria.IsCriteriaSatisfied(ebayArticle, newArticle))
+                    {
+                        newArticle.EbayId = ebayArticle.EbayId;
+                        resultList.Add(newArticle);
+                    }
+                }
+                catch (KeyNotFoundException)
+                {
+                    
+                }
+            }
+            NavigateToWheelDetailListPage(resultList);
+        }
+
 
         private static void NavigateToWheelDetailListPage(List<IArticle> resultList)
         {
