@@ -25,8 +25,6 @@ namespace WpfApplication1
         {
             XmlConfigurator.Configure();
             base.OnStartup(e);
-            Log.Debug("test");
-            Log.Error("test");
         }
     }
 }

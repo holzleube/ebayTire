@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using EbaySeller.Common.DataInterface;
+using EbaySeller.Common.Helper;
 using EbaySeller.Model.Source.Exceptions;
 using log4net;
 
@@ -13,7 +14,7 @@ namespace EbaySeller.Model.Source.CSV.Reader
 
         public Dictionary<string, IArticle> ReadArticlesFromFile(string filePath)
         {
-            var logger = LogManager.GetLogger(this.GetType());
+            var logger = LogManager.GetLogger(typeof(CSVReader));
             try
             {
                 var textLines = File.ReadAllLines(filePath);
@@ -28,7 +29,7 @@ namespace EbaySeller.Model.Source.CSV.Reader
                         {
                             continue;
                         }
-                        var key = article.Description + article.Description2;
+                        var key = ArticleKeyGenerator.GetKeyFromArticle(article);
                         if (result.ContainsKey(key))
                         {
                             IWheel wheel = article as IWheel;

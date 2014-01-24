@@ -8,6 +8,8 @@ namespace EbaySeller.Model.Source.CSV.Writer
 {
     public interface ICSVWriter
     {
-        void WriteToCSVFile(IArticle articleToWrite);
+        void WriteToCSVFile(List<IArticle> articlesToWrite);
+
+        void WriteToCSVFile(IArticle articlesToWrite);
     }
 }

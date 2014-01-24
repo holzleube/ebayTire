@@ -20,12 +20,20 @@ namespace EbaySeller.Model.Source.CSV.Writer
             this.fileName = filename;
             WriteTextToFile(CSVConstants.FirstLineOfCsvFile, false);
         }
+        public void WriteToCSVFile(List<IArticle> articles)
+        {
+            foreach (var articleToWrite in articles)
+            {
+                WriteToCSVFile(articleToWrite);
+            }
+        }
+
+
         public void WriteToCSVFile(IArticle articleToWrite)
         {
             if (articleToWrite == null)
             {
                 logger.Warn("Article in Write To CSV was null");
-                return;
             }
             string csvTextLine = GetTextLineFromArticle(articleToWrite);
             WriteTextToFile(csvTextLine, true);

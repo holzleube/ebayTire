@@ -42,7 +42,12 @@
   <ItemGroup>
     <Compile Include="DataInterface\IArticle.cs" />
     <Compile Include="DataInterface\IWheel.cs" />
+    <Compile Include="Helper\ArticleKeyGenerator.cs" />
+    <Compile Include="Helper\DoubleChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Lib\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

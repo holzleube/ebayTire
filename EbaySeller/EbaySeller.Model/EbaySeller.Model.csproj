@@ -103,7 +103,6 @@
     <Content Include="Lib\eBay.Service.SDK.Attribute.dll" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\CSV-Datei.csv" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

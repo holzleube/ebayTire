@@ -8,8 +8,10 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using EbaySeller.Common.DataInterface;
+using EbaySeller.Common.Helper;
 using EbaySeller.Model.Source.CSV;
 using EbaySeller.Model.Source.CSV.Reader;
+using EbaySeller.Model.Source.Ebay.Constants;
 using EbaySeller.Model.Source.Exceptions;
 using EbaySeller.ViewModel.Source.Comperator;
 using EbaySeller.ViewModel.Source.ViewInterfaces;
@@ -29,7 +31,7 @@ namespace EbaySeller.ViewModel.Source.Import
         private Dictionary<string, IArticle> originalArticles = new Dictionary<string, IArticle>();
         private Dictionary<string, IArticle> newOriginalArticles = new Dictionary<string, IArticle>();
 
-        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog logger = LogManager.GetLogger(typeof(ImportViewModel));
 
         private bool isLoadingBaseData = false;
         private bool isLoadingNewData = false;
@@ -133,7 +135,7 @@ namespace EbaySeller.ViewModel.Source.Import
         {
             get
             {
-                return new RelayCommand(CompareEbayArticles);
+                return new RelayCommand(CompareEbayArticlesOnly);
             }
         }
 
@@ -196,10 +198,12 @@ namespace EbaySeller.ViewModel.Source.Import
             }
             catch (FileNotReadyException ex)
             {
+                logger.Debug("Exception beim Auslesen der Datei.", ex);
                 MessageBox.Show("Datei kann nicht geöffnet werden, da sie bereits verwendet wird.");
             }
             catch (Exception e)
             {
+                logger.Error("Unbekannter Fehler beim Öffnen der Datei"+fileName, e);
                 MessageBox.Show("Es ist folgender Fehler aufgetreten: " + e.Message);
             }
         }
@@ -230,54 +234,60 @@ namespace EbaySeller.ViewModel.Source.Import
             var copyOfNewArticles = new List<IArticle>(NewArticles);
             var resultList = new List<IArticle>();
             var comperator = new ArticleCrudComperator();
-            foreach (var originalArticle in Articles)
+            foreach (var baseArticle in Articles)
             {
                 try
                 {
-                    string key = originalArticle.Description + originalArticle.Description2;
+                    string key = ArticleKeyGenerator.GetKeyFromArticle(baseArticle);
                     var newArticle = newOriginalArticles[key];
-                    if (!comperator.AreBothArticleEqual(originalArticle, newArticle))
+                    if (!comperator.AreBothArticleEqual(baseArticle, newArticle))
                     {
                         var newArticleWithId = newArticle;
-                        newArticleWithId.EbayId = originalArticle.EbayId;
+                        newArticleWithId.EbayId = baseArticle.EbayId;
                         resultList.Add(newArticleWithId);  
                     }
                     copyOfNewArticles.Remove(newArticle);
                 }
                 catch (KeyNotFoundException e)
                 {
-                    originalArticle.IsToDelete = true;
-                    resultList.Add(originalArticle);  
+                    baseArticle.Availability = 0;
+                    resultList.Add(baseArticle);  
                 }
             }
             resultList.AddRange(copyOfNewArticles);
             NavigateToWheelDetailListPage(resultList);
         }
 
-        private void CompareEbayArticles()
+        private void CompareEbayArticlesOnly()
         {
             if (Articles.Count == 0 || NewArticles.Count == 0)
             {
                 MessageBox.Show("Es kann kein Update gemacht werden, da entweder die Basis oder die Vergleichsdatei fehlt.");
+                return;
             }
             var ebayArticles = Articles.Where(x => !string.IsNullOrEmpty(x.EbayId));
             var criteria = new PriceCriteria();
             var resultList = new List<IArticle>();
             foreach (var ebayArticle in ebayArticles)
             {
-                var key = ebayArticle.Description + ebayArticle.Description2;
+                var key = ArticleKeyGenerator.GetKeyFromArticle(ebayArticle);
                 try
                 {
                     var newArticle = newOriginalArticles[key];
                     if (!criteria.IsCriteriaSatisfied(ebayArticle, newArticle))
                     {
                         newArticle.EbayId = ebayArticle.EbayId;
+                        if (newArticle.Availability < EbayArticleConstants.MinimumCountOfArticles)
+                        {
+                            newArticle.Availability = 0;
+                        }
                         resultList.Add(newArticle);
                     }
                 }
                 catch (KeyNotFoundException)
                 {
-                    
+                    ebayArticle.Availability = 0;
+                    resultList.Add(ebayArticle);
                 }
             }
             NavigateToWheelDetailListPage(resultList);

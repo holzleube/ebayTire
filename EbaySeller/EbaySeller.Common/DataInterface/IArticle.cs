@@ -38,7 +38,5 @@ namespace EbaySeller.Common.DataInterface
 
         string EbayId { get; set; }
 
-        bool IsToDelete { get; set; }
-
     }
 }

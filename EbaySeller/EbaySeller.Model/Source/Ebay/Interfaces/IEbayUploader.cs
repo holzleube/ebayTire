@@ -10,5 +10,7 @@ namespace EbaySeller.Model.Source.Ebay.Interfaces
     public interface IEbayUploader
     {
         IArticle RefreshOrCreateEbayArticle(IArticle articleToRefresh, EbayArticleCSVWriter csvWriter, double amount, string template);
+
+        void RemoveItem(IArticle articleToDelete);
     }
 }

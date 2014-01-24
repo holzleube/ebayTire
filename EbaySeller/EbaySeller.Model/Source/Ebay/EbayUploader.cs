@@ -55,12 +55,6 @@ namespace EbaySeller.Model.Source.Ebay
             }
             else
             {
-                if (article.IsToDelete)
-                {
-                    RemoveItem(article);
-                    logger.Info("removed ebay article: " + article.EbayId);
-                    return null;
-                }
                 newArticle = ReviseEbayArticle(article);
             }
 
@@ -73,7 +67,9 @@ namespace EbaySeller.Model.Source.Ebay
             var ebayType = new ItemType();
             
             ebayType.ItemID = article.EbayId;
-            ebayType.QuantityAvailable = GetQuantityOfArticle(article);
+            ebayType.OutOfStockControl = true;
+            ebayType.QuantityAvailable = 0;
+            ebayType.Quantity = GetQuantityOfArticle(article);
             ebayType.StartPrice = GetCalculatedPrice(article);
             ebayType.VATDetails = GetVatDetails();
             ebayType.Storefront = GetStorefrontType();
@@ -122,7 +118,7 @@ namespace EbaySeller.Model.Source.Ebay
             var category = new CategoryType();
             category.CategoryID = "9891";
             ebayType.PrimaryCategory = category;
-
+            
             ebayType.Quantity = GetQuantityOfArticle(article);
 
             ebayType.ConditionID = 1000;
@@ -295,7 +291,14 @@ namespace EbaySeller.Model.Source.Ebay
 
         public void RemoveItem(IArticle articleToDelete)
         {
-            deleteItemCall.EndItem(articleToDelete.EbayId, EndReasonCodeType.NotAvailable, "");
+            try
+            {
+                deleteItemCall.EndItem(articleToDelete.EbayId, EndReasonCodeType.NotAvailable, "");
+            }
+            catch (ApiException exception)
+            {
+                logger.Warn("Exception bei Delete item: "+ articleToDelete.EbayId, exception);
+            }
         }
     }
 }

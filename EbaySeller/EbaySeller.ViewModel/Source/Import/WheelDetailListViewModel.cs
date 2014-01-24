@@ -9,9 +9,11 @@ using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
 using EbaySeller.Common.DataInterface;
+using EbaySeller.Common.Helper;
 using EbaySeller.Model.Source.CSV.Reader;
 using EbaySeller.Model.Source.CSV.Writer;
 using EbaySeller.Model.Source.Ebay;
+using EbaySeller.Model.Source.Ebay.Interfaces;
 using EbaySeller.Model.Source.Ebay.Template;
 using EbaySeller.Model.Source.Exceptions;
 using GalaSoft.MvvmLight;
@@ -33,6 +35,15 @@ namespace EbaySeller.ViewModel.Source.Import
         private string ebayArticlePercentage = string.Empty;
         private string ebayArticleAmount = string.Empty;
         private int countOfCurrentUploadedItems;
+        private List<IArticle> articlesToDeleteList;
+        private static string baseFileName;
+        private IEbayUploader ebayUploader;
+
+        public WheelDetailListViewModel()
+        {
+            baseFileName = ConfigurationManager.AppSettings["Ebay.BaseFile"];
+            ebayUploader = new EbayUploader();
+        }
 
         public ICommand UploadToEbayCommand
         {
@@ -49,8 +60,6 @@ namespace EbaySeller.ViewModel.Source.Import
                 return new RelayCommand(DeleteEbayArticles);
             }
         }
-
-        
 
         public ICollectionView WheelList
         {
@@ -128,6 +137,7 @@ namespace EbaySeller.ViewModel.Source.Import
         {
             countOfWheels = wheels.Count;
             WheelListFlat = wheels;
+           
             //WheelList = new ListCollectionView(wheels);
             //WheelList.GroupDescriptions.Add(new PropertyGroupDescription("Manufactorer"));
             //WheelList.SortDescriptions.Add(new SortDescription("Manufactorer", ListSortDirection.Ascending));
@@ -135,38 +145,35 @@ namespace EbaySeller.ViewModel.Source.Import
 
         private void UploadCurrentListToEbay()
         {
-            double amount = 0.0;
-            if (!IsValidDouble(EbayArticleAmount, out amount))
+            double amount;
+            if (!DoubleChecker.IsValidDouble(EbayArticleAmount, out amount))
             {
                 MessageBox.Show("Bitte geben Sie einen gültigen Gewinn ein. In der Form 4,5");
                 return;
             }
-            string baseFileName = ConfigurationManager.AppSettings["Ebay.BaseFile"];
-            //var saveFileDialog = new SaveFileDialog();
-            //if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            //{
-                IsUploadingToEbay = true;
-                BackgroundWorker bw = new BackgroundWorker();
+            
+            IsUploadingToEbay = true;
+            var bw = new BackgroundWorker();
 
-                try
+            try
+            {
+                bw.DoWork += delegate
                 {
-                    bw.DoWork += delegate
-                    {
-                        string template = TemplateLoader.LoadTemplateFromUri(ConfigurationManager.AppSettings["Ebay.Template"]);
-                        var ebaySingleArticleCsvWriter = new EbayArticleCSVWriter(baseFileName + ".diffs");
-                        CountOfCurrentUploadedItems = 0;
-                        var allArticles = IterateThroughAllItemsAndUploadThem(GetOriginalArticles(), ebaySingleArticleCsvWriter, amount, template);
-                        WriteAllArticlesBackToCSV(baseFileName, allArticles);
-                        IsUploadingToEbay = false;
-                    };
-                    bw.RunWorkerAsync();
+                    string template = TemplateLoader.LoadTemplateFromUri(ConfigurationManager.AppSettings["Ebay.Template"]);
+                    var ebaySingleArticleCsvWriter = new EbayArticleCSVWriter(baseFileName + ".diffs");
+                    CountOfCurrentUploadedItems = 0;
+                    var allArticles = IterateThroughAllItemsAndUploadThem(GetOriginalArticles(), ebaySingleArticleCsvWriter, amount, template);
+                    WriteAllArticlesBackToCSV(new List<IArticle>(allArticles));
+                    IsUploadingToEbay = false;
+                };
+                bw.RunWorkerAsync();
 
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Es ist folgender Fehler aufgetreten: " + e.Message);
-                }
-            //}
+            }
+            catch (Exception e)
+            {
+                logger.Error("Schwerer Fehler beim Hochladen", e);
+                MessageBox.Show("Es ist ein unbekannter Fehler beim Hochladen auf Ebay aufgetreten: " + e.Message);
+            }
         }
 
         private Dictionary<string, IArticle> GetOriginalArticles()
@@ -179,7 +186,6 @@ namespace EbaySeller.ViewModel.Source.Import
                                                                EbayArticleCSVWriter ebaySingleArticleCsvWriter, double amount,
                                                                string template)
         {
-            var ebayUploader = new EbayUploader();
             foreach (var articleToUpload in WheelListFlat)
             {
                 IArticle result = null;
@@ -188,17 +194,12 @@ namespace EbaySeller.ViewModel.Source.Import
                     result = ebayUploader.RefreshOrCreateEbayArticle(articleToUpload,
                                                                      ebaySingleArticleCsvWriter, amount,
                                                                      template);
-                    if (result == null)
+                    var key = ArticleKeyGenerator.GetKeyFromArticle(articleToUpload);
+                    if (dictionary.ContainsKey(key))
                     {
-                        dictionary.Remove(articleToUpload.ArticleId);
-                        CountOfCurrentUploadedItems++;
-                        continue;
+                        dictionary.Remove(key);
                     }
-                    if (dictionary.ContainsKey(result.ArticleId))
-                    {
-                        dictionary.Remove(result.ArticleId);
-                    }
-                    dictionary[result.ArticleId] = result;
+                    dictionary[key] = result;
                 }
                 catch (ApiException e)
                 {
@@ -215,57 +216,32 @@ namespace EbaySeller.ViewModel.Source.Import
             return dictionary.Values;
         }
 
-        private static void WriteAllArticlesBackToCSV(string filename, IEnumerable<IArticle> articles)
+        private static void WriteAllArticlesBackToCSV(List<IArticle> articles)
         {
-            var ebayArticleCsvWriter = new EbayArticleCSVWriter(filename);
-            foreach (var article in articles)
-            {
-                ebayArticleCsvWriter.WriteToCSVFile(article);
-            }
+            var ebayArticleCsvWriter = new EbayArticleCSVWriter(baseFileName);
+            ebayArticleCsvWriter.WriteToCSVFile(articles);
         }
 
-        private bool IsValidDouble(string stringToCheck, out double variable)
-        {
-            variable = 0.0;
-            if (stringToCheck.Contains("."))
-            {
-                return false;
-            }
-            if (stringToCheck.Equals(string.Empty))
-            {
-                return false;
-            }
-            try
-            {
-                variable = double.Parse(stringToCheck);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
-        }
+       
 
         private void DeleteEbayArticles()
         {
-            string messageBoxText =string.Format("Sollen alle:{0} Artikel gelösch werden?", WheelListFlat.Count);
+            string messageBoxText =string.Format("Sollen alle {0} Artikel gelöscht werden?", WheelListFlat.Count);
             string caption = "Lösche Artikel";
             var buttons = MessageBoxButtons.YesNo;
             var result = MessageBox.Show(messageBoxText, caption, buttons);
             if (result.Equals(DialogResult.Yes))
             {
-                var saveFileDialog = new SaveFileDialog();
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+
+                var allArticles = GetOriginalArticles();
+                foreach (var articleToDelete in WheelListFlat)
                 {
-                    var allArticles = GetOriginalArticles();
-                    var ebayUploader = new EbayUploader();
-                    foreach (var articleToDelete in WheelListFlat)
-                    {
-                        ebayUploader.RemoveItem(articleToDelete);
-                        allArticles[articleToDelete.ArticleId].EbayId = "";
-                    }
-                    WriteAllArticlesBackToCSV(saveFileDialog.FileName, allArticles.Values);
+                    var key = articleToDelete.Description + articleToDelete.Description2;
+                    ebayUploader.RemoveItem(articleToDelete);
+                    allArticles.Remove(key);
                 }
+                WriteAllArticlesBackToCSV(new List<IArticle>(allArticles.Values));
+
             }
             
             
