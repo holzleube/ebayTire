@@ -66,6 +66,7 @@
                 <ribbon:RibbonGroup Header="Filter" DataContext="{Binding Source={StaticResource Locator}, Path=Filter}">
                     <ribbon:RibbonToggleButton Label="Autoreifen" IsChecked="{Binding CarWheelFilterChecked}" LargeImageSource="Images/auto.png" Command="{Binding FilterToggleCommand}" />
                     <ribbon:RibbonToggleButton Label="Winter" IsChecked="{Binding WinterFilterChecked}" LargeImageSource="Images/winter.png" Command="{Binding FilterToggleCommand}" />
+                    <ribbon:RibbonToggleButton Label="Sommer" IsChecked="{Binding SummerFilterChecked}" LargeImageSource="Images/summer.png" Command="{Binding FilterToggleCommand}" />
                     <ribbon:RibbonToggleButton Label="Kleiner R19" IsChecked="{Binding CrossSectionFilterChecked}" LargeImageSource="Images/crosssection.png" Command="{Binding FilterToggleCommand}" />
                     <ribbon:RibbonToggleButton Label="205/55 195/65 205/60 195/60" IsChecked="{Binding WidthHeightFilterChecked}" LargeImageSource="Images/yardstick.png" Command="{Binding FilterToggleCommand}" />
                     <ribbon:RibbonToggleButton Label="Auto, Winter, Dotfrei, Maße" IsChecked="{Binding AllFilterChecked}" LargeImageSource="Images/yardstick.png" Command="{Binding FilterToggleCommand}" />

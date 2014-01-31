@@ -27,6 +27,8 @@ namespace EbaySeller.Model.Source.Data
         public string DirectLink { get; set; }
         public string TyreLabelLink { get; set; }
         public string EbayId { get; set; }
+        public string EbayId2 { get; set; }
+        public string EbayId4 { get; set; }
         public bool IsToDelete { get; set; }
     }
 }

@@ -68,6 +68,8 @@ namespace EbaySeller.Model.Source.CSV.Writer
                 articleToWrite.DirectLink,
                 articleToWrite.TyreLabelLink,
                 articleToWrite.EbayId,
+                articleToWrite.EbayId2,
+                articleToWrite.EbayId4,
                 DateTime.Now);
         }
     }

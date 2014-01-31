@@ -248,7 +248,7 @@ namespace EbaySeller.ViewModel.Source.Import
                     }
                     copyOfNewArticles.Remove(newArticle);
                 }
-                catch (KeyNotFoundException e)
+                catch (KeyNotFoundException)
                 {
                     baseArticle.Availability = 0;
                     resultList.Add(baseArticle);  

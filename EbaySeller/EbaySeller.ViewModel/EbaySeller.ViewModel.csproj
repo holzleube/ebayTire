@@ -83,6 +83,7 @@
     <Compile Include="Source\Filter\EbayArticleFilter.cs" />
     <Compile Include="Source\Filter\IFilterCriteria.cs" />
     <Compile Include="Source\Filter\NewArticleFilter.cs" />
+    <Compile Include="Source\Filter\SummerFilterCriteria.cs" />
     <Compile Include="Source\Filter\WidthHeightFilter.cs" />
     <Compile Include="Source\Filter\WinterFilterCriteria.cs" />
     <Compile Include="Source\Import\FilterViewModel.cs" />

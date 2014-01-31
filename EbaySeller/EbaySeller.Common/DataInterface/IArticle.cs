@@ -38,5 +38,9 @@ namespace EbaySeller.Common.DataInterface
 
         string EbayId { get; set; }
 
+        string EbayId2 { get; set; }
+
+        string EbayId4 { get; set; }
+
     }
 }

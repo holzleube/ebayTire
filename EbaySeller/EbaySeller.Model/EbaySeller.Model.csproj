@@ -91,8 +91,11 @@
     <Compile Include="Source\CSV\Writer\ICSVWriter.cs" />
     <Compile Include="Source\Data\Article.cs" />
     <Compile Include="Source\Data\Wheel.cs" />
+    <Compile Include="Source\Ebay\ArticleBuilders\EbayItemSpecificsBuilder.cs" />
     <Compile Include="Source\Ebay\Constants\EbayArticleConstants.cs" />
     <Compile Include="Source\Ebay\EbayUploader.cs" />
+    <Compile Include="Source\Ebay\Facade\EbayFacade.cs" />
+    <Compile Include="Source\Ebay\Interfaces\IEbayFacade.cs" />
     <Compile Include="Source\Ebay\Interfaces\IEbayUploader.cs" />
     <Compile Include="Source\Ebay\Template\TemplateLoader.cs" />
     <Compile Include="Source\Exceptions\FileNotReadyException.cs" />

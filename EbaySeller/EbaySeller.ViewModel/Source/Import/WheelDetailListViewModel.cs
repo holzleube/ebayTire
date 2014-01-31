@@ -35,7 +35,6 @@ namespace EbaySeller.ViewModel.Source.Import
         private string ebayArticlePercentage = string.Empty;
         private string ebayArticleAmount = string.Empty;
         private int countOfCurrentUploadedItems;
-        private List<IArticle> articlesToDeleteList;
         private static string baseFileName;
         private IEbayUploader ebayUploader;
 
@@ -237,7 +236,7 @@ namespace EbaySeller.ViewModel.Source.Import
                 foreach (var articleToDelete in WheelListFlat)
                 {
                     var key = articleToDelete.Description + articleToDelete.Description2;
-                    ebayUploader.RemoveItem(articleToDelete);
+                    ebayUploader.RemoveAllEbayArticles(articleToDelete);
                     allArticles.Remove(key);
                 }
                 WriteAllArticlesBackToCSV(new List<IArticle>(allArticles.Values));

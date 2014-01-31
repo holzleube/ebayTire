@@ -8,11 +8,14 @@ using System.Threading.Tasks;
 using EbaySeller.Common.DataInterface;
 using EbaySeller.Model.Source.CSV.WheelOperations;
 using EbaySeller.Model.Source.Data;
+using EbaySeller.Model.Source.Ebay;
+using log4net;
 
 namespace EbaySeller.Model.Source.CSV
 {
     public class CSVTextHelper
     {
+        private static ILog logger = LogManager.GetLogger(typeof(EbayUploader));
 
         public static IArticle GetArticleFromString(string textLine, int articleId)
         {
@@ -21,7 +24,7 @@ namespace EbaySeller.Model.Source.CSV
             var description = GetString(values[2]);
             var description2 = GetString(values[3]);
             var manufactorer = GetString(values[14]);
-            if (description.Contains("DOT") || description2.Contains("DOT") || manufactorer.Equals("Syron",StringComparison.InvariantCultureIgnoreCase))
+            if (description.Contains("DOT") || description2.Contains("DOT") || manufactorer.Equals("Syron", StringComparison.InvariantCultureIgnoreCase) || description2.Contains("DEMO"))
             {
                 return null;
             }
@@ -34,7 +37,9 @@ namespace EbaySeller.Model.Source.CSV
                 }
                 catch (Exception exception)
                 {
-                    article = new Article();
+                    logger.Warn("Exception beim Auslesen eines Autoreifens", exception);
+                    return null;
+                    //article = new Article();
                 }
             }
             else
@@ -61,6 +66,12 @@ namespace EbaySeller.Model.Source.CSV
             if (values.Length == 19)
             {
                 article.EbayId = values[17];
+            }
+            else if (values.Length == 21)
+            {
+                article.EbayId = values[17];
+                article.EbayId2 = values[18];
+                article.EbayId4 = values[19];
             }
             return article;
         }

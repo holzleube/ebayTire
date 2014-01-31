@@ -18,6 +18,7 @@ namespace EbaySeller.ViewModel.Source.Import
         private bool isWheelFilterChecked;
         private bool isDotFilterChecked;
         private bool isWinterFilterChecked;
+        private bool isSummerFilterChecked;
         private bool isWidthHeightFilterChecked;
         private bool allFilterChecked;
         private bool isEbayArticleFilterChecked;
@@ -32,6 +33,7 @@ namespace EbaySeller.ViewModel.Source.Import
             availableFilterDictionary.Add(CarWheelFilterKey, new CarFilterCriteria());
             availableFilterDictionary.Add(DotFilterKey, new DotFilter());
             availableFilterDictionary.Add(WinterFilterKey, new WinterFilterCriteria());
+            availableFilterDictionary.Add(SummerFilterKey, new SummerFilterCriteria());
             availableFilterDictionary.Add(WidthHeightFilterKey, new WidthHeightFilter());
             availableFilterDictionary.Add(EbayArticleFilterKey, new EbayArticleFilter());
             availableFilterDictionary.Add(NewArticleFilterKey, new NewArticleFilter());
@@ -43,6 +45,7 @@ namespace EbaySeller.ViewModel.Source.Import
         private const string CarWheelFilterKey = "CarWheelFilterKey";
         private const string DotFilterKey = "DotFilterKey";
         private const string WinterFilterKey = "WinterFilterKey";
+        private const string SummerFilterKey = "SummerFilterKey";
         private const string WidthHeightFilterKey = "WidthHeightFilterKey";
         private const string EbayArticleFilterKey = "EbayArticleFilterKey";
         private const string NewArticleFilterKey = "NewArticleFilterKey";
@@ -144,6 +147,17 @@ namespace EbaySeller.ViewModel.Source.Import
                 UpdateFilter(WinterFilterKey);
                 isWinterFilterChecked = value;
                 RaisePropertyChanged("WinterFilterChecked");
+            }
+        }
+
+        public bool SummerFilterChecked
+        {
+            get { return isSummerFilterChecked; }
+            set
+            {
+                UpdateFilter(SummerFilterKey);
+                isSummerFilterChecked = value;
+                RaisePropertyChanged("SummerFilterChecked");
             }
         }
 

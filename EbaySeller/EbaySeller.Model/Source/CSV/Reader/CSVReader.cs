@@ -46,7 +46,7 @@ namespace EbaySeller.Model.Source.CSV.Reader
                     }
                     catch (Exception e)
                     {
-                        logger.Info("Couldnt read line: "+textLine, e);
+                        logger.Info("Couldnt read line: "+textLine + " Möglicherweise Double Parse Fehler", e);
                     }
                 }
                 return result;

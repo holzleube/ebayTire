@@ -11,6 +11,6 @@ namespace EbaySeller.Model.Source.Ebay.Interfaces
     {
         IArticle RefreshOrCreateEbayArticle(IArticle articleToRefresh, EbayArticleCSVWriter csvWriter, double amount, string template);
 
-        void RemoveItem(IArticle articleToDelete);
+        void RemoveAllEbayArticles(IArticle articleToDelete);
     }
 }
