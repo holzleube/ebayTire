@@ -243,7 +243,7 @@ namespace EbaySeller.ViewModel.Source.Import
                     if (!comperator.AreBothArticleEqual(baseArticle, newArticle))
                     {
                         var newArticleWithId = newArticle;
-                        newArticleWithId.EbayId = baseArticle.EbayId;
+                        newArticleWithId.EbayIds = baseArticle.EbayIds;
                         resultList.Add(newArticleWithId);  
                     }
                     copyOfNewArticles.Remove(newArticle);
@@ -265,7 +265,7 @@ namespace EbaySeller.ViewModel.Source.Import
                 MessageBox.Show("Es kann kein Update gemacht werden, da entweder die Basis oder die Vergleichsdatei fehlt.");
                 return;
             }
-            var ebayArticles = Articles.Where(x => !string.IsNullOrEmpty(x.EbayId));
+            var ebayArticles = Articles.Where(x => x.EbayIds.Count > 0);
             var criteria = new PriceCriteria();
             var resultList = new List<IArticle>();
             foreach (var ebayArticle in ebayArticles)
@@ -276,7 +276,7 @@ namespace EbaySeller.ViewModel.Source.Import
                     var newArticle = newOriginalArticles[key];
                     if (!criteria.IsCriteriaSatisfied(ebayArticle, newArticle))
                     {
-                        newArticle.EbayId = ebayArticle.EbayId;
+                        newArticle.EbayIds = ebayArticle.EbayIds;
                         if (newArticle.Availability < EbayArticleConstants.MinimumCountOfArticles)
                         {
                             newArticle.Availability = 0;

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using EbaySeller.Common.DataInterface;
 using EbaySeller.Model.Source.CSV.WheelOperations;
 using EbaySeller.Model.Source.Data;
@@ -39,7 +35,6 @@ namespace EbaySeller.Model.Source.CSV
                 {
                     logger.Warn("Exception beim Auslesen eines Autoreifens", exception);
                     return null;
-                    //article = new Article();
                 }
             }
             else
@@ -63,15 +58,16 @@ namespace EbaySeller.Model.Source.CSV
             article.Manufactorer = manufactorer;
             article.DirectLink = values[15];
             article.TyreLabelLink = values[16];
+            article.EbayIds = new Dictionary<int, string>();
             if (values.Length == 19)
             {
-                article.EbayId = values[17];
+                article.EbayIds[1] = values[17];
             }
             else if (values.Length == 21)
             {
-                article.EbayId = values[17];
-                article.EbayId2 = values[18];
-                article.EbayId4 = values[19];
+                article.EbayIds[1] = values[17];
+                article.EbayIds[2] = values[18];
+                article.EbayIds[4] = values[19];
             }
             return article;
         }

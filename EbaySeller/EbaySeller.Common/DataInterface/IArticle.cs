@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace EbaySeller.Common.DataInterface
 {
     public interface IArticle
@@ -36,11 +38,6 @@ namespace EbaySeller.Common.DataInterface
 
         string TyreLabelLink { get; set; }
 
-        string EbayId { get; set; }
-
-        string EbayId2 { get; set; }
-
-        string EbayId4 { get; set; }
-
+        Dictionary<int, string> EbayIds { get; set; }
     }
 }

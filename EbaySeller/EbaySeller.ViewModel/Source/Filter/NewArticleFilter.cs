@@ -10,7 +10,7 @@ namespace EbaySeller.ViewModel.Source.Filter
     {
         public bool IsInFilter(IWheel article)
         {
-            return string.IsNullOrEmpty(article.EbayId);
+            return article.EbayIds.Count == 0;
         }
     }
 }

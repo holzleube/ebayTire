@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using EbaySeller.Common.DataInterface;
 using EbaySeller.Model.Source.CSV.Writer;
@@ -7,19 +6,12 @@ using EbaySeller.Model.Source.Ebay.ArticleBuilders;
 using EbaySeller.Model.Source.Ebay.Constants;
 using EbaySeller.Model.Source.Ebay.Facade;
 using EbaySeller.Model.Source.Ebay.Interfaces;
-using EbaySeller.Model.Source.Ebay.Template;
-using eBay.Service.Call;
-using eBay.Service.Core.Sdk;
 using eBay.Service.Core.Soap;
-using eBay.Service.Util;
-using log4net;
-using log4net.Repository.Hierarchy;
 
 namespace EbaySeller.Model.Source.Ebay
 {
     public class EbayUploader:IEbayUploader
     {
-        private ILog logger = LogManager.GetLogger(typeof(EbayUploader));
         private static readonly BuyerPaymentMethodCodeType[] PaymentMethods = new[]
             {
                 BuyerPaymentMethodCodeType.MoneyXferAccepted, 
@@ -42,90 +34,74 @@ namespace EbaySeller.Model.Source.Ebay
         {
             IArticle newArticle = null;
             currentAmount = amount;
-
-            var calculatedCount = article.Availability - 6;
-            if (calculatedCount < 1)
-            {
-                var countOf2Articles = calculatedCount + 6;
-            }
-            calculatedCount = calculatedCount - 6;
-            if (calculatedCount < 1)
-            {
-                var countOf1Articles = calculatedCount + 6;
-            }
-            calculatedCount = calculatedCount - 8;
-            if (calculatedCount < 1)
-            {
-                var countOf4Articles = calculatedCount + 8;
-            }
-
+           
+            var availabilityMapToIterate = new Dictionary<int, int>();
+            availabilityMapToIterate[2] = 6;
+            availabilityMapToIterate[1] = 6;
+            availabilityMapToIterate[4] = 8;
             
-            if (string.IsNullOrEmpty(article.EbayId))
+            var availabilityMap = new Dictionary<int, int>(availabilityMapToIterate);
+            var rest = article.Availability - 6;
+            foreach (var item in availabilityMapToIterate)
             {
-                if (article.Availability < EbayArticleConstants.MinimumCountOfArticles)
+                rest = rest - item.Value;
+                if (rest < 0)
                 {
-                    return article;
+                    availabilityMap[item.Key] = 0;
                 }
-                if (article.Availability > 20)
-                {
-                    newArticle = LoadUpNewSingleArticle(article, template);
-                    newArticle = LoadUpNewSingleArticle(article, template, 3);
-                    newArticle = LoadUpNewSingleArticle(article, template, 2);
-                }
-                newArticle = LoadUpNewSingleArticle(article, template);
             }
-            else
+
+            foreach (var availabilityPair in availabilityMap)
             {
-                newArticle = ReviseEbayArticle(article);
+                if (article.EbayIds.ContainsKey(availabilityPair.Key))
+                {
+                    newArticle = ReviseEbayArticle(article, availabilityPair);
+                    continue;
+                }
+                if (availabilityPair.Value == 0)
+                {
+                    continue;
+                }
+                newArticle = LoadUpNewSingleArticle(article, template, availabilityPair);
             }
 
             cswWriter.WriteToCSVFile(newArticle);
             return newArticle;
         }
 
-        private IArticle LoadUpNewSingleArticle(IArticle article, string template, int i)
-        {
-            
-        }
-
-
-        private IArticle ReviseEbayArticle(IArticle article)
+        private IArticle ReviseEbayArticle(IArticle article, KeyValuePair<int, int> availabilityPair)
         {
             var ebayType = new ItemType();
-            
-            ebayType.ItemID = article.EbayId;
+
+            ebayType.ItemID = article.EbayIds[availabilityPair.Key];
             ebayType.OutOfStockControl = true;
-            ebayType.Quantity = GetQuantityOfArticle(article);
-            ebayType.StartPrice = GetCalculatedPrice(article);
+            ebayType.Quantity = GetQuantity(availabilityPair);
+            ebayType.StartPrice = GetCalculatedPrice(article, availabilityPair.Key);
             ebayType.VATDetails = GetVatDetails();
             ebayType.Storefront = GetStorefrontType();
  
             return article;
         }
 
-        private static int GetQuantityOfArticle(IArticle article)
+        private static int GetQuantity(KeyValuePair<int, int> availabilityPair)
         {
-            if (article.Availability < 6)
-            {
-                return article.Availability;
-            }
-            return 6;
+            return availabilityPair.Value/availabilityPair.Key;
         }
 
-        private IArticle LoadUpNewSingleArticle(IArticle article, string template)
+        private IArticle LoadUpNewSingleArticle(IArticle article, string template, KeyValuePair<int, int> availabilityPair)
         {
             var ebayType = new ItemType();
 
             var wheel = article as IWheel;
             if (wheel != null)
             {
-                ebayType.Title = GetTitleFromArticle(wheel);
+                ebayType.Title = GetTitleFromArticle(wheel, availabilityPair.Key);
                 ebayType.ItemSpecifics = itemSpecificBuilder.GetItemSpecifics(wheel);
             }
 
-            ebayType.Description = GetDescriptionFromArticle(wheel, template);
-            ebayType.StartPrice = GetCalculatedPrice(article);
-            ebayType.Quantity = GetQuantityOfArticle(article);
+            ebayType.Description = GetDescriptionFromArticle(wheel, template, availabilityPair.Key);
+            ebayType.StartPrice = GetCalculatedPrice(article, availabilityPair.Key);
+            ebayType.Quantity = GetQuantity(availabilityPair);
 
             ebayType.ListingType = ListingTypeCodeType.StoresFixedPrice;
             ebayType.ListingDuration = "GTC";
@@ -140,7 +116,7 @@ namespace EbaySeller.Model.Source.Ebay
             ebayType.PayPalEmailAddress = currentMail;
             ebayType.DispatchTimeMax = 1;
 
-            ebayType.ShippingDetails = GetShippingDetails();
+            ebayType.ShippingDetails = GetShippingDetails(availabilityPair.Key);
             
             ebayType.MotorsGermanySearchable = true;
             ebayType.VATDetails = GetVatDetails();
@@ -150,7 +126,7 @@ namespace EbaySeller.Model.Source.Ebay
             ebayType.ReturnPolicy = GetPolicy();
             ebayType.PictureDetails = GetPictureDetails(article);
 
-            article.EbayId = facade.AddFixedPriceItem(ebayType);
+            article.EbayIds[availabilityPair.Key] = facade.AddFixedPriceItem(ebayType);
             return article;
         }
 
@@ -173,27 +149,31 @@ namespace EbaySeller.Model.Source.Ebay
             return pictureDetails;
         }
 
-        private AmountType GetCalculatedPrice(IArticle article)
+        private AmountType GetCalculatedPrice(IArticle article, int articleCount)
         {
-            double price = article.Price;
-            price += currentAmount + 0.35;
+            double price = article.Price * articleCount;
+            price += currentAmount*articleCount + 0.35;
             price /= (EbayArticleConstants.CalculatedConstant);
 
             return new AmountType {currencyID = CurrencyCodeType.EUR, Value = price};
         }
 
-        private ShippingDetailsType GetShippingDetails()
+        private ShippingDetailsType GetShippingDetails(int countOfArticles)
         {
             ShippingDetailsType sd = new ShippingDetailsType();
             sd.ShippingType = ShippingTypeCodeType.Flat;
 
             ShippingServiceOptionsType st1 = new ShippingServiceOptionsType();
             st1.ShippingService = ShippingServiceCodeType.DE_Paket.ToString();
-            st1.ShippingServiceAdditionalCost = new AmountType() { Value = 0, currencyID = CurrencyCodeType.EUR };
-            
-            st1.ShippingServiceCost = new AmountType() { Value = 5.95, currencyID = CurrencyCodeType.EUR };
+            st1.ShippingServiceAdditionalCost = new AmountType { Value = 0, currencyID = CurrencyCodeType.EUR };
             st1.ShippingServicePriority = 1;
-            
+            st1.ShippingServiceCost = new AmountType { Value = 5.95, currencyID = CurrencyCodeType.EUR };
+
+            if (countOfArticles > 1)
+            {
+                st1.ShippingServiceCost.Value = 0;
+            }
+
             sd.ShippingServiceOptions = new ShippingServiceOptionsTypeCollection(new[] { st1});
             return sd;
         }
@@ -208,11 +188,11 @@ namespace EbaySeller.Model.Source.Ebay
             return policy;
         }
 
-        private string GetDescriptionFromArticle(IWheel article, string template)
+        private string GetDescriptionFromArticle(IWheel article, string template, int countOfArticles)
         {
             return string.Format(template, 
                 article.ImageLink, 
-                GetTitleFromArticle(article), 
+                GetTitleFromArticle(article, countOfArticles), 
                 article.Manufactorer, 
                 article.WheelWidth, 
                 article.WheelHeight, 
@@ -222,7 +202,7 @@ namespace EbaySeller.Model.Source.Ebay
                 article.TyreLabelLink);
         }
 
-        private string GetTitleFromArticle(IArticle article)
+        private static string GetTitleFromArticle(IArticle article, int countOfArticles)
         {
             var wheel = article as IWheel;
             if (wheel != null)
@@ -231,6 +211,11 @@ namespace EbaySeller.Model.Source.Ebay
                 {
                     return string.Format(EbayArticleConstants.EbayTitleWinterWheelTemplate, wheel.Description);
                 }
+                if (wheel.IsMudSnow)
+                {
+                    return string.Format(EbayArticleConstants.EbayTitleAllWeatherWheelTemplate,countOfArticles, wheel.Description);
+                }
+                return string.Format(EbayArticleConstants.EbayTitleSummerWheelTemplate, countOfArticles, wheel.Description);
             }
             
             return article.Description;
@@ -238,9 +223,18 @@ namespace EbaySeller.Model.Source.Ebay
 
         public void RemoveAllEbayArticles(IArticle articleToDelete)
         {
-            facade.DeleteEbayItem(articleToDelete.EbayId);
-            facade.DeleteEbayItem(articleToDelete.EbayId2);
-            facade.DeleteEbayItem(articleToDelete.EbayId4);
+            
+            DeleteArticle(articleToDelete, 1);
+            DeleteArticle(articleToDelete, 2);
+            DeleteArticle(articleToDelete, 4);
+        }
+
+        private void DeleteArticle(IArticle articleToDelete, int index)
+        {
+            if (articleToDelete.EbayIds.ContainsKey(index))
+            {
+                facade.DeleteEbayItem(articleToDelete.EbayIds[index]);
+            }
         }
     }
 }

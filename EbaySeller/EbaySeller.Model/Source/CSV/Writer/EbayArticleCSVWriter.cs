@@ -67,10 +67,19 @@ namespace EbaySeller.Model.Source.CSV.Writer
                 articleToWrite.Manufactorer,
                 articleToWrite.DirectLink,
                 articleToWrite.TyreLabelLink,
-                articleToWrite.EbayId,
-                articleToWrite.EbayId2,
-                articleToWrite.EbayId4,
+                GetEbayIdForArticle(articleToWrite, 1),
+                GetEbayIdForArticle(articleToWrite, 2),
+                GetEbayIdForArticle(articleToWrite, 4),
                 DateTime.Now);
+        }
+
+        private static string GetEbayIdForArticle(IArticle articleToWrite, int key)
+        {
+            if (articleToWrite.EbayIds.ContainsKey(key))
+            {
+                return articleToWrite.EbayIds[key];
+            }
+            return "";
         }
     }
 }
