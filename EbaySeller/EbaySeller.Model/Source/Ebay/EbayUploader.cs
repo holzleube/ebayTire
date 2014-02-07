@@ -35,21 +35,7 @@ namespace EbaySeller.Model.Source.Ebay
             IArticle newArticle = null;
             currentAmount = amount;
            
-            var availabilityMapToIterate = new Dictionary<int, int>();
-            availabilityMapToIterate[2] = 6;
-            availabilityMapToIterate[1] = 6;
-            availabilityMapToIterate[4] = 8;
-            
-            var availabilityMap = new Dictionary<int, int>(availabilityMapToIterate);
-            var rest = article.Availability - 6;
-            foreach (var item in availabilityMapToIterate)
-            {
-                rest = rest - item.Value;
-                if (rest < 0)
-                {
-                    availabilityMap[item.Key] = 0;
-                }
-            }
+            var availabilityMap = GetAvailabilityMap(article);
 
             foreach (var availabilityPair in availabilityMap)
             {
@@ -69,6 +55,31 @@ namespace EbaySeller.Model.Source.Ebay
             return newArticle;
         }
 
+        private static Dictionary<int, int> GetAvailabilityDefaults()
+        {
+            var availabilityMapToIterate = new Dictionary<int, int>();
+            availabilityMapToIterate[2] = 6;
+            availabilityMapToIterate[1] = 6;
+            availabilityMapToIterate[4] = 8;
+            return availabilityMapToIterate;
+        }
+
+        private static Dictionary<int, int> GetAvailabilityMap(IArticle article)
+        {
+            var availabilityMapToIterate = GetAvailabilityDefaults();
+            var availabilityMap = new Dictionary<int, int>(availabilityMapToIterate);
+            var rest = article.Availability;
+            foreach (var item in availabilityMapToIterate)
+            {
+                rest = rest - item.Value;
+                if (rest < 0)
+                {
+                    availabilityMap[item.Key] = 0;
+                }
+            }
+            return availabilityMap;
+        }
+
         private IArticle ReviseEbayArticle(IArticle article, KeyValuePair<int, int> availabilityPair)
         {
             var ebayType = new ItemType();
@@ -80,6 +91,7 @@ namespace EbaySeller.Model.Source.Ebay
             ebayType.VATDetails = GetVatDetails();
             ebayType.Storefront = GetStorefrontType();
  
+            facade.ReviseEbayArticle(ebayType);
             return article;
         }
 
@@ -115,7 +127,7 @@ namespace EbaySeller.Model.Source.Ebay
             ebayType.PaymentMethods = new BuyerPaymentMethodCodeTypeCollection(PaymentMethods);
             ebayType.PayPalEmailAddress = currentMail;
             ebayType.DispatchTimeMax = 1;
-
+            ebayType.OutOfStockControl = true;
             ebayType.ShippingDetails = GetShippingDetails(availabilityPair.Key);
             
             ebayType.MotorsGermanySearchable = true;
@@ -209,7 +221,7 @@ namespace EbaySeller.Model.Source.Ebay
             {
                 if (wheel.IsWinter)
                 {
-                    return string.Format(EbayArticleConstants.EbayTitleWinterWheelTemplate, wheel.Description);
+                    return string.Format(EbayArticleConstants.EbayTitleWinterWheelTemplate, countOfArticles, wheel.Description);
                 }
                 if (wheel.IsMudSnow)
                 {
@@ -223,7 +235,6 @@ namespace EbaySeller.Model.Source.Ebay
 
         public void RemoveAllEbayArticles(IArticle articleToDelete)
         {
-            
             DeleteArticle(articleToDelete, 1);
             DeleteArticle(articleToDelete, 2);
             DeleteArticle(articleToDelete, 4);

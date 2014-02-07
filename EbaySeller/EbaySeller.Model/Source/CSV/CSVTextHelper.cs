@@ -59,15 +59,23 @@ namespace EbaySeller.Model.Source.CSV
             article.DirectLink = values[15];
             article.TyreLabelLink = values[16];
             article.EbayIds = new Dictionary<int, string>();
-            if (values.Length == 19)
+            if (values.Length > 16)
             {
-                article.EbayIds[1] = values[17];
+                article = CheckIfIdIsNotEmptyAndSetId(values[17], 1, article);
             }
-            else if (values.Length == 21)
+            if (values.Length == 21)
             {
-                article.EbayIds[1] = values[17];
-                article.EbayIds[2] = values[18];
-                article.EbayIds[4] = values[19];
+                article = CheckIfIdIsNotEmptyAndSetId(values[18], 2, article);
+                article = CheckIfIdIsNotEmptyAndSetId(values[19], 4, article);
+            }
+            return article;
+        }
+
+        private static IArticle CheckIfIdIsNotEmptyAndSetId(string ebayId, int ebayKey, IArticle article)
+        {
+            if (!string.IsNullOrEmpty(ebayId))
+            {
+                article.EbayIds[ebayKey] = ebayId;
             }
             return article;
         }

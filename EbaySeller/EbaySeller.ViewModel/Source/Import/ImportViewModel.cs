@@ -139,6 +139,16 @@ namespace EbaySeller.ViewModel.Source.Import
             }
         }
 
+        public RelayCommand SetArticlesToNullCommand
+        {
+            get
+            {
+                return new RelayCommand(SetArticlesToNull);
+            }
+        }
+
+        
+
         #endregion
 
         private void ImportBaseDataWasClickedCommand()
@@ -293,6 +303,16 @@ namespace EbaySeller.ViewModel.Source.Import
             NavigateToWheelDetailListPage(resultList);
         }
 
+        private void SetArticlesToNull()
+        {
+            var resultList = new List<IArticle>();
+            foreach (var articleToEdit in Articles)
+            {
+                articleToEdit.Availability = 0;
+                resultList.Add(articleToEdit);
+            }
+            NavigateToWheelDetailListPage(resultList);
+        }
 
         private static void NavigateToWheelDetailListPage(List<IArticle> resultList)
         {

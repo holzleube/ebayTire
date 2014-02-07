@@ -34,6 +34,7 @@ namespace EbaySeller.Model.Source.CSV.Writer
             if (articleToWrite == null)
             {
                 logger.Warn("Article in Write To CSV was null");
+                return;
             }
             string csvTextLine = GetTextLineFromArticle(articleToWrite);
             WriteTextToFile(csvTextLine, true);

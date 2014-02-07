@@ -76,6 +76,7 @@
                 <ribbon:RibbonGroup Header="Berechnung">
                     <ribbon:RibbonButton Label="Kalkuliere Unterschiede" LargeImageSource="Images/reload.png" Command="{Binding CompareBaseAndNewFileCommand}"></ribbon:RibbonButton>
                     <ribbon:RibbonButton Label="Preisupdate" LargeImageSource="Images/cash.png" Command="{Binding CompareEbayArticlesCommand}"></ribbon:RibbonButton>
+                    <ribbon:RibbonButton Label="Null setzen" LargeImageSource="Images/empty.png" Command="{Binding SetArticlesToNullCommand}"></ribbon:RibbonButton>
                 </ribbon:RibbonGroup> 
                 <ribbon:RibbonGroup Header="Berechnung">
                     <ribbon:RibbonButton Label="Ebay hochladen" DataContext="{Binding Source={StaticResource Locator}, Path=Wheel}" LargeImageSource="Images/ebay.png" Command="{Binding UploadToEbayCommand}"/>

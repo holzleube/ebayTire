@@ -7,7 +7,7 @@ namespace EbaySeller.Model.Source.Ebay.Constants
 {
     public class EbayArticleConstants
     {
-        public const string EbayTitleWinterWheelTemplate = "Winterreifen {0}";
+        public const string EbayTitleWinterWheelTemplate = "{0}x Winterreifen {1}";
         public const string EbayTitleAllWeatherWheelTemplate = "{0}x Ganzjahres-Reifen {1}";
         public const string EbayTitleSummerWheelTemplate = "{0}x Sommer-Reifen {1}";
 
