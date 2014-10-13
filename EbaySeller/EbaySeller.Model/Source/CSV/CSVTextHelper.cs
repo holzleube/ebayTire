@@ -59,7 +59,7 @@ namespace EbaySeller.Model.Source.CSV
             article.DirectLink = values[15];
             article.TyreLabelLink = values[16];
             article.EbayIds = new Dictionary<int, string>();
-            if (values.Length > 16)
+            if (values.Length > 17)
             {
                 article = CheckIfIdIsNotEmptyAndSetId(values[17], 1, article);
             }

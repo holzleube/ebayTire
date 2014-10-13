@@ -86,6 +86,7 @@
     <Compile Include="Source\Filter\SummerFilterCriteria.cs" />
     <Compile Include="Source\Filter\WidthHeightFilter.cs" />
     <Compile Include="Source\Filter\WinterFilterCriteria.cs" />
+    <Compile Include="Source\Gambio\GambioViewModel.cs" />
     <Compile Include="Source\Import\FilterViewModel.cs" />
     <Compile Include="Source\Import\IFilterableViewModel.cs" />
     <Compile Include="Source\Import\IMainViewModel.cs" />

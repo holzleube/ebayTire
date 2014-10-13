@@ -35,7 +35,7 @@ namespace EbaySeller.ViewModel.Source.Import
 
         private bool isLoadingBaseData = false;
         private bool isLoadingNewData = false;
-        private const string BaseArticleKey = "BaseArticleKey";
+        public const string BaseArticleKey = "BaseArticleKey";
         private const string NewArticleKey = "NewArticleKey";
 
         #region binding Data
@@ -270,7 +270,7 @@ namespace EbaySeller.ViewModel.Source.Import
 
         private void CompareEbayArticlesOnly()
         {
-            if (Articles.Count == 0 || NewArticles.Count == 0)
+            if (Articles.Count == 0 || newOriginalArticles.Count == 0)
             {
                 MessageBox.Show("Es kann kein Update gemacht werden, da entweder die Basis oder die Vergleichsdatei fehlt.");
                 return;
@@ -334,6 +334,11 @@ namespace EbaySeller.ViewModel.Source.Import
         {
             Articles = filteredArticleLists[BaseArticleKey];
             NewArticles = filteredArticleLists[NewArticleKey];
+        }
+
+        public List<IArticle> GetFilteredList()
+        {
+            return Articles;
         }
     }
 }

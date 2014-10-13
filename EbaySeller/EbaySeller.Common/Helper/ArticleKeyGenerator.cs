@@ -11,6 +11,11 @@ namespace EbaySeller.Common.Helper
         public static string GetKeyFromArticle(IArticle article)
         {
             return article.Description + article.Description2;
+            //key = key.Replace(",", "");
+            //key = key.Replace(" ", "");
+            //key = key.Replace("/", "");
+            //key = key.Replace("\\", "");
+            //return key;
         }
     }
 }

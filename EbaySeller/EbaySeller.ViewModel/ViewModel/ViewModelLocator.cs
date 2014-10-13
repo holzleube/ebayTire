@@ -12,6 +12,7 @@
   See http://www.galasoft.ch/mvvm
 */
 
+using EbaySeller.ViewModel.Source.Gambio;
 using EbaySeller.ViewModel.Source.Import;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
@@ -36,6 +37,7 @@ namespace EbaySeller.ViewModel.ViewModel
             SimpleIoc.Default.Register<ImportViewModel>();
             SimpleIoc.Default.Register<WheelDetailListViewModel>();
             SimpleIoc.Default.Register<FilterViewModel>();
+            SimpleIoc.Default.Register<GambioViewModel>();
         }
 
         public MainViewModel Main
@@ -67,6 +69,13 @@ namespace EbaySeller.ViewModel.ViewModel
                 return ServiceLocator.Current.GetInstance<FilterViewModel>();
             }
         }
+        public GambioViewModel Gambio
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<GambioViewModel>();
+            }
+        }
         
         public static void Cleanup()
         {
@@ -74,6 +83,7 @@ namespace EbaySeller.ViewModel.ViewModel
             SimpleIoc.Default.Unregister<ImportViewModel>();
             SimpleIoc.Default.Unregister<WheelDetailListViewModel>();
             SimpleIoc.Default.Unregister<FilterViewModel>();
+            SimpleIoc.Default.Unregister<GambioViewModel>();
         }
     }
 }

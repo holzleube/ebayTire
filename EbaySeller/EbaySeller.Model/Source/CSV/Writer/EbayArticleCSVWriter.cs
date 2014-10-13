@@ -10,56 +10,24 @@ using log4net;
 
 namespace EbaySeller.Model.Source.CSV.Writer
 {
-    public class EbayArticleCSVWriter:ICSVWriter
+    public class EbayArticleCSVWriter:AArticleCSVWriter
     {
-        private string fileName;
-        private ILog logger = LogManager.GetLogger(typeof(EbayArticleCSVWriter));
-
-        public EbayArticleCSVWriter(string filename)
+        public EbayArticleCSVWriter(string filename) : base(filename, CSVConstants.FirstLineOfCsvFile)
         {
-            this.fileName = filename;
-            WriteTextToFile(CSVConstants.FirstLineOfCsvFile, false);
-        }
-        public void WriteToCSVFile(List<IArticle> articles)
-        {
-            foreach (var articleToWrite in articles)
-            {
-                WriteToCSVFile(articleToWrite);
-            }
         }
 
-
-        public void WriteToCSVFile(IArticle articleToWrite)
-        {
-            if (articleToWrite == null)
-            {
-                logger.Warn("Article in Write To CSV was null");
-                return;
-            }
-            string csvTextLine = GetTextLineFromArticle(articleToWrite);
-            WriteTextToFile(csvTextLine, true);
-        }
-
-        private void WriteTextToFile(string csvTextLine, bool append)
-        {
-            using (var file = new StreamWriter(@fileName, append))
-            {
-                file.WriteLine(csvTextLine);
-            }
-        }
-
-        private string GetTextLineFromArticle(IArticle articleToWrite)
+        protected override string GetTextLineFromArticle(IArticle articleToWrite)
         {
             return string.Format(CSVConstants.DataFormatLine, 
                 articleToWrite.Id,
                 articleToWrite.ArticleId,
                 articleToWrite.Description,
                 articleToWrite.Description2,
-                articleToWrite.Price.ToString("0.00", CultureInfo.InvariantCulture),
-                articleToWrite.Price4.ToString("0.00", CultureInfo.InvariantCulture),
-                articleToWrite.AvgPrice.ToString("0.00", CultureInfo.InvariantCulture),
-                articleToWrite.AnonymPrice.ToString("0.00", CultureInfo.InvariantCulture),
-                articleToWrite.RvoPrice.ToString("0.00", CultureInfo.InvariantCulture),
+                GetNumberFormatForDecimal(articleToWrite.Price),
+                GetNumberFormatForDecimal(articleToWrite.Price4),
+                GetNumberFormatForDecimal(articleToWrite.AvgPrice),
+                GetNumberFormatForDecimal(articleToWrite.AnonymPrice),
+                GetNumberFormatForDecimal(articleToWrite.RvoPrice),
                 articleToWrite.Availability,
                 articleToWrite.ManufactorerNumber,
                 articleToWrite.ImageLink,
@@ -73,6 +41,8 @@ namespace EbaySeller.Model.Source.CSV.Writer
                 GetEbayIdForArticle(articleToWrite, 4),
                 DateTime.Now);
         }
+
+        
 
         private static string GetEbayIdForArticle(IArticle articleToWrite, int key)
         {

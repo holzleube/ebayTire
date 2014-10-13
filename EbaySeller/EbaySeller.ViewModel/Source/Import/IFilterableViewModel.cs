@@ -11,5 +11,7 @@ namespace EbaySeller.ViewModel.Source.Import
         Dictionary<string, List<IArticle>> GetListsToFilter();
 
         void SetFilteredLists(Dictionary<string, List<IArticle>> filteredArticleLists);
+
+        List<IArticle> GetFilteredList();
     }
 }

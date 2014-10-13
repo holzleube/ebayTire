@@ -56,8 +56,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ribbon:Ribbon x:Name="RibbonWindow">
-            <ribbon:RibbonTab Header="Import" DataContext="{Binding Source={StaticResource Locator}, Path=Import}">
+        <ribbon:Ribbon x:Name="RibbonWindow" SelectedIndex="1">
+            <ribbon:RibbonTab Header="Ebay" DataContext="{Binding Source={StaticResource Locator}, Path=Import}">
                 <ribbon:RibbonGroup Header="Laden">
                     <ribbon:RibbonButton Label="Lade Basis" LargeImageSource="Images/base.png" Command="{Binding ImportBaseFileRelayCommand}"/>
                     <ribbon:RibbonButton Label="Öffne Basis" LargeImageSource="Images/open.png" Command="{Binding ImportRelayCommand}"/>
@@ -83,10 +83,14 @@
                     <ribbon:RibbonButton Label="Artikel Löschen" DataContext="{Binding Source={StaticResource Locator}, Path=Wheel}" LargeImageSource="Images/delete_cart.png" Command="{Binding DeleteArticleEbayCommand}"/>
                 </ribbon:RibbonGroup>
                 </ribbon:RibbonTab>
-            <ribbon:RibbonTab Header="Ebay">
-                <ribbon:RibbonGroup Header="Verwaltung">
-                    <ribbon:RibbonButton Label="Lade Status" LargeImageSource="Images/open.png" Command="{Binding ImportRelayCommand}"></ribbon:RibbonButton>
+            <ribbon:RibbonTab Header="Gambio" DataContext="{Binding Source={StaticResource Locator}, Path=Gambio}">
+                <ribbon:RibbonGroup Header="CSV">
+                    <ribbon:RibbonButton Label="Erstelle Export" LargeImageSource="Images/base.png" Command="{Binding ExportCsvDataCommand}"/>
                     <ribbon:RibbonButton Label="Verkauft" LargeImageSource="Images/open.png" Command="{Binding ImportRelayCommand}"></ribbon:RibbonButton>
+                </ribbon:RibbonGroup>
+                <ribbon:RibbonGroup Header="Bilder">
+                    <ribbon:RibbonButton Label="Bilderimport" LargeImageSource="Images/base.png" Command="{Binding ImageImportCommand}"/>
+                    <ribbon:RibbonTextBox Label="Preismarge" Text="{Binding PriceMarge, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
         </ribbon:Ribbon>
