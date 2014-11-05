@@ -91,6 +91,7 @@
     <Compile Include="Source\CSV\Writer\EbayArticleCSVWriter.cs" />
     <Compile Include="Source\CSV\Writer\GambioArticleCSVWriter.cs" />
     <Compile Include="Source\CSV\Writer\ICSVWriter.cs" />
+    <Compile Include="Source\CSV\Writer\PrestoShopCSVWriter.cs" />
     <Compile Include="Source\Data\Article.cs" />
     <Compile Include="Source\Data\Wheel.cs" />
     <Compile Include="Source\Ebay\ArticleBuilders\EbayItemSpecificsBuilder.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Source\Exceptions\FileNotReadyException.cs" />
     <Compile Include="Source\Images\ImageLoader.cs" />
     <Compile Include="Tests\CSV\CSVTextHelperTests.cs" />
+    <Compile Include="Tests\CSV\PrestoshopCSsvConverterTestscs.cs" />
     <Compile Include="Tests\Images\ImageLoaderTests.cs" />
   </ItemGroup>
   <ItemGroup>

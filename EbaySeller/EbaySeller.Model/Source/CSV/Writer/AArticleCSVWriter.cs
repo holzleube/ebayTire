@@ -16,13 +16,15 @@ namespace EbaySeller.Model.Source.CSV.Writer
         private string fileName;
         private string originalName;
         private string firstLine;
+        protected double priceMarge;
 
-        protected AArticleCSVWriter(string filename, string firstLine)
+        protected AArticleCSVWriter(string filename, string firstLine, double priceMarge)
         {
             this.fileName = filename;
             this.originalName = fileName;
+            this.priceMarge = priceMarge;
             this.firstLine = firstLine;
-            WriteTextToFile(firstLine, false);
+            //WriteTextToFile(firstLine, false);
         }
 
         public void WriteToCSVFile(List<IArticle> articlesToWrite)
@@ -51,7 +53,7 @@ namespace EbaySeller.Model.Source.CSV.Writer
             WriteTextToFile(csvTextLine, true);
         }
 
-        protected abstract string GetTextLineFromArticle(IArticle articleToWrite);
+        public abstract string GetTextLineFromArticle(IArticle articleToWrite);
 
         private void WriteTextToFile(string csvTextLine, bool append)
         {
@@ -64,6 +66,59 @@ namespace EbaySeller.Model.Source.CSV.Writer
         protected string GetNumberFormatForDecimal(double numberToConvert)
         {
             return numberToConvert.ToString("0.00", CultureInfo.InvariantCulture);
+        }
+
+        protected string GetArticlePriceFormat(IArticle articleToWrite)
+        {
+            double calculatedPrice = articleToWrite.Price + priceMarge;
+            return calculatedPrice.ToString("N");
+            //return String.Format("{0:0.00}", calculatedPrice);
+        }
+
+        protected string GetNameFromArticle(IArticle articleToWrite)
+        {
+            //IWheel wheel = (IWheel)articleToWrite;
+            //if (wheel == null)
+            //{
+            //    return articleToWrite.Description;
+            //}
+            return articleToWrite.Description;
+        }
+
+        protected string GetCategoryFromArticle(IArticle articleToWrite)
+        {
+            IWheel wheel = (IWheel)articleToWrite;
+            if (wheel == null)
+            {
+                return "Sonstiges";
+            }
+            if (wheel.IsWinter)
+            {
+                return "Winterreifen";
+            }
+            if (wheel.IsMudSnow)
+            {
+                return "Ganzjahresreifen";
+            }
+            return "Sommerreifen";
+        }
+
+        protected string GetDescriptionFromArticle(IArticle articleToWrite)
+        {
+            IWheel article = (IWheel)articleToWrite;
+            if (article == null)
+            {
+                return articleToWrite.Description;
+            }
+            return "Beschreibung";
+            //string.Format(descriptionTemplate,
+            //    article.TyreLabelLink,
+            //    article.Manufactorer,
+            //    article.WheelWidth,
+            //    article.WheelHeight,
+            //    article.CrossSection,
+            //    article.WeightIndex,
+            //    article.SpeedIndex);
         }
 
     }

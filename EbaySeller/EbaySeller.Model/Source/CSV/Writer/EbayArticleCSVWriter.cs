@@ -12,11 +12,11 @@ namespace EbaySeller.Model.Source.CSV.Writer
 {
     public class EbayArticleCSVWriter:AArticleCSVWriter
     {
-        public EbayArticleCSVWriter(string filename) : base(filename, CSVConstants.FirstLineOfCsvFile)
+        public EbayArticleCSVWriter(string filename) : base(filename, CSVConstants.FirstLineOfCsvFile, 0)
         {
         }
 
-        protected override string GetTextLineFromArticle(IArticle articleToWrite)
+        public override string GetTextLineFromArticle(IArticle articleToWrite)
         {
             return string.Format(CSVConstants.DataFormatLine, 
                 articleToWrite.Id,
