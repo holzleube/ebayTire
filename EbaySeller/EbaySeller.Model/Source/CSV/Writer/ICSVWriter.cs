@@ -12,6 +12,5 @@ namespace EbaySeller.Model.Source.CSV.Writer
 
         void WriteToCSVFile(IArticle articlesToWrite);
 
-        string GetTextLineFromArticle(IArticle articleToWrite);
     }
 }

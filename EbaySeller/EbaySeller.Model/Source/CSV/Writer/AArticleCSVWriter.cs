@@ -24,7 +24,7 @@ namespace EbaySeller.Model.Source.CSV.Writer
             this.originalName = fileName;
             this.priceMarge = priceMarge;
             this.firstLine = firstLine;
-            //WriteTextToFile(firstLine, false);
+            WriteTextToFile(firstLine, false);
         }
 
         public void WriteToCSVFile(List<IArticle> articlesToWrite)

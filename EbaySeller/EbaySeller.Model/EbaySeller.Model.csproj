@@ -73,6 +73,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\CSV\Constants\CSVConstants.cs" />
     <Compile Include="Source\CSV\CSVTextHelper.cs" />
+    <Compile Include="Source\CSV\Extractors\ArticlePropertyExtractorFactory.cs" />
+    <Compile Include="Source\CSV\Extractors\Helper\IPlaceholderReplacer.cs" />
+    <Compile Include="Source\CSV\Extractors\Helper\Placeholder.cs" />
+    <Compile Include="Source\CSV\Extractors\Helper\PlaceholderReplacer.cs" />
+    <Compile Include="Source\CSV\Extractors\Helper\WheelPlaceholderReplacer.cs" />
+    <Compile Include="Source\CSV\Extractors\IArticlePropertyExtractorFactory.cs" />
+    <Compile Include="Source\CSV\Extractors\IPropertyExtractor.cs" />
+    <Compile Include="Source\CSV\Extractors\PrestoshopPropertyExtractor.cs" />
+    <Compile Include="Source\CSV\Extractors\PrestoshopWheelPropertyExtractor.cs" />
+    <Compile Include="Source\CSV\Line\ICSVLine.cs" />
+    <Compile Include="Source\CSV\Line\PrestashopCSVLine.cs" />
     <Compile Include="Source\CSV\Reader\CSVReader.cs" />
     <Compile Include="Source\CSV\Reader\ICSVReader.cs" />
     <Compile Include="Source\CSV\WheelOperations\AWheelOperations.cs" />
@@ -88,6 +99,7 @@
     <Compile Include="Source\CSV\WheelOperations\WheelSpeedIndexOperation.cs" />
     <Compile Include="Source\CSV\WheelOperations\WheelWeightIndexOperation.cs" />
     <Compile Include="Source\CSV\Writer\AArticleCSVWriter.cs" />
+    <Compile Include="Source\CSV\Writer\ArticleCsvWriter.cs" />
     <Compile Include="Source\CSV\Writer\EbayArticleCSVWriter.cs" />
     <Compile Include="Source\CSV\Writer\GambioArticleCSVWriter.cs" />
     <Compile Include="Source\CSV\Writer\ICSVWriter.cs" />
@@ -103,8 +115,13 @@
     <Compile Include="Source\Ebay\Template\TemplateLoader.cs" />
     <Compile Include="Source\Exceptions\FileNotReadyException.cs" />
     <Compile Include="Source\Images\ImageLoader.cs" />
+    <Compile Include="Tests\CSV\ArticlePropertyExtractorTests.cs" />
     <Compile Include="Tests\CSV\CSVTextHelperTests.cs" />
-    <Compile Include="Tests\CSV\PrestoshopCSsvConverterTestscs.cs" />
+    <Compile Include="Tests\CSV\Helper\PlaceholderReplacerTests.cs" />
+    <Compile Include="Tests\CSV\Helper\WheelPlaceholderReplacerTests.cs" />
+    <Compile Include="Tests\CSV\PrestashopCsvLineTests.cs" />
+    <Compile Include="Tests\CSV\PrestashopPropertyWheelExtractorTests.cs" />
+    <Compile Include="Tests\CSV\PrestoshopPropertyExtractorTests.cs" />
     <Compile Include="Tests\Images\ImageLoaderTests.cs" />
   </ItemGroup>
   <ItemGroup>
