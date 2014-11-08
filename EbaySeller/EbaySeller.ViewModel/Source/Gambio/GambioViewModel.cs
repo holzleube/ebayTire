@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EbaySeller.Common.DataInterface;
 using EbaySeller.Common.Helper;
+using EbaySeller.Model.Source.CSV.Extractors;
 using EbaySeller.Model.Source.CSV.Reader;
 using EbaySeller.Model.Source.CSV.Writer;
 using EbaySeller.Model.Source.Images;
@@ -53,36 +56,42 @@ namespace EbaySeller.ViewModel.Source.Gambio
 
         private void ExportCsvData()
         {
-            BackgroundWorker bw = new BackgroundWorker();
-
-             var fileDialog = new SaveFileDialog();
+            var fileDialog = new SaveFileDialog();
             if (fileDialog.ShowDialog() != DialogResult.OK)
             {
                 return;
             }
+            BackgroundWorker bw = new BackgroundWorker();
             try
             {
                 bw.DoWork += delegate
                     {
-                        IFilterableViewModel viewModel = GetViewModelFromLocator();
-
-                        var list = viewModel.GetListsToFilter();
-                        var mainList = list[ImportViewModel.BaseArticleKey];
-                        double doubleValue;
-                        if (!double.TryParse(priceMarge, out doubleValue))
-                        {
-                            MessageBox.Show("Ungültiger Margenwert: " + priceMarge);
-                            return;
-                        }
-                        var gambioCSVWriter = new GambioArticleCSVWriter(fileDialog.FileName, doubleValue);
-                        gambioCSVWriter.WriteToCSVFile(mainList);
+                        LoadDataAndWriteToCsv(fileDialog);
                     };
                 bw.RunWorkerAsync();
             }
             catch (Exception exception)
             {
-                
+                MessageBox.Show("Unbekannte ausnahme " + exception.Message);
             }
+        }
+
+        private void LoadDataAndWriteToCsv(SaveFileDialog fileDialog)
+        {
+            IFilterableViewModel viewModel = GetViewModelFromLocator();
+
+            var list = viewModel.GetListsToFilter();
+            var mainList = list[ImportViewModel.BaseArticleKey];
+            double doubleValue;
+            if (!double.TryParse(priceMarge, out doubleValue))
+            {
+                MessageBox.Show("Ungültiger Margenwert: " + priceMarge);
+                return;
+            }
+            var template = File.ReadAllText(ConfigurationManager.AppSettings["Presta.Template"]);
+            IArticlePropertyExtractorFactory propertyFactory = new ArticlePropertyExtractorFactory(doubleValue, template);
+            var gambioCSVWriter = new ArticleCsvWriter(fileDialog.FileName, propertyFactory);
+            gambioCSVWriter.WriteToCSVFile(mainList);
         }
 
         private void ImportImages()

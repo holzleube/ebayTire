@@ -89,7 +89,7 @@ namespace EbaySeller.Model.Source.CSV.Constants
         public const string WinterWheelCategoryName = "Winterreifen";
         public const string AllYearWheelCategoryName = "Ganzjahresreifen";
         public const string WheelSizeTemplate = "Reifenbreite:$wheelWidth$:1:," +
-                                                "Reifenquerschnitt:$wheelHeigth$:2: " +
+                                                "Reifenquerschnitt:$wheelHeigth$:2:," +
                                                 "Felgendurchmesser:$wheelCrossSection$:3:," +
                                                 "Geschwindigkeitsindex:$speedIndex$:4:," +
                                                 "Lastindex :$loadIndex$:5:," +

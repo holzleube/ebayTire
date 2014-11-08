@@ -24,7 +24,7 @@ namespace EbaySeller.Model.Source.CSV.Extractors.Helper
             public const string WheelSpeedIndex = "$speedIndex$";
             public const string WheelEuImageLink = "$euImage$";
             public const string WheelType = "$wheelType$";
-            public const string WheelNameTemplate = WheelNamePlaceholder + " " + WheelWidthPlaceholder + "/" + WheelHeightPlaceholder + " " + WheelCrossSectionPlaceholder;
+            public const string WheelNameTemplate =ArticlePlaceholder.ManufactorPlaceholder+" "+ WheelNamePlaceholder + " " + WheelWidthPlaceholder + "/" + WheelHeightPlaceholder + " " + WheelCrossSectionPlaceholder;
         }
     }
 }

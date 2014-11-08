@@ -89,6 +89,13 @@ namespace EbaySeller.Model.Tests.CSV
         }
 
         [Test]
+        public void TestFeaturesContainsCrossSection()
+        {
+            testValue = extractor.GetArticleFeatures();
+            CheckContains(",Felgendurchmesser:R19:3:");
+        }
+
+        [Test]
         public void TestWheelHasNoDotFeature()
         {
             testValue = extractor.GetArticleFeatures();
@@ -119,13 +126,14 @@ namespace EbaySeller.Model.Tests.CSV
             return new Wheel()
                 {
                     Description = "testdescription",
-                    WheelId = "KUMHO Z13",
+                    WheelId = "Z13",
                     WheelWidth = 185,
                     WheelHeight = 70,
                     CrossSection = "R19",
                     WeightIndex = 70,
                     AcousticLevel = "90S",
                     SpeedIndex = 'N',
+                    Manufactorer = "KUMHO",
                     IsWinter = true
                 };
         }
