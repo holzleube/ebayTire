@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using EbaySeller.Common.DataInterface;
 using EbaySeller.Model.Source.CSV.Extractors;
 using EbaySeller.Model.Source.Data;
 using NUnit.Framework;
@@ -29,7 +30,8 @@ namespace EbaySeller.Model.Tests.CSV
         [Test]
         public void TestCreationOfWheelExtractor()
         {
-            var result = articlePropertyExtractorFactory.GetPropertyExtractor(new Wheel());
+            IArticle article = new Wheel();
+            var result = articlePropertyExtractorFactory.GetPropertyExtractor(article);
             Assert.IsTrue(result is PrestoshopWheelPropertyExtractor);
         }
     }

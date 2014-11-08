@@ -15,7 +15,7 @@ namespace EbaySeller.Model.Source.CSV.Extractors
         string GetCategory();
         string GetImageUrls();
         int GetAvailability();
-        string GetShortDescription(string template);
+        string GetShortDescription();
         string GetDescription();
         string GetArticleTags();
         string GetArticleFeatures();

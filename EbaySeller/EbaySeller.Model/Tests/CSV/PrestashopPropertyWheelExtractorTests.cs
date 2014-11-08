@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using EbaySeller.Common.DataInterface;
+using EbaySeller.Model.Source.CSV.Constants;
 using EbaySeller.Model.Source.CSV.Extractors;
 using EbaySeller.Model.Source.CSV.Extractors.Helper;
 using EbaySeller.Model.Source.Data;
@@ -40,10 +41,72 @@ namespace EbaySeller.Model.Tests.CSV
         }
 
         [Test]
-        public void TestWheelFeature()
+        public void TestWinterCategory()
+        {
+            testValue = extractor.GetCategory();
+            Check(CSVConstants.WinterWheelCategoryName);
+        }
+        
+        [Test]
+        public void TestSummerCategory()
+        {
+            wheelToTest.IsMudSnow = false;
+            wheelToTest.IsWinter = false;
+            extractor = new PrestoshopWheelPropertyExtractor(wheelToTest, 2, "");
+            testValue = extractor.GetCategory();
+            Check(CSVConstants.SummerWheelCategoryName);
+        }
+
+        [Test]
+        public void TestAllYearWheelCategory()
+        {
+            wheelToTest.IsMudSnow = true;
+            wheelToTest.IsWinter = false;
+            extractor = new PrestoshopWheelPropertyExtractor(wheelToTest, 2, "");
+            testValue = extractor.GetCategory();
+            Check(CSVConstants.AllYearWheelCategoryName);
+        }
+
+        [Test]
+        public void TestFeaturesContainsWheelSize()
         {
             testValue = extractor.GetArticleFeatures();
-            Check("Breite:185:1:");
+            CheckContains("Reifenbreite:185:1:");
+        }
+
+        [Test]
+        public void TestFeaturesContainsWheelType()
+        {
+            testValue = extractor.GetArticleFeatures();
+            CheckContains("Typ:Winterreifen:7:");
+        }
+
+        [Test]
+        public void TestFeaturesContainsSpeedIndex()
+        {
+            testValue = extractor.GetArticleFeatures();
+            CheckContains("Geschwindigkeitsindex:N:4:");
+        }
+
+        [Test]
+        public void TestWheelHasNoDotFeature()
+        {
+            testValue = extractor.GetArticleFeatures();
+            Assert.IsFalse(testValue.Contains("DOT"));
+        }
+
+        [Test]
+        public void TestWheelHasDotFeature()
+        {
+            wheelToTest.DotNumber = 2010;
+            extractor = new PrestoshopWheelPropertyExtractor(wheelToTest, 2, "");
+            testValue = extractor.GetArticleFeatures();
+            Assert.IsTrue(testValue.Contains("DOT:2010:8:"));
+        }
+
+        private void CheckContains(string expectedValue)
+        {
+            Assert.IsTrue(testValue.Contains(expectedValue));
         }
 
         private void Check(string expectedValue)
@@ -62,7 +125,8 @@ namespace EbaySeller.Model.Tests.CSV
                     CrossSection = "R19",
                     WeightIndex = 70,
                     AcousticLevel = "90S",
-                    SpeedIndex = 'N'
+                    SpeedIndex = 'N',
+                    IsWinter = true
                 };
         }
     }

@@ -27,7 +27,12 @@ namespace EbaySeller.Model.Source.CSV.Extractors
 
         public string GetArticleId()
         {
-            return article.Description.Trim() + article.Description2.Trim();
+            return GetNullcheckedTrimmedString(article.Description) + GetNullcheckedTrimmedString(article.Description2);
+        }
+
+        private string GetNullcheckedTrimmedString(string valueToTrim)
+        {
+            return valueToTrim == null ? "" : valueToTrim.Trim();
         }
 
         public virtual string GetArticleName()
@@ -50,7 +55,7 @@ namespace EbaySeller.Model.Source.CSV.Extractors
             return article.Manufactorer;
         }
 
-        public string GetCategory()
+        public virtual string GetCategory()
         {
             return CSVConstants.DefaultCategoryName;
         }
@@ -70,9 +75,9 @@ namespace EbaySeller.Model.Source.CSV.Extractors
             return article.Availability;
         }
 
-        public string GetShortDescription(string template)
+        public string GetShortDescription()
         {
-            return ReplaceTemplate(template);
+            return ReplaceTemplate(Placeholder.ArticlePlaceholder.NamePlaceholder);
         }
 
         public virtual string GetDescription()

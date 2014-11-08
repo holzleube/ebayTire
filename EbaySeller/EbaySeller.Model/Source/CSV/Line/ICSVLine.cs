@@ -7,6 +7,6 @@ namespace EbaySeller.Model.Source.CSV.Line
 {
     public interface ICSVLine
     {
-        string GetCSVLine(string shortDescriptionTemplate);
+        string GetCSVLine();
     }
 }

@@ -16,7 +16,7 @@ namespace EbaySeller.Model.Source.CSV.Line
             this.propertyExtractor = propertyExtractor;
         }
 
-        public string GetCSVLine(string shortDescriptionTemplate)
+        public string GetCSVLine()
         {
             return String.Format(CSVConstants.PrestoFormatLine,
                 propertyExtractor.GetArticleId(),
@@ -26,7 +26,7 @@ namespace EbaySeller.Model.Source.CSV.Line
                 propertyExtractor.GetArticleOriginalPrice(),
                 propertyExtractor.GetManufactorer(),
                 propertyExtractor.GetAvailability(),
-                propertyExtractor.GetShortDescription(shortDescriptionTemplate),
+                propertyExtractor.GetShortDescription(),
                 propertyExtractor.GetDescription(),
                 propertyExtractor.GetArticleTags(),
                 propertyExtractor.GetImageUrls(),

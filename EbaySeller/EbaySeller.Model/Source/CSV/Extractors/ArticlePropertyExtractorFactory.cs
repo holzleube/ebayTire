@@ -18,6 +18,11 @@ namespace EbaySeller.Model.Source.CSV.Extractors
         }
         public IPropertyExtractor GetPropertyExtractor(IArticle article)
         {
+            IWheel wheel = article as IWheel;
+            if (wheel != null)
+            {
+                return GetPropertyExtractor(wheel);
+            }
             return new PrestoshopPropertyExtractor(article, marge);
         }
 

@@ -33,6 +33,15 @@ namespace EbaySeller.Model.Tests.CSV
         }
 
         [Test]
+        public void TestIdOfArticleWithNullValues()
+        {
+            testArticle.Description2 = null;
+            extractor = new PrestoshopPropertyExtractor(testArticle, 2);
+            var testValue = extractor.GetArticleId();
+            Assert.AreEqual(testArticle.Description, testValue);
+        }
+
+        [Test]
         public void TestArticleName()
         {
             var testValue = extractor.GetArticleName();
@@ -112,8 +121,7 @@ namespace EbaySeller.Model.Tests.CSV
         [Test]
         public void TestShortDescription()
         {
-            string template = "$name$";
-            var testValue = extractor.GetShortDescription(template);
+            var testValue = extractor.GetShortDescription();
             Assert.AreEqual(testArticle.Description, testValue);
         }
 

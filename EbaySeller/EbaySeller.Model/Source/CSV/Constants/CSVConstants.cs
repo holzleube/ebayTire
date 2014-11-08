@@ -33,46 +33,70 @@ namespace EbaySeller.Model.Source.CSV.Constants
             "|{15}|{16}||{17}|{18}||";
 
         public const string PrestoFirstLine =
-            "ID;Active (0/1);Name *;Categories (x,y,z...);Price tax excluded or Price tax included;Tax rules ID;Wholesale price;On sale (0/1);" +
-            "Discount amount;Discount percent;Discount from (yyyy-mm-dd);Discount to (yyyy-mm-dd);" +
-            "Reference #;Supplier reference #;Supplier;" +
-            "Manufacturer;" +
-            "EAN13;UPC;Ecotax;Width;Height;Depth;Weight;" +
-            "Quantity;Minimal quantity;" +
-            "Visibility;Additional shipping cost;Unity;Unit price;" +
-            "Short description;Description;Tags (x,y,z...);" +
-            "Meta title;Meta keywords;Meta description;URL rewritten;Text when in stock;Text when backorder allowed;Available for order (0 = No, 1 = Yes);Product available date;Product creation date;" +
-            "Show price (0 = No, 1 = Yes);Image URLs (x,y,z...);Delete existing images (0 = No, 1 = Yes);" +
-            "Feature(Name:Value:Position);" +
-            "Available online only (0 = No, 1 = Yes);Condition;Customizable (0 = No, 1 = Yes);Uploadable files (0 = No, 1 = Yes);Text fields (0 = No, 1 = Yes);Out of stock;ID / Name of shop;Advanced stock management;Depends On Stock;Warehouse";
+            "ID|Active (0/1)|Name *|Categories (x,y,z...)|Price tax excluded or Price tax included|Tax rules ID|Wholesale price|On sale (0/1)|" +
+            "Discount amount|Discount percent|Discount from (yyyy-mm-dd)|Discount to (yyyy-mm-dd)|" +
+            "Reference #|Supplier reference #|Supplier|" +
+            "Manufacturer|" +
+            "EAN13|UPC|Ecotax|Width|Height|Depth|Weight|" +
+            "Quantity|Minimal quantity|" +
+            "Visibility|Additional shipping cost|Unity|Unit price|" +
+            "Short description|Description|Tags (x,y,z...)|" +
+            "Meta title|Meta keywords|Meta description|URL rewritten|Text when in stock|Text when backorder allowed|Available for order (0 = No, 1 = Yes)|Product available date|Product creation date|" +
+            "Show price (0 = No, 1 = Yes)|Image URLs (x,y,z...)|Delete existing images (0 = No, 1 = Yes)|" +
+            "Feature(Name:Value:Position)|" +
+            "Available online only (0 = No, 1 = Yes)|Condition|Customizable (0 = No, 1 = Yes)|Uploadable files (0 = No, 1 = Yes)|Text fields (0 = No, 1 = Yes)|Out of stock|ID / Name of shop|Advanced stock management|Depends On Stock|Warehouse";
 
-        private string test =
-           "ID;Active;Name;Category;MargedPrice;tax;original;0;" +
-           "Discount amount;Discount percent;Discount from (yyyy-mm-dd);Discount to (yyyy-mm-dd);" +
-           "Artikel Nr. #;Supplier reference #;Supplier;" +
-           "Manufacturer;" +
-           "EAN13;UPC;Ecotax;Width;Height;Depth;Weight;" +
-           "Quantity;Minimal quantity;" +
-           "Visibility;Additional shipping cost;Unity;Unit price;" +
-           "Short description;Description;Tags (x,y,z...);" +
-           "Meta title;Meta keywords;Meta description;URL rewritten;Text when in stock;Text when backorder allowed;Available for order (0 = No, 1 = Yes);Product available date;Product creation date;" +
-           "Show price (0 = No, 1 = Yes);Image URLs (x,y,z...);Delete existing images (0 = No, 1 = Yes);" +
-           "Feature(Name:Value:Position);" +
-           "Available online only (0 = No, 1 = Yes);Condition;Customizable (0 = No, 1 = Yes);Uploadable files (0 = No, 1 = Yes);Text fields (0 = No, 1 = Yes);Out of stock;ID / Name of shop;Advanced stock management;Depends On Stock;Warehouse";
-  
+        //private string test =
+        //   "ID;Active;Name;Category;MargedPrice;tax;original;0;" +
+        //   "Discount amount;Discount percent;Discount from (yyyy-mm-dd);Discount to (yyyy-mm-dd);" +
+        //   "Artikel Nr. #;Supplier reference #;Supplier;" +
+        //   "Manufacturer;" +
+        //   "EAN13;UPC;Ecotax;Width;Height;Depth;Weight;" +
+        //   "Quantity;Minimal quantity;" +
+        //   "Visibility;Additional shipping cost;Unity;Unit price;" +
+        //   "Short description;Description;Tags (x,y,z...);" +
+        //   "Meta title;Meta keywords;Meta description;URL rewritten;Text when in stock;Text when backorder allowed;Available for order (0 = No, 1 = Yes);Product available date;Product creation date;" +
+        //   "Show price (0 = No, 1 = Yes);Image URLs (x,y,z...);Delete existing images (0 = No, 1 = Yes);" +
+        //   "Feature(Name:Value:Position);" +
+        //   "Available online only (0 = No, 1 = Yes);Condition;Customizable (0 = No, 1 = Yes);Uploadable files (0 = No, 1 = Yes);Text fields (0 = No, 1 = Yes);Out of stock;ID / Name of shop;Advanced stock management;Depends On Stock;Warehouse";
+
         
-        public const string PrestoFormatLine = "{0};1;{1};{2};{3};" +
-                                               "53;{4};0;;;" +
-                                               ";;;;;" +
-                                               "{5};;;;" +
-                                               ";;;;{6};" +
-                                               "1;;;;;" +
-                                               "{7};{8};{9};;;;" +
-                                               ";;;1;" +
-                                               ";;1;{10};0;" +
-                                               "{11};0;new;0;0;" +
-                                               "0;0;0;0;0;0";
+        //public const string PrestoFormatLine = "{0};1;{1};{2};{3};" +
+        //                                       "53;{4};0;;;" +
+        //                                       ";;;;;" +
+        //                                       "{5};;;;" +
+        //                                       ";;;;{6};" +
+        //                                       "1;;;;;" +
+        //                                       "{7};{8};{9};;;;" +
+        //                                       ";;;1;" +
+        //                                       ";;1;{10};0;" +
+        //                                       "{11};0;new;0;0;" +
+        //                                       "0;0;0;0;0;0";
+        public const string PrestoFormatLine = "{0}|1|{1}|{2}|{3}|" +
+                                               "53|{4}|0|||" +
+                                               "|||||" +
+                                               "{5}||||" +
+                                               "||||{6}|" +
+                                               "1|||||" +
+                                               "{7}|{8}|{9}||||" +
+                                               "|||1|" +
+                                               "||1|{10}|0|" +
+                                               "{11}|0|new|0|0|" +
+                                               "0|0|0|0|0|0";
 
         public const string DefaultCategoryName = "Sonstiges";
+        public const string SummerWheelCategoryName = "Sommerreifen";
+        public const string WinterWheelCategoryName = "Winterreifen";
+        public const string AllYearWheelCategoryName = "Ganzjahresreifen";
+        public const string WheelSizeTemplate = "Reifenbreite:$wheelWidth$:1:," +
+                                                "Reifenquerschnitt:$wheelHeigth$:2: " +
+                                                "Felgendurchmesser:$wheelCrossSection$:3:," +
+                                                "Geschwindigkeitsindex:$speedIndex$:4:," +
+                                                "Lastindex :$loadIndex$:5:," +
+                                                "Hersteller :$Manufactorer$:6:," +
+                                                "Typ:$wheelType$:7:";
+        public const string WheelDotTemplate = "DOT:{0}:8:";
+
+        
     }
 }

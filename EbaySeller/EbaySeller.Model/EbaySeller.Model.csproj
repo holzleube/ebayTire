@@ -123,6 +123,7 @@
     <Compile Include="Tests\CSV\PrestashopPropertyWheelExtractorTests.cs" />
     <Compile Include="Tests\CSV\PrestoshopPropertyExtractorTests.cs" />
     <Compile Include="Tests\Images\ImageLoaderTests.cs" />
+    <Compile Include="Tests\PrestoshopCSsvConverterTestscs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Lib\eBay.Service.dll" />

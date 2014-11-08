@@ -26,17 +26,28 @@ namespace EbaySeller.Model.Tests.CSV
             "Show price (0 = No, 1 = Yes);Image URLs (x,y,z...);" +
             "Delete existing images (0 = No, 1 = Yes);Feature(Name:Value:Position);Available online only (0 = No, 1 = Yes);Condition;Customizable (0 = No, 1 = Yes);Uploadable files (0 = No, 1 = Yes);Text fields (0 = No, 1 = Yes);Out of stock;ID / Name of shop;Advanced stock management;Depends On Stock;Warehouse";
         
-        private const string expectedLine = "ArticleId;1;ArticleName;ArticleCategory;ArticleMargePrice;53;ArticleOriginalPrice;0;" +
-                                            ";;;;" +
-                                            ";;;" +
-                                            "ArticleManufactorer;" +
-                                            ";;;;;;;" +
-                                            "70;1;" +
-                                            ";;;;" +
-                                            "ArticleShortDescription;ArticleDescription;ArticleTags;" +
-                                            ";;;;;;1;;;" +
-                                            "1;ArticleImages;0;" +
-                                            "ArticleFeatures;0;new;0;0;0;0;0;0;0;0";
+        //private const string expectedLine = "ArticleId;1;ArticleName;ArticleCategory;ArticleMargePrice;53;ArticleOriginalPrice;0;" +
+        //                                    ";;;;" +
+        //                                    ";;;" +
+        //                                    "ArticleManufactorer;" +
+        //                                    ";;;;;;;" +
+        //                                    "70;1;" +
+        //                                    ";;;;" +
+        //                                    "ArticleShortDescription;ArticleDescription;ArticleTags;" +
+        //                                    ";;;;;;1;;;" +
+        //                                    "1;ArticleImages;0;" +
+        //                                    "ArticleFeatures;0;new;0;0;0;0;0;0;0;0";
+        private const string expectedLine = "ArticleId|1|ArticleName|ArticleCategory|ArticleMargePrice|53|ArticleOriginalPrice|0|" +
+                                           "||||" +
+                                           "|||" +
+                                           "ArticleManufactorer|" +
+                                           "|||||||" +
+                                           "70|1|" +
+                                           "||||" +
+                                           "ArticleShortDescription|ArticleDescription|ArticleTags|" +
+                                           "||||||1|||" +
+                                           "1|ArticleImages|0|" +
+                                           "ArticleFeatures|0|new|0|0|0|0|0|0|0|0";
         [SetUp]
         public void CreateCsvLine()
         {
@@ -47,7 +58,7 @@ namespace EbaySeller.Model.Tests.CSV
         [Test]
         public void TestSingleLine()
         {
-            var testValue = csvLine.GetCSVLine("");
+            var testValue = csvLine.GetCSVLine();
             Console.WriteLine(testValue);
             Console.WriteLine(expectedLine);
             Assert.AreEqual(expectedLine, testValue);
@@ -102,7 +113,7 @@ namespace EbaySeller.Model.Tests.CSV
             return 70;
         }
 
-        public string GetShortDescription(string template)
+        public string GetShortDescription()
         {
             return "ArticleShortDescription";
         }
